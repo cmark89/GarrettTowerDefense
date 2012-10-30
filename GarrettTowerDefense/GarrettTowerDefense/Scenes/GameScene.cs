@@ -28,6 +28,8 @@ namespace GarrettTowerDefense
         public static Texture2D GUITexture { get; private set; }
         public static Rectangle GUIArea { get; private set; }
 
+        public static Texture2D EnemyHealthbar { get; private set; }
+
         public static GUI GUI { get; private set; }
 
         //Used for storing the price of towers efficiently
@@ -64,6 +66,7 @@ namespace GarrettTowerDefense
         public override void LoadContent(ContentManager Content)
         {
             GUI = new GUI(Content);
+            EnemyHealthbar = Content.Load<Texture2D>("GUI/EnemyHealthbar");
         }
 
         
@@ -215,8 +218,25 @@ namespace GarrettTowerDefense
                 e.Draw(spriteBatch);
             }
             
-
             //Draw projectiles
+
+
+            foreach (Enemy e in Enemies)
+            {
+                float healthPercent = (e.CurrentHealth / e.Health);
+                int width = (int)((TileEngine.TileWidth - 1) * healthPercent) + 1;
+                Color color;
+                if(healthPercent >= .5f)
+                {
+                    color = new Color((1 - healthPercent)/.5f,1f,0f,1f);
+                }
+                else
+                {
+                    color = new Color(1f,healthPercent/.5f,0f,1f);
+                }
+                
+                spriteBatch.Draw(EnemyHealthbar, new Rectangle((int)e.Position.X, (int)e.Position.Y, width, 3), color);
+            }
 
             GUI.Draw(spriteBatch);
         }
@@ -317,6 +337,12 @@ namespace GarrettTowerDefense
             {
                 e.GetPath(CurrentMap.CastleTile);
             }
+        }
+
+        public static void GainGold(int gold)
+        {
+            Console.WriteLine("Gain " + gold + " gold!  Now have " + (Gold + gold));
+            Gold += gold;
         }
     }
 

@@ -23,6 +23,8 @@ namespace GarrettTowerDefense
         public float Health { get; protected set; }
         public float CurrentHealth { get; protected set; }
 
+        public int Bounty { get; protected set; }
+
         public int Damage { get; protected set; }
 
         public float BaseMovementSpeed { get; protected set; }
@@ -176,6 +178,7 @@ namespace GarrettTowerDefense
             CurrentHealth -= totalDamage;
             if(CurrentHealth <= 0)
             {
+                GameScene.GainGold(Bounty);
                 Alive = false;
             }
         }

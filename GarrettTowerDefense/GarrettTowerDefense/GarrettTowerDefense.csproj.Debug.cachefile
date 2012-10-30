@@ -15,6 +15,7 @@ Content\GUI\MainGUI.xnb
 Content\Fonts\NormalFont.xnb
 Content\Fonts\GoldFont.xnb
 Content\GUI\Healthbar.xnb
+Content\GUI\EnemyHealthbar.xnb
 Content\Audio\Music\Elegy.wma
 Content\Audio\Music\Bananalord.wma
 Content\Audio\Music\ProfaningTheRitual.wma
