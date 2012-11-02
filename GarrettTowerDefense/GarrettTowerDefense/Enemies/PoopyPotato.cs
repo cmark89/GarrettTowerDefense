@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     class PoopyPotato: Enemy
     {
-        public PoopyPotato()
+        public PoopyPotato(bool carnageMode = false)
         {
             Name = "Poopy Potato";
             TextureID = 23;
@@ -18,7 +18,7 @@ namespace GarrettTowerDefense
             Health = BaseHealth * (1 + (.35f * GameScene.waveManager.WaveNumber));
             CurrentHealth = Health;
 
-            Bounty = 8;
+            Bounty = 11;
             Bounty = (int)Bounty * (1 + (int)(GameScene.waveManager.WaveNumber / 10));
 
             Damage = 4;
@@ -27,9 +27,16 @@ namespace GarrettTowerDefense
             MovementSpeed = BaseMovementSpeed;
 
             Keywords = new List<Keyword>();
-            Weaknesses = new float[] { 1f, 1f, 1.5f, 1f, 1f };
+            Weaknesses = new float[] { .7f, 1f, 1f, 1.3f, 1f };
 
             CurrentState = MonsterState.Normal;
+
+            if (carnageMode)
+            {
+                Name = "Carnage Potato";
+                BaseHealth = 300;
+                //Add keywords or something...
+            }
 
             //base.Initialize();
         }

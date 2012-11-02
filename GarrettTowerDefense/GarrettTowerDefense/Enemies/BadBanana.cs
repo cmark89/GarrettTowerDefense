@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     class BadBanana: Enemy
     {
-        public BadBanana()
+        public BadBanana(bool carnageMode = false)
         {
             Name = "Bad Banana";
             TextureID = 21;
@@ -27,9 +27,16 @@ namespace GarrettTowerDefense
             MovementSpeed = BaseMovementSpeed;
 
             Keywords = new List<Keyword>();
-            Weaknesses = new float[] { 1f, 1f, 1.5f, 1f, 1f };
+            Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
 
             CurrentState = MonsterState.Normal;
+
+            if (carnageMode)
+            {
+                Name = "Carnage Banana";
+                BaseHealth = 300;
+                //Add keywords or something...
+            }
 
             //base.Initialize();
         }

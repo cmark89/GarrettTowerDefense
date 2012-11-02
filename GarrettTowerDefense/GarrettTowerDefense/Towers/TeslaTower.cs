@@ -30,7 +30,7 @@ namespace GarrettTowerDefense
             //Fire a projectile at each enemy in range.
             foreach (Enemy e in GameScene.Enemies)
             {
-                if (Vector2.Distance(Position, e.Position) <= AttackRange)
+                if (Vector2.Distance(Position, e.Position) <= AttackRange && e.Visible && e.Alive)
                 {
                     Projectiles.Add(new Projectile(this, e, ProjectileSpeed, 33));
                 }

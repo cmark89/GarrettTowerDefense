@@ -15,6 +15,8 @@ namespace GarrettTowerDefense
         public float NextSpawn { get; private set; }
         public int EnemiesLeft { get; private set; }
 
+        public bool WavePaused = false;
+
         Random rand;
 
         public WaveManager()
@@ -24,25 +26,27 @@ namespace GarrettTowerDefense
             WaveNumber = 0;
             EnemiesLeft = 0;
             WaveTime = 0f;
-            SpawnRate = 1.4f;
+            SpawnRate = 1f;
             NextSpawn = 0;
         }
 
         public void Update(GameTime gameTime)
         {
-            WaveTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (WaveTime >= NextSpawn)
+            if (!WavePaused)
             {
-                if (WaveNumber == 0)
+                WaveTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (WaveTime >= NextSpawn)
                 {
-                    Console.WriteLine("Begin the game at wave 1!");
-                    NextWave();
-                    return;
-                }
+                    if (WaveNumber == 0)
+                    {
+                        Console.WriteLine("Begin the game at wave 1!");
+                        NextWave();
+                        return;
+                    }
 
-                NextSpawn = WaveTime + SpawnRate;
-                SpawnEnemy();
-                EnemiesLeft--;
+                    NextSpawn = WaveTime + SpawnRate;
+                    SpawnEnemy();
+                }
             }
         }
 
@@ -55,6 +59,9 @@ namespace GarrettTowerDefense
             }
             else
             {
+                //Minus one enemy left.
+                EnemiesLeft--;
+
                 Console.WriteLine("Spawn an enemy!");
                 Enemy newEnemy;
                 switch (WaveNumber)
@@ -83,6 +90,58 @@ namespace GarrettTowerDefense
                     case (8):
                         newEnemy = new GhostFruit();
                         break;
+                    case (9):
+                        newEnemy = new CarnivorousCorn();
+                        break;
+                    case (10):
+                        newEnemy = new SmellyLettuce();
+                        break;
+                    case (11):
+                        newEnemy = new LimeyLemon();
+                        break;
+                    case (12):
+                        WavePaused = true;
+                        EnemiesLeft = 0;
+                        newEnemy = new WizardPear();
+                        break;
+                    case (13):
+                        newEnemy = new CruelCarrot(true);
+                        break;
+                    case (14):
+                        newEnemy = new GrumpyGrape(true);
+                        break;
+                    case (15):
+                        newEnemy = new EvilOrange(true);
+                        break;
+                    case (16):
+                        newEnemy = new BadBanana(true);
+                        break;
+                    case (17):
+                        newEnemy = new MoroseMushroom(true);
+                        break;
+                    case (18):
+                        newEnemy = new PoopyPotato(true);
+                        break;
+                    case (19):
+                        newEnemy = new AngryApple(true);
+                        break;
+                    case (20):
+                        newEnemy = new GhostFruit(true);
+                        break;
+                    case (21):
+                        newEnemy = new CarnivorousCorn(true);
+                        break;
+                    case (22):
+                        newEnemy = new SmellyLettuce(true);
+                        break;
+                    case (23):
+                        newEnemy = new LimeyLemon(true);
+                        break;
+                    case (24):
+                        WavePaused = true;
+                        EnemiesLeft = 0;
+                        newEnemy = new AlexanderHamilton();
+                        break;
                     default:
                         newEnemy = null;
                         break;
@@ -107,6 +166,20 @@ namespace GarrettTowerDefense
             EnemiesLeft = 7 + WaveNumber * 2;
 
             NextSpawn = 0 + SpawnRate;
+        }
+
+        public void ReenableSpawn()
+        {
+            WavePaused = false;
+        }
+
+        //Spawns a specific enemy at a point (used for bosses)
+        public void SpawnAt(Enemy e, Point spawnAt)
+        {
+            Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
+
+            e.Initialize();
+            e.SetPosition(spawnVector);
         }
             
     }

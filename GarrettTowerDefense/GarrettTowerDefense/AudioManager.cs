@@ -63,6 +63,8 @@ namespace GarrettTowerDefense
         {
             try
             {
+
+                MediaPlayer.IsRepeating = true;
                 MediaPlayer.Play(song);
             }
             catch

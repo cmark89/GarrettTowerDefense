@@ -68,7 +68,7 @@ namespace GarrettTowerDefense
                     //For each enemy, determine if it's in range.
                     foreach (Enemy e in newEnemiesList)
                     {
-                        if (!proj.HitEnemies.Contains(e) && e.Alive && Vector2.Distance(proj.Position, e.Position) <= MaxBounceRange)
+                        if (!proj.HitEnemies.Contains(e) && e.Alive && e.Visible && Vector2.Distance(proj.Position, e.Position) <= MaxBounceRange)
                         {
                             //Set the target to the first enemy found to be within range of the tower.
                             proj.SetNewTarget(e);

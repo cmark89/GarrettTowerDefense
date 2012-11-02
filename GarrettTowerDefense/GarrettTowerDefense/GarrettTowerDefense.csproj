@@ -114,6 +114,11 @@
     <Compile Include="BinaryMinHeap.cs" />
     <Compile Include="Enemies\BadBanana.cs" />
     <Compile Include="Enemies\AngryApple.cs" />
+    <Compile Include="Enemies\CarnivorousCorn.cs" />
+    <Compile Include="Enemies\AlexanderHamilton.cs" />
+    <Compile Include="Enemies\WizardPear.cs" />
+    <Compile Include="Enemies\LimeyLemon.cs" />
+    <Compile Include="Enemies\SmellyLettuce.cs" />
     <Compile Include="Enemies\GhostFruit.cs" />
     <Compile Include="Enemies\PoopyPotato.cs" />
     <Compile Include="Enemies\MoroseMushroom.cs" />

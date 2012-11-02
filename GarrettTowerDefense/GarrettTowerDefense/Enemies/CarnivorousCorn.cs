@@ -6,19 +6,19 @@ using Microsoft.Xna.Framework;
 
 namespace GarrettTowerDefense
 {
-    class AngryApple: Enemy
+    class CarnivorousCorn: Enemy
     {
-        public AngryApple(bool carnageMode = false)
+        public CarnivorousCorn(bool carnageMode = false)
         {
-            Name = "Angry Apple";
-            TextureID = 24;
+            Name = "Carnivorous Corn";
+            TextureID = 26;
 
-            BaseHealth = 50;
+            BaseHealth = 60;
             //Calculate true health based on the wave number
             Health = BaseHealth * (1 + (.35f * GameScene.waveManager.WaveNumber));
             CurrentHealth = Health;
 
-            Bounty = 12;
+            Bounty = 13;
             Bounty = (int)Bounty * (1 + (int)(GameScene.waveManager.WaveNumber / 10));
 
             Damage = 4;
@@ -27,13 +27,13 @@ namespace GarrettTowerDefense
             MovementSpeed = BaseMovementSpeed;
 
             Keywords = new List<Keyword>();
-            Weaknesses = new float[] { 1f, 1f, 1.5f, 1f, 1f };
+            Weaknesses = new float[] { .75f, 1.3f, 1f, 1.3f, 1f };
 
             CurrentState = MonsterState.Normal;
 
             if (carnageMode)
             {
-                Name = "Carnage Apple";
+                Name = "Carnage Corn";
                 BaseHealth = 300;
                 //Add keywords or something...
             }

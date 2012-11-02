@@ -105,11 +105,7 @@ namespace GarrettTowerDefense
                 }
 
                 //Check for death from damage over time effects
-                if (CurrentHealth <= 0)
-                {
-                    Alive = false;
-                    return;
-                }
+                CheckForDeath();
 
                 //If the monster uses stealth...
                 if (Stealthed)
@@ -138,19 +134,26 @@ namespace GarrettTowerDefense
                     GameScene.CurHealth -= Damage;
                 }
             }
-
-            OnUpdate();
         }
 
-        public virtual void OnUpdate()
+        public virtual void CheckForDeath()
         {
+            if (CurrentHealth <= 0)
+            {
+                Alive = false;
+                return;
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if ((Alive && !Stealthed) || (Alive && Stealthed && Visible))
+            if (Alive && !Stealthed)
             {
                 spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), Color.White);
+            }
+            else if (Alive && Stealthed && Visible)
+            {
+                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), Color.White * .5f);
             }
         }
 
@@ -203,6 +206,9 @@ namespace GarrettTowerDefense
 
         public void DamageEnemy(int damage, DamageType type)
         {
+            if (!Alive)
+                return;
+
             float totalDamage = damage * Weaknesses[(int)type];
             
             CurrentHealth -= totalDamage;

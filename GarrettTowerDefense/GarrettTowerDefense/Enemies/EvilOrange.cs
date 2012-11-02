@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     class EvilOrange: Enemy
     {
-        public EvilOrange()
+        public EvilOrange(bool carnageMode = false)
         {
             Name = "Evil Orange";
             TextureID = 20;
@@ -30,6 +30,13 @@ namespace GarrettTowerDefense
             Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
 
             CurrentState = MonsterState.Normal;
+
+            if (carnageMode)
+            {
+                Name = "Carnage Orange";
+                BaseHealth = 300;
+                //Add keywords or something...
+            }
 
             //base.Initialize();
         }

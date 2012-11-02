@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     class CruelCarrot : Enemy
     {
-        public CruelCarrot()
+        public CruelCarrot(bool carnageMode = false)
         {
             Name = "Cruel Carrot";
             TextureID = 18;
@@ -30,6 +30,13 @@ namespace GarrettTowerDefense
             Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
 
             CurrentState = MonsterState.Normal;
+
+            if (carnageMode)
+            {
+                Name = "Carnage Carrot";
+                BaseHealth = 300;
+                //Add keywords or something...
+            }
 
             //base.Initialize();
         }

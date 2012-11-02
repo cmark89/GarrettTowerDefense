@@ -140,15 +140,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="levelTileset.png">
-      <Name>levelTileset</Name>
+    <Compile Include="GUI\EnemyHealthbar.png">
+      <Name>EnemyHealthbar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\EnemyHealthbar.png">
-      <Name>EnemyHealthbar</Name>
+    <Compile Include="levelTileset.png">
+      <Name>levelTileset</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

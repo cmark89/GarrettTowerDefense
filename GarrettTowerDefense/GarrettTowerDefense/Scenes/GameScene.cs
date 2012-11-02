@@ -141,6 +141,25 @@ namespace GarrettTowerDefense
                     Enemies.RemoveAt(i);
             }
 
+            //Should add an upgrade button and make this require MouseAction.Updrade instead of MouseAction.None.  Otherwise it's dumb.
+            if (CurrentMouseAction == MouseAction.None && MouseHandler.MouseOverMap() && MouseHandler.RightClick())
+            {
+                Vector2 mousepos = new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y);
+                Point clickedtile = TileEngine.ScreenSpaceToMapSpace(mousepos);
+                Console.WriteLine("Right clicked on " + clickedtile);
+
+                Tower t = GameScene.Towers.Find(x => x.MapPosition == clickedtile);
+                if (t != null)
+                {
+                    Console.WriteLine("Upgrade " + t.Name + "!");
+                }
+
+
+                
+            }
+
+
+
             //Update the wave manager.
             waveManager.Update(gameTime);
 

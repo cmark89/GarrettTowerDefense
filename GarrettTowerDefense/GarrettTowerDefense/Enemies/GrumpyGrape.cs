@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     class GrumpyGrape: Enemy
     {
-        public GrumpyGrape()
+        public GrumpyGrape(bool carnageMode = false)
         {
             Name = "Grumpy Grape";
             TextureID = 19;
@@ -30,6 +30,13 @@ namespace GarrettTowerDefense
             Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
 
             CurrentState = MonsterState.Normal;
+
+            if (carnageMode)
+            {
+                Name = "Carnage Grape";
+                BaseHealth = 300;
+                //Add keywords or something...
+            }
 
             //base.Initialize();
         }
