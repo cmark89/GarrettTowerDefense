@@ -29,6 +29,8 @@ namespace GarrettTowerDefense
 
         public float BaseMovementSpeed { get; protected set; }
         public float MovementSpeed { get; protected set; }
+        public bool Stealthed { get; protected set; }
+        public bool Visible { get; protected set; }
 
         public List<Keyword> Keywords { get; protected set; }
         public float[] Weaknesses { get; protected set; }
@@ -54,13 +56,19 @@ namespace GarrettTowerDefense
             GameScene.Enemies.Add(this);
             Console.WriteLine("\nFind path to castle (located at " + GameScene.CurrentMap.CastleTile.X + ", " + GameScene.CurrentMap.CastleTile.Y + ")");
             GetPath(GameScene.CurrentMap.CastleTile);
+
+            if (Stealthed)
+                Visible = false;
+            else
+                Visible = true;
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            //Move the enemy and shit
+            //Move the enemy and shit if not stunned
             if (CurrentState != MonsterState.Stunned)
             {
+                //Enemy is frozen; check for freeze expiration
                 if (isFrozen)
                 {
                     freezeDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -70,7 +78,7 @@ namespace GarrettTowerDefense
                         MovementSpeed = BaseMovementSpeed;
                     }
                 }
-
+                //Enemy is burning; check for burn expiration and damage
                 if (isBurning)
                 {
                     float burnDamage = (float)(burnDPS * gameTime.ElapsedGameTime.TotalSeconds);
@@ -83,6 +91,7 @@ namespace GarrettTowerDefense
                     }
                 }
 
+                //Enemy is poisoned; check for poison damage and expiration
                 if (isPoisoned)
                 {
                     float poisonDamage = (float)(poisonDPS * gameTime.ElapsedGameTime.TotalSeconds);
@@ -95,12 +104,29 @@ namespace GarrettTowerDefense
                     }
                 }
 
+                //Check for death from damage over time effects
                 if (CurrentHealth <= 0)
                 {
                     Alive = false;
                     return;
                 }
 
+                //If the monster uses stealth...
+                if (Stealthed)
+                {
+                    //Check for an observatory in detection range of the monster
+                    Tower observ = GameScene.Towers.Find(x => x.Name == "Observatory" && Vector2.Distance(Position, x.Position) < Observatory.RevealRange);
+                    if (observ == null)
+                    {
+                        //If there is no observatory, it remains hidden
+                        Visible = false;
+                    }
+                    else
+                    {
+                        //Else, it is visible
+                        Visible = true;
+                    }
+                }
 
                 UpdateMovement(gameTime);
                 
@@ -112,16 +138,20 @@ namespace GarrettTowerDefense
                     GameScene.CurHealth -= Damage;
                 }
             }
+
+            OnUpdate();
+        }
+
+        public virtual void OnUpdate()
+        {
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (Alive)
+            if ((Alive && !Stealthed) || (Alive && Stealthed && Visible))
             {
                 spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), Color.White);
             }
-            //DRAW THE HEALTHBAR (INDEX 15)
-
         }
 
         //Update the path to the target

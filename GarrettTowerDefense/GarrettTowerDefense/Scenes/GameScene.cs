@@ -223,6 +223,9 @@ namespace GarrettTowerDefense
 
             foreach (Enemy e in Enemies)
             {
+                if (e.Stealthed && !e.Visible)
+                    continue;
+
                 float healthPercent = (e.CurrentHealth / e.Health);
                 int width = (int)((TileEngine.TileWidth - 1) * healthPercent) + 1;
                 Color color;

@@ -112,6 +112,11 @@
   <ItemGroup>
     <Compile Include="AudioManager.cs" />
     <Compile Include="BinaryMinHeap.cs" />
+    <Compile Include="Enemies\BadBanana.cs" />
+    <Compile Include="Enemies\AngryApple.cs" />
+    <Compile Include="Enemies\GhostFruit.cs" />
+    <Compile Include="Enemies\PoopyPotato.cs" />
+    <Compile Include="Enemies\MoroseMushroom.cs" />
     <Compile Include="Enemies\EvilOrange.cs" />
     <Compile Include="Enemies\GrumpyGrape.cs" />
     <Compile Include="Enemies\CruelCarrot.cs" />

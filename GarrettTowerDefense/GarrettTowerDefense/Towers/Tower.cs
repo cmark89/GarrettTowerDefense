@@ -69,13 +69,14 @@ namespace GarrettTowerDefense
         {
             //Attack a target
 
+            //Target is out of range
             if (Target != null && Target.Alive && Vector2.Distance(Position, Target.Position) > AttackRange)
             {
                 Target = null;
             }
 
-            //First, acquire a new target if there is no target or if the current target has been killed
-            if ((Target != null && !Target.Alive) || Target == null || Vector2.Distance(Position, Target.Position) > AttackRange)
+            //First, acquire a new target if there is no target or if the current target has been killed or if the current target is invisible
+            if ((Target != null && !Target.Alive) || Target == null || !Target.Visible || Vector2.Distance(Position, Target.Position) > AttackRange)
             {
                 Target = AcquireNewTarget(Position, AttackRange);
             }
@@ -124,7 +125,7 @@ namespace GarrettTowerDefense
             //For each enemy, determine if it's in range.
             foreach (Enemy e in newEnemiesList)
             {
-                if(e.Alive && Vector2.Distance(point, e.Position) <= range)
+                if(e.Alive && e.Visible && Vector2.Distance(point, e.Position) <= range)
                 {
                     //Set the target to the first enemy found to be within range of the tower.
                     return e;

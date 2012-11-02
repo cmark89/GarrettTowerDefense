@@ -68,6 +68,21 @@ namespace GarrettTowerDefense
                     case (3):
                         newEnemy = new EvilOrange();
                         break;
+                    case (4):
+                        newEnemy = new BadBanana();
+                        break;
+                    case (5):
+                        newEnemy = new MoroseMushroom();
+                        break;
+                    case (6):
+                        newEnemy = new PoopyPotato();
+                        break;
+                    case (7):
+                        newEnemy = new AngryApple();
+                        break;
+                    case (8):
+                        newEnemy = new GhostFruit();
+                        break;
                     default:
                         newEnemy = null;
                         break;
