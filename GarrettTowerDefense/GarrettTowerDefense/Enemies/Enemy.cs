@@ -140,6 +140,7 @@ namespace GarrettTowerDefense
         {
             if (CurrentHealth <= 0)
             {
+                GameScene.GainGold(Bounty);
                 Alive = false;
                 return;
             }
@@ -204,6 +205,7 @@ namespace GarrettTowerDefense
             Position = v2;
         }
 
+
         public void DamageEnemy(int damage, DamageType type)
         {
             if (!Alive)
@@ -212,12 +214,9 @@ namespace GarrettTowerDefense
             float totalDamage = damage * Weaknesses[(int)type];
             
             CurrentHealth -= totalDamage;
-            if(CurrentHealth <= 0)
-            {
-                GameScene.GainGold(Bounty);
-                Alive = false;
-            }
+            CheckForDeath();
         }
+
 
         public void BeginFreeze(float slow, float duration)
         {

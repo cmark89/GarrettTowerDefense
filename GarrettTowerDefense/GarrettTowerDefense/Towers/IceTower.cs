@@ -83,7 +83,7 @@ namespace GarrettTowerDefense
         {
             nextAltAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + altAttackSpeed;
 
-            List<Enemy> altAttackTargets = GameScene.Enemies.FindAll(x => Target != x && Vector2.Distance(x.Position, Position) <= AttackRange);
+            List<Enemy> altAttackTargets = GameScene.Enemies.FindAll(x => Target != x && x.Alive && x.Visible && Vector2.Distance(x.Position, Position) <= AttackRange);
             if(altAttackTargets.Count > 0)
                 LaunchSecondaryAttack(altAttackTargets[new Random().Next(0, altAttackTargets.Count)]);
         }

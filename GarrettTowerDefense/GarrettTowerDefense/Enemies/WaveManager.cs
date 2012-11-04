@@ -161,6 +161,8 @@ namespace GarrettTowerDefense
         public void NextWave()
         {
             Console.WriteLine("Advance to next wave!");
+            if (WavePaused)
+                WavePaused = false;
             WaveNumber++;
             WaveTime = -10f;
             EnemiesLeft = 7 + WaveNumber * 2;
@@ -170,7 +172,9 @@ namespace GarrettTowerDefense
 
         public void ReenableSpawn()
         {
+            Console.WriteLine("Reenable spawning");
             WavePaused = false;
+            Console.WriteLine("WavePaused : " + WavePaused.ToString());
             SpawnEnemy();
         }
 
