@@ -211,8 +211,13 @@ namespace GarrettTowerDefense
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if(Constructed)
+            if (Constructed)
+            {
                 spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(MapPosition.X * TileEngine.TileWidth, MapPosition.Y * TileEngine.TileHeight, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TileIndex), Color.White);
+
+                if(Level > 1)
+                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(MapPosition.X * TileEngine.TileWidth, MapPosition.Y * TileEngine.TileHeight, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(35 + Level), Color.White);
+            }
 
             foreach (Projectile p in Projectiles)
             {
