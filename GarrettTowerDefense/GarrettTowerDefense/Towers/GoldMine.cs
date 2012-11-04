@@ -26,7 +26,14 @@ namespace GarrettTowerDefense
             Damage = 0;
             AttackSpeed = 0f;
             AttackRange = 0;
-            
+        }
+
+        public override void LevelUp()
+        {
+            GoldBonus += 2;
+            GoldInterval -= 1;
+
+            base.LevelUp();
         }
 
 

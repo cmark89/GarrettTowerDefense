@@ -12,6 +12,8 @@ namespace GarrettTowerDefense
         public float burnPercent;
         public float burnDuration;
 
+        public float burnAoE = 75;
+
         //Constructor for arrow towers
         public FlameTower()
         {
@@ -27,7 +29,16 @@ namespace GarrettTowerDefense
             ProjectileSpeed = 180;
 
             burnDuration = 5f;
-            burnPercent = .2f;
+            burnPercent = .1f;
+        }
+
+        public override void LevelUp()
+        {
+            Damage += 3;
+            AttackSpeed -= .2f;
+            burnAoE += 15;
+
+            base.LevelUp();
         }
 
         public override void LaunchAttack(Enemy Target)

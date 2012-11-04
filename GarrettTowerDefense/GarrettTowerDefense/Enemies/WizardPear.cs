@@ -17,7 +17,7 @@ namespace GarrettTowerDefense
             Name = "Wizard Pear";
             TextureID = 29;
 
-            BaseHealth = 1000;
+            BaseHealth = 1500;
             //Calculate true health based on the wave number
             Health = BaseHealth;
             CurrentHealth = Health;
@@ -47,11 +47,12 @@ namespace GarrettTowerDefense
 
         public override void CheckForDeath()
         {
-            //if (CurrentHealth <= 0)
-            //{
-                //Alive = false;
-                //return;
-            //}
+            if (CurrentHealth <= 0)
+            {
+                Alive = false;
+                GameScene.waveManager.WavePaused = false;
+                return;
+            }
         }
     }
 }

@@ -9,9 +9,9 @@ namespace GarrettTowerDefense
     public class GlaiveTower : Tower
     {
         public static int Cost = 90;
-        int MaxBounces = 4;
-        int MaxBounceRange = 125;
-        int MaxGlaives = 2;
+        public int MaxBounces = 4;
+        public int MaxBounceRange = 125;
+        public int MaxGlaives = 2;
 
         //Constructor for arrow towers
         public GlaiveTower()
@@ -21,11 +21,23 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
+            UpgradeCost = new int[4] { 60, 90, 135, 200 };
+
             DamageType = DamageType.Physical;
             Damage = 10;
             AttackSpeed = 1.8f;
             AttackRange = 300;
             ProjectileSpeed = 240;
+        }
+
+        public override void LevelUp()
+        {
+            Damage += 4;
+            MaxBounces += 1;
+            MaxGlaives += 1;
+            MaxBounceRange += 40;
+
+            base.LevelUp();
         }
 
         public override void LaunchAttack(Enemy Target)

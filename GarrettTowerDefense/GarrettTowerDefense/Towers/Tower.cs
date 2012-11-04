@@ -36,6 +36,9 @@ namespace GarrettTowerDefense
         public List<Projectile> Projectiles;
         public List<Projectile> DisabledProjectiles;
 
+        public int[] UpgradeCost = new int[4];
+
+
         
 
         public Tower()
@@ -142,9 +145,21 @@ namespace GarrettTowerDefense
 
         }
 
+        public virtual void Upgrade()
+        {
+            if (Level < 5 && GameScene.Gold >= UpgradeCost[Level - 1])
+            {
+                Console.WriteLine("Upgrade " + Name + "!");
+                GameScene.Gold -= UpgradeCost[Level - 1];
+                LevelUp();
+                //Play level up sound effect here.  Maybe a sparkly.
+            }
+        }
+
         public virtual void LevelUp()
         {
             //Increase the level of the tower
+            Level++;
         }
 
         public virtual void UpdateStats()

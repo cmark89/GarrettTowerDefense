@@ -28,6 +28,14 @@ namespace GarrettTowerDefense
             poisonDuration = 10f;
         }
 
+        public override void LevelUp()
+        {
+            //Add in toxic pool effect?
+            Damage += 5;
+
+            base.LevelUp();
+        }
+
         public override void LaunchAttack(Enemy Target)
         {
             //Fire a projectile

@@ -151,7 +151,7 @@ namespace GarrettTowerDefense
                 Tower t = GameScene.Towers.Find(x => x.MapPosition == clickedtile);
                 if (t != null)
                 {
-                    Console.WriteLine("Upgrade " + t.Name + "!");
+                    t.Upgrade();
                 }
 
 

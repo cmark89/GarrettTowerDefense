@@ -171,6 +171,7 @@ namespace GarrettTowerDefense
         public void ReenableSpawn()
         {
             WavePaused = false;
+            SpawnEnemy();
         }
 
         //Spawns a specific enemy at a point (used for bosses)

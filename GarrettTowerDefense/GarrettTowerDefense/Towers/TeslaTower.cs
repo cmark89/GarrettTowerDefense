@@ -21,8 +21,17 @@ namespace GarrettTowerDefense
             DamageType = DamageType.Electrical;
             Damage = 12;
             AttackSpeed = 3f;
-            AttackRange = 250;
+            AttackRange = 225;
             ProjectileSpeed = 350;
+        }
+
+        public override void LevelUp()
+        {
+            Damage += 2;
+            AttackSpeed -= .25f;
+            AttackRange += 25;
+
+            base.LevelUp();
         }
 
         public override void LaunchAttack(Enemy Target)

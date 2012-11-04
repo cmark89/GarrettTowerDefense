@@ -13,6 +13,11 @@ namespace GarrettTowerDefense
         private float slowAmount;
         private float freezeDuration;
 
+        private float nextAltAttackTime;
+        private float altAttackSpeed;
+
+        public int altDamage;
+
         //Constructor for arrow towers
         public IceTower()
         {
@@ -29,7 +34,60 @@ namespace GarrettTowerDefense
 
             slowAmount = .5f;
             freezeDuration = 3f;
+
+            altAttackSpeed = 5f;
+            altDamage = 0;
         }
+
+        public override void LevelUp()
+        {
+            Damage += 2;
+            altDamage += 1;
+            altAttackSpeed -= 1f;
+
+            base.LevelUp();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //Only try to attack if the tower has a damage value of greater than 0
+            if (Damage > 0 && gameTime.TotalGameTime.TotalSeconds >= NextAttackTime)
+            {
+                Attack(gameTime);
+            }
+
+            if (Level > 1 && gameTime.TotalGameTime.TotalSeconds >= nextAltAttackTime)
+            {
+                AltAttack(gameTime);
+            }
+
+            foreach (Projectile p in Projectiles)
+            {
+                if (p.Enabled)
+                    p.Update(gameTime);
+            }
+
+            if (DisabledProjectiles.Count == 0)
+                return;
+            else
+            {
+                foreach (Projectile p in DisabledProjectiles)
+                {
+                    Projectiles.Remove(p);
+                }
+            }
+        }
+
+
+        public void AltAttack(GameTime gameTime)
+        {
+            nextAltAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + altAttackSpeed;
+
+            List<Enemy> altAttackTargets = GameScene.Enemies.FindAll(x => Target != x && Vector2.Distance(x.Position, Position) <= AttackRange);
+            if(altAttackTargets.Count > 0)
+                LaunchSecondaryAttack(altAttackTargets[new Random().Next(0, altAttackTargets.Count)]);
+        }
+
 
         public override void LaunchAttack(Enemy Target)
         {
@@ -37,13 +95,24 @@ namespace GarrettTowerDefense
             Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 34));
         }
 
+        public void LaunchSecondaryAttack(Enemy Target)
+        {
+            //Fire a new projectile
+            Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 36, "Icicle"));
+        }
+
         public override void OnProjectileHit(Projectile proj, Enemy target)
         {
             Console.WriteLine("The projecile hits!");
-            if (Target != null)
+            if (target != null)
             {
-                Target.BeginFreeze(slowAmount, freezeDuration);
-                Target.DamageEnemy(Damage, DamageType);
+                target.BeginFreeze(slowAmount, freezeDuration);
+
+                if (proj.Name != "Icicle")
+                    target.DamageEnemy(Damage, DamageType);
+                else if (proj.Name == "Icicle" && altDamage > 0)
+                    target.DamageEnemy(altDamage, DamageType);
+                    
             }
 
             DisposeOfProjectile(proj);

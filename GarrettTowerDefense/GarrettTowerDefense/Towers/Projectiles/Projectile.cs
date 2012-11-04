@@ -9,6 +9,8 @@ namespace GarrettTowerDefense
 {
     public class Projectile
     {
+        public string Name { get; private set; }
+
         public int SpriteIndex { get; private set; }
         public float Speed { get; private set; }
         public Vector2 Position { get; private set; }
@@ -22,14 +24,19 @@ namespace GarrettTowerDefense
         public int Bounces { get; set; }
         private bool isGlaive = false;
         private float rotationSpeed = .4f;
-        private float curRotation = 0;
+        private float curRotation = -90f;
 
+        //Stores the offset to the center of a tile
+        private float _offset = TileEngine.TileWidth / 2;
 
 
         public Projectile(Tower parent, Enemy target, float speed) : this(parent, target, speed, 13) { }
 
-        public Projectile(Tower parent, Enemy target, float speed, int index)
+        public Projectile(Tower parent, Enemy target, float speed, int index, string name = "")
         {
+            if (name != "")
+                Name = name;
+
             Parent = parent;
             Target = target;
             Speed = speed;
@@ -46,6 +53,14 @@ namespace GarrettTowerDefense
                 HitEnemies = new List<Enemy>();
                 isGlaive = true;
             }
+
+            
+
+
+            //WORK ON THIS
+            //curRotation = (float)Math.Atan2((double)(Target.Position.Y - Position.Y), (double)(Target.Position.X - Position.X));
+            //curRotation *= (180f / (float)Math.PI);
+            curRotation += 90;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -55,6 +70,8 @@ namespace GarrettTowerDefense
 
             if (isGlaive)
                 curRotation += rotationSpeed;
+            else
+                curRotation = (float)Math.Atan2((double)((Position.Y + _offset) - (Target.Position.Y + _offset)), (double)((Position.X + _offset) - (Target.Position.X + _offset))) + 90f;
 
             //Handle the movement of the projectile
             float movementThisFrame = Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -77,12 +94,7 @@ namespace GarrettTowerDefense
         public void Draw(SpriteBatch spriteBatch)
         {
             if (Enabled)
-                if (!isGlaive)
-                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(SpriteIndex), Color.White);
-                else
-                {
-                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X + TileEngine.TileWidth / 2, (int)Position.Y + TileEngine.TileHeight / 2, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(SpriteIndex), Color.White, curRotation, new Vector2(15, 15), SpriteEffects.None, 0);
-                }
+                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X + TileEngine.TileWidth / 2, (int)Position.Y + TileEngine.TileHeight / 2, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(SpriteIndex), Color.White, curRotation, new Vector2(15, 15), SpriteEffects.None, 0);
         }
 
 

@@ -23,5 +23,11 @@ namespace GarrettTowerDefense
             AttackSpeed = 0;
             AttackRange = 700;
         }
+
+        public override void LevelUp()
+        {
+            RevealRange += 50;
+            base.LevelUp();
+        }
     }
 }
