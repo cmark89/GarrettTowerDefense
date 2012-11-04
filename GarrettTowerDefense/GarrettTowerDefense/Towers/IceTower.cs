@@ -26,6 +26,8 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
+            UpgradeCost = new int[] { 40, 70, 120, 170 };
+
             DamageType = DamageType.Ice;
             Damage = 10;
             AttackSpeed = 1.4f;

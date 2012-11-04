@@ -17,10 +17,17 @@ namespace GarrettTowerDefense
             Health = 200;
             Level = 1;
 
+            UpgradeCost = new int[] { 0 };
+
             DamageType = DamageType.Physical;
             Damage = 0;
             AttackSpeed = 0;
             AttackRange = 0;
+        }
+
+        public override void LevelUp()
+        {
+            return;
         }
     }
 }

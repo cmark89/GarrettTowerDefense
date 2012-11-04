@@ -22,6 +22,8 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
+            UpgradeCost = new int[] { 50, 75, 125, 175 };
+
             DamageType = DamageType.Fire;
             Damage = 15;
             AttackSpeed = 1.6f;

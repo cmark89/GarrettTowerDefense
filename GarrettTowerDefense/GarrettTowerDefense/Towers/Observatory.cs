@@ -7,7 +7,7 @@ namespace GarrettTowerDefense
 {
     public class Observatory : Tower
     {
-        public static int Cost = 150;
+        public static int Cost = 50;
         public static float RevealRange = 100;
 
         //Constructor for arrow towers
@@ -17,6 +17,8 @@ namespace GarrettTowerDefense
             TileIndex = 13;
             Health = 100;
             Level = 1;
+
+            UpgradeCost = new int[] { 30, 60, 90, 120 };
 
             DamageType = DamageType.Physical;
             Damage = 0;

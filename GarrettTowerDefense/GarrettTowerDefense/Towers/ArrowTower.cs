@@ -17,7 +17,7 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
-            UpgradeCost = new int[4]{40,60,100,160};
+            UpgradeCost = new int[]{40,60,100,160};
 
             DamageType = DamageType.Physical;
             Damage = 8;
