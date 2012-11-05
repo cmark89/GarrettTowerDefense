@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace GarrettTowerDefense
 {
+    [Serializable]
     public class Map
     {
         public MapCell[,] mapCells { get; private set; }

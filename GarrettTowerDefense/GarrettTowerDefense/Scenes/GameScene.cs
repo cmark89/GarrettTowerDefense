@@ -380,6 +380,7 @@ namespace GarrettTowerDefense
         BuildGlaiveTower,
         BuildObservatory,
         BuildGoldMine,
+        PlaceTile,
         Upgrade
     }
 }
