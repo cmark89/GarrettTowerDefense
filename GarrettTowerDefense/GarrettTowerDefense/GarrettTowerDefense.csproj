@@ -127,6 +127,7 @@
     <Compile Include="Enemies\GrumpyGrape.cs" />
     <Compile Include="Enemies\CruelCarrot.cs" />
     <Compile Include="Enemies\WaveManager.cs" />
+    <Compile Include="GUI\EditorGUI.cs" />
     <Compile Include="GUI\GUI.cs" />
     <Compile Include="GUI\GUIButton.cs" />
     <Compile Include="Enemies\Enemy.cs" />

@@ -14,16 +14,20 @@ namespace GarrettTowerDefense
     public class MapEditorScene : Scene
     {
         //Stores the current map
-        public static Map CurrentMap { get; private set; }
+        //public static Map CurrentMap { get; private set; }
 
         public static MouseAction CurrentMouseAction { get; set; }
 
         public static Texture2D GUITexture { get; private set; }
         public static Rectangle GUIArea { get; private set; }
 
-        public static GUI GUI { get; private set; }
+        public static EditorGUI GUI { get; private set; }
         
         public static int storedTile;
+        public static bool isBaseTile;
+
+        public static bool castlePlaced;
+        public static MapCell castleTile;
 
 
         public MapEditorScene()
@@ -42,12 +46,14 @@ namespace GarrettTowerDefense
 
         public override void LoadContent(ContentManager Content)
         {
-            GUI = new GUI(Content);
+            GUI = new EditorGUI(Content);
         }
 
         
         public override void Update(GameTime gameTime)
         {
+            GUI.Update(gameTime);
+            HandleMouseInput(gameTime);
             //Handle drawing and shit.
         }
 
@@ -58,20 +64,13 @@ namespace GarrettTowerDefense
             if (CurrentMap != null)
                 CurrentMap.Draw(spriteBatch);
 
-            if (CurrentMouseAction != MouseAction.None && MouseHandler.MouseOverMap())
+            if (CurrentMouseAction != MouseAction.None && MouseHandler.MouseOverMap() && !isBaseTile)
             {
                 Point curMouseTile = TileEngine.ScreenSpaceToMapSpace(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y));
                 Color showColor = new Color(0f, .7f, 0f, .4f);
                 
-                //Replace this with trees and shit
-                switch (CurrentMouseAction)
-                {
-                    //case MouseAction.BuildBarricade:
-                        //spriteBatch.Draw(CurrentMap.Tileset.Texture, TileEngine.ScreenSpaceToMapVector(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y)), CurrentMap.Tileset.GetSourceRectangle(16), showColor);
-                        //break;
-                    default:
-                        break;
-                }
+                spriteBatch.Draw(CurrentMap.Tileset.Texture, TileEngine.ScreenSpaceToMapVector(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y)), CurrentMap.Tileset.GetSourceRectangle(storedTile), showColor);
+                
             }
 
             GUI.Draw(spriteBatch);
@@ -92,32 +91,24 @@ namespace GarrettTowerDefense
             {
                 //The mouse is over the map.
                 
-                if (MouseHandler.CurrentMouseState.X < CurrentMap.MapWidth * TileEngine.TileWidth)
+                if (MouseHandler.CurrentMouseState.X < CurrentMap.MapWidth * TileEngine.TileWidth && CurrentMouseAction == MouseAction.PlaceTile)
                 {
                     //Get the tile the mouse is over
                     Point curMouseTile = TileEngine.ScreenSpaceToMapSpace(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y));
-                    
-                    //Run a switch on the mouse state to determine what to do
-                    switch (CurrentMouseAction)
+
+                    if (storedTile == 4 && castlePlaced)
                     {
-                        //case MouseAction.BuildBarricade:
-                            //new Barricade().Build(curMouseTile);
-                            //if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
-                            //break;
-                        default:
-                            break;
+                        castleTile.tiles.RemoveAt(1);
+                        
                     }
 
-                    
+                    PlaceTile(curMouseTile, storedTile, isBaseTile);
 
-                    //Handle clicking on the map
-                    AudioManager.PlaySoundEffect(1);
-                }
-                //The mouse is too far to the right to be over the map
-                else
-                {
-                    //Handle clicking over the interface.
-                    AudioManager.PlaySoundEffect(0);
+                    if (storedTile == 4)
+                    {
+                        castleTile = CurrentMap.mapCells[curMouseTile.Y, curMouseTile.X];
+                        castlePlaced = true;
+                    }
                 }
             }
             if (MouseHandler.RightClick())
@@ -131,6 +122,37 @@ namespace GarrettTowerDefense
         public static void ClearMouseAction()
         {
             CurrentMouseAction = MouseAction.None;
+        }
+
+        public static void SelectTile(int index, bool isBaseLayer)
+        {
+            storedTile = index;
+            isBaseTile = isBaseLayer;
+
+            CurrentMouseAction = MouseAction.PlaceTile;
+        }
+
+        public static void PlaceTile(Point targetTile, int tileID, bool isBase)
+        {
+            int y = targetTile.Y;
+            int x = targetTile.X;
+
+            int? tempIndex = null;
+
+            if(isBase)
+            {
+                if (CurrentMap.mapCells[y, x].tiles.Count > 1)
+                {
+                    tempIndex = CurrentMap.mapCells[y, x].tiles[1].TileID;
+                }
+
+                CurrentMap.mapCells[y, x] = new MapCell();
+            }
+
+            CurrentMap.mapCells[y, x].AddTile(tileID);
+
+            if (tempIndex != null)
+                CurrentMap.mapCells[y, x].AddTile((int)tempIndex);
         }
     }
 }

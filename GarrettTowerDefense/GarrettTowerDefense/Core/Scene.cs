@@ -10,6 +10,8 @@ namespace GarrettTowerDefense
 {
     abstract public class Scene
     {
+        public static Map CurrentMap;
+
         public abstract void LoadContent(ContentManager Content);
 
         public abstract void Initialize();

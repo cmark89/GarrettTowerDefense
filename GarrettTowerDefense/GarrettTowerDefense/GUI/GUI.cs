@@ -194,6 +194,7 @@ namespace GarrettTowerDefense
         BuildObservatory,
         BuildGoldMine,
         UpgradeTower,
-        DestroyTower
+        DestroyTower,
+        PlaceTile
     }
 }

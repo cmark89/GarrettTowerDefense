@@ -21,6 +21,26 @@ namespace GarrettTowerDefense
         public List<Point> SpawnPoints { get; private set; }
         public int Music { get; private set; }
 
+        public Map()
+        {
+            MapWidth = 19;
+            MapHeight = 15;
+            Tileset = TileEngine.Tilesets[0];
+            SpawnPoints = new List<Point>();
+
+            mapCells = new MapCell[MapHeight,MapWidth];
+
+            Music = 2;
+
+            for (int y = 0; y < MapHeight; y++)
+            {
+                for (int x = 0; x < MapWidth; x++)
+                {
+                    mapCells[y, x] = new MapCell(0);
+                }
+            }
+        }
+
 
         public void InitializeTestMap()
         {

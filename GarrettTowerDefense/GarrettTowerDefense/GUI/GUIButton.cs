@@ -80,7 +80,7 @@ namespace GarrettTowerDefense
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(currentImage, Rect, Color.White);
-            spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(Rect.X + 7, Rect.Y + 7, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(buttonImage), Color.White);
+            spriteBatch.Draw(Scene.CurrentMap.Tileset.Texture, new Rectangle(Rect.X + 7, Rect.Y + 7, TileEngine.TileWidth, TileEngine.TileHeight), Scene.CurrentMap.Tileset.GetSourceRectangle(buttonImage), Color.White);
         }
 
         public bool ButtonClicked()

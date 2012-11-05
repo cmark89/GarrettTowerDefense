@@ -14,7 +14,7 @@ namespace GarrettTowerDefense
     public class GameScene : Scene
     {
         //Stores the current map
-        public static Map CurrentMap { get; private set; }
+        //public static Map CurrentMap { get; private set; }
         public static Pathfinder pathfinder;
 
         //Stores a list of all towers currently in the game

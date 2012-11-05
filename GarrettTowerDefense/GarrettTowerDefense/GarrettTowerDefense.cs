@@ -21,7 +21,7 @@ namespace GarrettTowerDefense
         SpriteBatch spriteBatch;
         public static Viewport viewport;
 
-        Scene currentScene;
+        public static Scene currentScene;
 
         public GarrettTowerDefense()
         {
@@ -44,8 +44,14 @@ namespace GarrettTowerDefense
             //Later replace with something else.
             IsMouseVisible = true;
 
+            //Load the tileset here so the map can be properly loaded.
+            new Tileset(Content.Load<Texture2D>("levelTileset"));
+
+
             currentScene = new GameScene();
             GameScene.SetMap(new Map());
+
+            //currentScene = new MapEditorScene();
 
             
 
@@ -70,6 +76,7 @@ namespace GarrettTowerDefense
             new Tileset(Content.Load<Texture2D>("levelTileset"));            
 
             //Set the test map.
+            
             GameScene.CurrentMap.InitializeTestMap2();
             currentScene.LoadContent(Content);
         }
