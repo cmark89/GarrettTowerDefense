@@ -68,6 +68,7 @@ namespace Pathfinding
         //Construct new pathfinding information using the given map
         public Pathfinder(Map map)
         {
+            Console.WriteLine("Pathfinder activated.");
             levelWidth = map.MapWidth;
             levelHeight = map.MapHeight;
 
@@ -77,6 +78,7 @@ namespace Pathfinding
 
         public void InitializeSearchNodes(Map map)
         {
+            Console.WriteLine("Initializing search nodes.");
             searchNodes = new SearchNode[map.MapHeight, map.MapWidth];
 
             //For each tile in our map, create a SearchNode for it
@@ -228,7 +230,6 @@ namespace Pathfinding
             }
 
             //Cache the start and end nodes for convenience
-            Console.WriteLine("\nPF Width: " + levelWidth + "\n PF Height:" + levelHeight);
             SearchNode startNode = searchNodes[startPoint.Y, startPoint.X];
             SearchNode endNode = searchNodes[endPoint.Y, endPoint.X];
 

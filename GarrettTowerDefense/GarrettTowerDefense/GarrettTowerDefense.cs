@@ -47,9 +47,13 @@ namespace GarrettTowerDefense
             //Load the tileset here so the map can be properly loaded.
             new Tileset(Content.Load<Texture2D>("levelTileset"));
 
+            //Let the audio manager load all relevant assets itself
+            AudioManager.LoadContent(Content);
 
             currentScene = new GameScene();
-            GameScene.SetMap(new Map());
+            GameScene.SetMap((Map)Serializer.Deserialize("map.gtd"));
+            Scene.CurrentMap.LoadFromSerialized();
+            Scene.CurrentMap.Initialize();
 
             //currentScene = new MapEditorScene();
 
@@ -67,17 +71,11 @@ namespace GarrettTowerDefense
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Let the audio manager load all relevant assets itself
-            AudioManager.LoadContent(Content);
-
-            //Add all tilesets to the engine (handled automatically by the Tileset class)
-            new Tileset(Content.Load<Texture2D>("levelTileset"));            
+            spriteBatch = new SpriteBatch(GraphicsDevice);          
 
             //Set the test map.
             
-            GameScene.CurrentMap.InitializeTestMap2();
+            //GameScene.CurrentMap.InitializeTestMap2();
             currentScene.LoadContent(Content);
         }
 

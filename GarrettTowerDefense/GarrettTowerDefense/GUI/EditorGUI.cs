@@ -23,7 +23,7 @@ namespace GarrettTowerDefense
 
         public EditorGUI(ContentManager Content)
         {
-            GUITexture = Content.Load<Texture2D>("GUI/MainGUI");
+            GUITexture = Content.Load<Texture2D>("GUI/EditorGUI");
             normalFont = Content.Load<SpriteFont>("Fonts/NormalFont");
 
             baseTiles = new List<int>()
@@ -41,8 +41,12 @@ namespace GarrettTowerDefense
         public void SetupGUI()
         {
             int x = GarrettTowerDefense.viewport.Width - GUITexture.Width;
-            
+
             GUIArea = new Rectangle(x, 0, GUITexture.Width, GUITexture.Height);
+
+            Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 41, GUIArea.Y + 37, 47, 47), "Save"));
+            Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 100, GUIArea.Y + 37, 47, 47), "Load"));
+
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 23, GUIArea.Y + 104, 47, 47), 0));
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 74, GUIArea.Y + 104, 47, 47), 1));
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 125, GUIArea.Y + 104, 47, 47), 2));
@@ -52,8 +56,7 @@ namespace GarrettTowerDefense
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 125, GUIArea.Y + 156, 47, 47), 5));
 
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 23, GUIArea.Y + 208, 47, 47), 14));
-            //Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 74, GUIArea.Y + 208, 47, 47)));
-            //Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 125, GUIArea.Y + 208, 47, 47)));
+            
         }
 
 
@@ -72,6 +75,29 @@ namespace GarrettTowerDefense
                 if (b.ButtonClicked())
                 {
                     Console.WriteLine("Clicked a button!  (Index: " + b.buttonImage.ToString() + ")");
+                    if (b.displayString != null)
+                    {
+                        Console.WriteLine("String: " + b.displayString);
+                        if (b.displayString == "Save")
+                        {
+                            //SAVE THE MAP
+                            Serializer.Serialize("map.gtd", Scene.CurrentMap);
+                        }
+
+                        if (b.displayString == "Load")
+                        {
+                            //LOAD THE MAP
+                            Scene.CurrentMap = (Map)Serializer.Deserialize("map.gtd");
+                            Scene.CurrentMap.LoadFromSerialized();
+                            if (Scene.CurrentMap.CastleTile != null)
+                            {
+                                MapEditorScene.castlePlaced = true;
+                                MapEditorScene.castleTile = Scene.CurrentMap.mapCells[Scene.CurrentMap.CastleTile.Y, Scene.CurrentMap.CastleTile.X];
+                            }
+                        }
+                    }
+                    
+                    
                     currentInput = GUIInput.PlaceTile;
                     MapEditorScene.SelectTile(b.buttonImage, baseTiles.Contains(b.buttonImage));
                 }

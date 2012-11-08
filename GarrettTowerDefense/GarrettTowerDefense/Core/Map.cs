@@ -15,9 +15,25 @@ namespace GarrettTowerDefense
         public MapCell[,] mapCells { get; private set; }
         public int MapWidth { get; private set; }
         public int MapHeight { get; private set; }
-        public Tileset Tileset { get; private set;}
 
-        public Point CastleTile { get; private set; }
+        [NonSerialized]
+        public Tileset _tileset;
+
+        public Tileset Tileset
+        {
+            get { return _tileset; }
+            private set { _tileset = value; }
+        }
+
+        [NonSerialized]
+        public Point _castleTile;
+
+        public Point CastleTile
+        {
+            get { return _castleTile; }
+            private set { _castleTile = value; }
+        }
+
         public List<Point> SpawnPoints { get; private set; }
         public int Music { get; private set; }
 
@@ -138,11 +154,27 @@ namespace GarrettTowerDefense
 
         public void Initialize()
         {
+            Console.WriteLine("Map initialized.");
+            Music = 1;
             AudioManager.PlaySong(Music);
-            GameScene.pathfinder = new Pathfinding.Pathfinder(this);
 
-            //TEST
-            
+            PopulateSpawnPoints();
+        }
+
+        public void PopulateSpawnPoints()
+        {
+            SpawnPoints = new List<Point>();
+
+            for (int y = 0; y < MapHeight; y++)
+            {
+                for (int x = 0; x < MapWidth; x++)
+                {
+                    if (mapCells[y, x].tiles.Count > 1 && mapCells[y, x].tiles[1].TileID == 5)
+                    {
+                        SpawnPoints.Add(new Point(x, y));
+                    }
+                }
+            }
         }
 
 
@@ -166,23 +198,38 @@ namespace GarrettTowerDefense
             }
         }
 
-        #region Serialization and Loading
-        //This will deserialize a map from a file
-        public static Map LoadMap(string mapName)
-        {
-            return null;
-        }
 
-        public static Map LoadMap(int mapIndex)
+        //Run after loading
+        public void LoadFromSerialized()
         {
-            return null;
-        }
+            Tileset = TileEngine.Tilesets[0];
+            for (int y = 0; y < MapHeight; y++)
+            {
+                for(int x = 0; x < MapWidth; x++)
+                {
+                    if (mapCells[y, x].tiles.Count > 1 && mapCells[y, x].tiles[1].TileID == 4)
+                    {
+                        CastleTile = new Point(x, y);
+                    }
 
-        //This will serialize a map to a file
-        public static void SaveMap()
-        {
+                    if (mapCells[y, x].tiles.Count > 1 && mapCells[y, x].tiles[1].TileID == 5)
+                    {
+                        SpawnPoints.Add(new Point(x, y));
+                    }
+                }
+            }
+
+            Console.WriteLine(String.Format("Castle is at {0}, {1}.", CastleTile.X, CastleTile.Y));
+            foreach (Tile t in mapCells[CastleTile.Y, CastleTile.X].tiles)
+            {
+                Console.Write(t.TileID);
+            }
+
+            foreach (Point p in SpawnPoints)
+            {
+                Console.WriteLine(String.Format("Spawn point at: {0}, {1}", p.X, p.Y));
+            }
         }
-        #endregion
 
 
         public bool TileIsBuildable(Point point)

@@ -86,38 +86,79 @@ namespace GarrettTowerDefense
         //Handle mouse input during the game.
         public static void HandleMouseInput(GameTime gameTime)
         {
+            Point curMouseTile = TileEngine.ScreenSpaceToMapSpace(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y));
             //Player clicks the mouse
             if (MouseHandler.Click())
             {
-                //The mouse is over the map.
-                
+                //The mouse is over the map.   
                 if (MouseHandler.CurrentMouseState.X < CurrentMap.MapWidth * TileEngine.TileWidth && CurrentMouseAction == MouseAction.PlaceTile)
                 {
-                    //Get the tile the mouse is over
-                    Point curMouseTile = TileEngine.ScreenSpaceToMapSpace(new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y));
-
-                    if (storedTile == 4 && castlePlaced)
+                    if (!isBaseTile)
                     {
-                        castleTile.tiles.RemoveAt(1);
-                        
+                        if (storedTile == 4 && castlePlaced)
+                        {
+                            for (int i = 0; i < castleTile.tiles.Count; i++)
+                            {
+                                if (castleTile.tiles[i].TileID == 4)
+                                {
+                                    castleTile.tiles.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (storedTile == 4)
+                        {
+                            castleTile = CurrentMap.mapCells[curMouseTile.Y, curMouseTile.X];
+                            castlePlaced = true;
+                        }
+
+                        if (storedTile == 5)
+                        {
+                            Scene.CurrentMap.SpawnPoints.Add(new Point(curMouseTile.X, curMouseTile.Y));
+                        }
                     }
+
+                    if(!isBaseTile)
+                        ClearNonBaseTiles(curMouseTile);
 
                     PlaceTile(curMouseTile, storedTile, isBaseTile);
-
-                    if (storedTile == 4)
-                    {
-                        castleTile = CurrentMap.mapCells[curMouseTile.Y, curMouseTile.X];
-                        castlePlaced = true;
-                    }
                 }
             }
             if (MouseHandler.RightClick())
             {
                 //If right clicking, break the current operation.
-                CurrentMouseAction = MouseAction.None;
+                if (CurrentMouseAction != MouseAction.None)
+                    CurrentMouseAction = MouseAction.None;
+                else if (MouseHandler.CurrentMouseState.X < CurrentMap.MapWidth * TileEngine.TileWidth && CurrentMouseAction == MouseAction.None)
+                {
+                    ClearNonBaseTiles(new Point(curMouseTile.X, curMouseTile.Y));
+                }
             }
         }
         #endregion
+
+        public static void ClearNonBaseTiles(Point point)
+        {
+            if (CurrentMap.mapCells[point.Y, point.X].tiles.Count > 1)
+            {
+                int i;
+
+                //If there is a spawn point here, ensure that it is properly disposed of from the map's list.
+                if (CurrentMap.mapCells[point.Y, point.X].tiles[1].TileID == 5)
+                {
+                    CurrentMap.SpawnPoints.Remove(CurrentMap.SpawnPoints.Find(x => x.X == point.X && x.Y == point.Y));
+                }
+
+                for (i = 1; i < CurrentMap.mapCells[point.Y, point.X].tiles.Count; i++)
+                {
+                    
+                    CurrentMap.mapCells[point.Y, point.X].tiles.RemoveAt(i);
+                }
+            }
+            else
+                return;
+        }
 
         public static void ClearMouseAction()
         {
@@ -134,6 +175,9 @@ namespace GarrettTowerDefense
 
         public static void PlaceTile(Point targetTile, int tileID, bool isBase)
         {
+            if (!MouseHandler.MouseOverMap())
+                return;
+
             int y = targetTile.Y;
             int x = targetTile.X;
 

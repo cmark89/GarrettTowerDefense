@@ -22,7 +22,8 @@ namespace GarrettTowerDefense
 
         public static Point ScreenSpaceToMapSpace(Vector2 screenPoint)
         {
-            return new Point((int)screenPoint.X / TileWidth, (int)screenPoint.Y / TileHeight);
+            Point newPoint = new Point((int)(screenPoint.X / TileWidth), (int)(screenPoint.Y / TileHeight));
+            return newPoint;
         }
 
         public static Vector2 ScreenSpaceToMapVector(Vector2 screenPoint)
@@ -30,7 +31,6 @@ namespace GarrettTowerDefense
             return new Vector2(((int)(screenPoint.X / TileWidth)) * TileWidth, ((int)(screenPoint.Y / TileHeight)) * TileHeight);
         }
     }
-
 
 
     public class Tileset
@@ -65,7 +65,7 @@ namespace GarrettTowerDefense
     }
 
 
-
+    [Serializable]
     public class Tile
     {
         public int TileID { get; private set; }
@@ -80,6 +80,7 @@ namespace GarrettTowerDefense
 
 
     //The MapCell class represents the physical cell on the map.
+    [Serializable]
     public class MapCell
     {
         public Map parentMap { get; private set; }

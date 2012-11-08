@@ -50,8 +50,9 @@ namespace GarrettTowerDefense
         protected float poisonDuration = 0f;
 
 
-        public virtual void Initialize()
+        public virtual void Initialize(Vector2 initialPosition)
         {
+            Position = initialPosition;
             Alive = true;
             GameScene.Enemies.Add(this);
             Console.WriteLine("\nFind path to castle (located at " + GameScene.CurrentMap.CastleTile.X + ", " + GameScene.CurrentMap.CastleTile.Y + ")");
@@ -162,6 +163,11 @@ namespace GarrettTowerDefense
         public virtual void GetPath(Point target)
         {
             Waypoints = GameScene.pathfinder.FindPath(TileEngine.ScreenSpaceToMapSpace(Position), target);
+            Console.WriteLine("Position:" + Position);
+            Console.WriteLine("Map Position: " + TileEngine.ScreenSpaceToMapSpace(Position));
+
+
+
             if (Waypoints.Count > 0)
             {
                 //There is a path to the end point.  Terminate.
@@ -203,6 +209,7 @@ namespace GarrettTowerDefense
         public void SetPosition(Vector2 v2)
         {
             Position = v2;
+            Console.WriteLine("Enemy spawn! " + Position);
         }
 
 

@@ -15,8 +15,6 @@ namespace GarrettTowerDefense
         public static Texture2D OverTexture;
         public static Texture2D DownTexture;
 
-
-
         //The location in screen space of this button
         public Rectangle Rect { get; private set; }
         //The ID of this button
@@ -28,6 +26,9 @@ namespace GarrettTowerDefense
         //The image to appear on the button
         public int buttonImage {get; private set;}
 
+        public string displayString { get; private set; }
+        public static SpriteFont font;
+
 
         public GUIButton(Rectangle thisRect, int id)
         {
@@ -37,12 +38,23 @@ namespace GarrettTowerDefense
             buttonImage = id;
         }
 
+        public GUIButton(Rectangle thisRect, string text)
+        {
+            Rect = thisRect;
+            State = GUIButtonState.Up;
+
+            displayString = text;
+        }
+
 
         public static void LoadContent(ContentManager Content)
         {
             UpTexture = Content.Load<Texture2D>("GUI/GUIButtonUp");
             OverTexture = Content.Load<Texture2D>("GUI/GUIButtonOver");
             DownTexture = Content.Load<Texture2D>("GUI/GUIButtonDown");
+
+            if(font == null)
+                font = Content.Load<SpriteFont>("Fonts/NormalFont");
         }
 
         public void Update(GameTime gameTime)
@@ -80,7 +92,10 @@ namespace GarrettTowerDefense
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(currentImage, Rect, Color.White);
-            spriteBatch.Draw(Scene.CurrentMap.Tileset.Texture, new Rectangle(Rect.X + 7, Rect.Y + 7, TileEngine.TileWidth, TileEngine.TileHeight), Scene.CurrentMap.Tileset.GetSourceRectangle(buttonImage), Color.White);
+            if (displayString == null)
+                spriteBatch.Draw(Scene.CurrentMap.Tileset.Texture, new Rectangle(Rect.X + 7, Rect.Y + 7, TileEngine.TileWidth, TileEngine.TileHeight), Scene.CurrentMap.Tileset.GetSourceRectangle(buttonImage), Color.White);
+            else
+                spriteBatch.DrawString(font, displayString, new Vector2(Rect.X + 7, Rect.Y + 7), Color.Aqua);
         }
 
         public bool ButtonClicked()

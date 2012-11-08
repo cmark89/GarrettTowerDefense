@@ -150,11 +150,15 @@ namespace GarrettTowerDefense
                 if (newEnemy == null)
                     return;
 
-                Point spawnAt = (GameScene.CurrentMap.SpawnPoints[rand.Next(0, GameScene.CurrentMap.SpawnPoints.Count)]);
+                int spawnPointIndex = rand.Next(0, GameScene.CurrentMap.SpawnPoints.Count);
+                Point spawnAt = (GameScene.CurrentMap.SpawnPoints[spawnPointIndex]);
+
+                Console.WriteLine(GameScene.CurrentMap.SpawnPoints.Count + " spawn points found.  Spawn at index " + spawnPointIndex);
+                Console.WriteLine("Spawn at point: " + spawnAt);
+
                 Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
 
-                newEnemy.Initialize();
-                newEnemy.SetPosition(spawnVector);
+                newEnemy.Initialize(spawnVector);
             }
         }
 
@@ -183,8 +187,7 @@ namespace GarrettTowerDefense
         {
             Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
 
-            e.Initialize();
-            e.SetPosition(spawnVector);
+            e.Initialize(spawnVector);
         }
             
     }
