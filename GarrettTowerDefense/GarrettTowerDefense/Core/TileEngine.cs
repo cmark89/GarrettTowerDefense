@@ -88,6 +88,7 @@ namespace GarrettTowerDefense
         public bool IsWalkable = true;
         public bool IsBuildable = true;
         public bool ContainsGold = false;
+        public bool ContainsTower = false;
 
         //Creates a blank MapCell
         public MapCell()

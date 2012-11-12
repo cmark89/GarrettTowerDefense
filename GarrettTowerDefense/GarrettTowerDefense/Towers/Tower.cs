@@ -11,7 +11,7 @@ namespace GarrettTowerDefense
     public class Tower
     {
         //The tile this tower is attached to
-        public Tile ParentTile;
+        public MapCell ParentCell;
         //The Tower's position in map coordinates, and stores the center of that tile as its Vector2 position.
         public Point MapPosition;
         public Vector2 Position;    
@@ -55,8 +55,13 @@ namespace GarrettTowerDefense
                 //Create the tower on the given tile
                 MapPosition = point;
                 Position = new Vector2(point.X * TileEngine.TileWidth, point.Y * TileEngine.TileHeight);
-                GameScene.CurrentMap.SetTileBuildability(point, false);
-                GameScene.CurrentMap.SetTileWalkability(point, false);
+                ParentCell = GameScene.CurrentMap[point.Y, point.X];
+
+                ParentCell.IsWalkable = false;
+                ParentCell.IsBuildable = false;
+                ParentCell.ContainsTower = true;
+
+                GameScene.CurrentMap.SetMovementCost(MapPosition, Pathfinding.Pathfinder.TOWER_COST);
 
                 Initialize();
             }
@@ -170,7 +175,23 @@ namespace GarrettTowerDefense
         //Destroy the tower, either on purpose or as the result of a game effect
         public virtual void Destroy()
         {
+            //KABLAMO!!!
+
             //Free the parent tile from the no building restriction if applicable.
+            if(Name != "Gold Mine")
+                ParentCell.IsWalkable = true;
+
+            ParentCell.IsBuildable = true;
+            ParentCell.ContainsTower = false;
+
+            GameScene.CurrentMap.SetMovementCost(MapPosition, 1f);
+
+            Constructed = false;
+            //Projectiles.Clear();
+            //DisabledProjectiles.Clear();
+            GameScene.Towers.Remove(GameScene.Towers.Find(x => x == this));
+
+            GameScene.RecalculateEnemyPath();
         }
 
         public virtual void Initialize()

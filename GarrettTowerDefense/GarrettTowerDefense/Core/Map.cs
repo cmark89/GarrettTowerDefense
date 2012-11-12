@@ -57,6 +57,13 @@ namespace GarrettTowerDefense
             }
         }
 
+        //Indexer for ease of accessing tiles
+        public MapCell this[int y, int x]
+        {
+            get { return mapCells[y, x]; }
+            set { mapCells[y,x] = value; }
+        }
+
 
         public void InitializeTestMap()
         {
@@ -250,12 +257,22 @@ namespace GarrettTowerDefense
         public void SetTileWalkability(Point point, bool b)
         {
             mapCells[point.Y, point.X].IsWalkable = b;
-            GameScene.pathfinder.SetMovementCost(point, 1000000);
         }
+
+        public void SetMovementCost(Point point, float cost)
+        {
+            GameScene.pathfinder.SetMovementCost(point, cost);
+        }
+        
 
         public void SetTileGoldability(Point point, bool b)
         {
             mapCells[point.Y, point.X].ContainsGold = b;
+        }
+
+        public void SetTileHasTower(Point point, bool b)
+        {
+            this[point.Y, point.X].ContainsTower = b;
         }
     }
 }

@@ -57,6 +57,8 @@ namespace Pathfinding
 
         //Holds nodes that have already been searched
         private List<SearchNode> closedList = new List<SearchNode>();
+
+        public const int TOWER_COST = 10000;
         
 
         private float Heuristic(Point point1, Point point2)
@@ -216,7 +218,7 @@ namespace Pathfinding
 
 
         //The meat of the system:
-        public List<Vector2> FindPath(Point startPoint, Point endPoint)
+        public List<Vector2> FindPath(Point startPoint, Point endPoint, ref int pathCost)
         {
             Console.WriteLine("\nInitiate FindPath");
             Console.WriteLine("\nStart Point: " + startPoint.X + ", " + startPoint.Y);
@@ -284,6 +286,8 @@ namespace Pathfinding
                 {
                     Console.WriteLine("\nGoal found.  Returning final path.");
                     //Trace our final path back to the start
+                    pathCost = (int)currentNode.DistanceTraveled;
+                    Console.WriteLine("Path cost: " + pathCost);
                     return FindFinalPath(startNode, endNode);
                 }
 

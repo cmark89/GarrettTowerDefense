@@ -14,6 +14,7 @@ namespace GarrettTowerDefense
         public string Name { get; protected set; }
         //The position of the enemy in screen space.
         public Vector2 Position { get; protected set; }
+        public Point MapPosition { get; protected set; }
         //The index of the enemy in the sprite sheet
         public int TextureID { get; protected set; }
 
@@ -48,6 +49,8 @@ namespace GarrettTowerDefense
         protected bool isPoisoned = false;
         protected float poisonDPS = 0f;
         protected float poisonDuration = 0f;
+
+        private bool _canDestroyTowers = false;
 
 
         public virtual void Initialize(Vector2 initialPosition)
@@ -162,21 +165,24 @@ namespace GarrettTowerDefense
         //Update the path to the target
         public virtual void GetPath(Point target)
         {
-            Waypoints = GameScene.pathfinder.FindPath(TileEngine.ScreenSpaceToMapSpace(Position), target);
+            int pathCost = 0;
+            Waypoints = GameScene.pathfinder.FindPath(TileEngine.ScreenSpaceToMapSpace(Position), target, ref  pathCost);
             Console.WriteLine("Position:" + Position);
             Console.WriteLine("Map Position: " + TileEngine.ScreenSpaceToMapSpace(Position));
 
-
-
-            if (Waypoints.Count > 0)
+            if (pathCost < Pathfinder.TOWER_COST)
             {
-                //There is a path to the end point.  Terminate.
+                //There is a path to the end point that does not go through a tower.
+                //Ensure that the monster cannot destroy towers.
+                _canDestroyTowers = false;
+                //Return.
                 return;
             }
             else
             {
                 //It's time for some big pain to happen!
-                TextureID = 2;
+                _canDestroyTowers = true;
+                return;
             }
         }
 
@@ -203,6 +209,13 @@ namespace GarrettTowerDefense
 
                 newMovement *= movementThisFrame;
                 Position += newMovement;
+            }
+
+            MapPosition = TileEngine.ScreenSpaceToMapSpace(Position);
+
+            if (_canDestroyTowers && GameScene.CurrentMap[MapPosition.Y, MapPosition.X].ContainsTower)
+            {
+                GameScene.Towers.Find(x => x.MapPosition == MapPosition).Destroy();
             }
         }
 
