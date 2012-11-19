@@ -39,6 +39,9 @@ namespace GarrettTowerDefense
 
         public List<Vector2> Waypoints { get; protected set; }
 
+        public Color DrawColor { get; protected set; }
+        public Color CarnageColor { get; protected set; }
+
         protected bool isFrozen = false;
         protected float freezeDuration = 0f;
 
@@ -52,11 +55,15 @@ namespace GarrettTowerDefense
 
         private bool _canDestroyTowers = false;
 
+        private bool regenHealth = false;
+        private float regenPercent = .04f;
+
 
         public virtual void Initialize(Vector2 initialPosition)
         {
             Position = initialPosition;
             Alive = true;
+            DrawColor = Color.White;
             GameScene.Enemies.Add(this);
             Console.WriteLine("\nFind path to castle (located at " + GameScene.CurrentMap.CastleTile.X + ", " + GameScene.CurrentMap.CastleTile.Y + ")");
             GetPath(GameScene.CurrentMap.CastleTile);
@@ -65,6 +72,12 @@ namespace GarrettTowerDefense
                 Visible = false;
             else
                 Visible = true;
+
+            if (WaveManager.carnageMode)
+            {
+                DrawColor = CarnageColor;
+                ApplyCarnageBuffs();
+            }
         }
 
         public virtual void Update(GameTime gameTime)
@@ -128,6 +141,16 @@ namespace GarrettTowerDefense
                     }
                 }
 
+                if (regenHealth && CurrentHealth < Health)
+                {
+                    float healedAmount = (Health * regenPercent) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    CurrentHealth += healedAmount;
+                    if (CurrentHealth > Health)
+                    {
+                        CurrentHealth = Health;
+                    }
+                }
+
                 UpdateMovement(gameTime);
                 
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
@@ -154,11 +177,11 @@ namespace GarrettTowerDefense
         {
             if (Alive && !Stealthed)
             {
-                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), Color.White);
+                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), DrawColor);
             }
             else if (Alive && Stealthed && Visible)
             {
-                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), Color.White * .5f);
+                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(TextureID), DrawColor * .5f);
             }
         }
 
@@ -240,6 +263,9 @@ namespace GarrettTowerDefense
 
         public void BeginFreeze(float slow, float duration)
         {
+            if (Weaknesses[(int)DamageType.Ice] == 0)
+                return;
+
             MovementSpeed = BaseMovementSpeed * slow;
             isFrozen = true;
             freezeDuration = duration;
@@ -247,6 +273,9 @@ namespace GarrettTowerDefense
 
         public void BeginBurn(float percent, float duration)
         {
+            if (Weaknesses[(int)DamageType.Fire] == 0)
+                return;
+
             float damage = (percent * Health) * Weaknesses[(int)DamageType.Fire];
             Console.WriteLine(Name + " will burn for " + damage + " damage (" + damage/duration + " damage per second) over " + duration + " seconds.");
             isBurning = true;
@@ -256,10 +285,75 @@ namespace GarrettTowerDefense
 
         public void BeginPoison(float damage, float duration)
         {
+            if (Weaknesses[(int)DamageType.Poison] == 0)
+                return;
+
             poisonDPS = damage * Weaknesses[(int)DamageType.Poison];
             Console.WriteLine(Name + " will be poisoned for " + damage + " damage per second for " + duration + " seconds.");
             isPoisoned = true;
             poisonDuration = duration;
+        }
+
+        // Finds all the carnage mode buffs in the current wave and applies them to the monster
+        public void ApplyCarnageBuffs()
+        {
+            //To make this befitting carnage mode, give the enemy 350% health.
+            Health *= 3.5f;
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Fast))
+            {
+                BaseMovementSpeed += 20;
+                MovementSpeed = BaseMovementSpeed;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.FireImmune))
+            {
+                Weaknesses[(int)DamageType.Fire] = 0f;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.IceImmune))
+            {
+                Weaknesses[(int)DamageType.Ice] = 0f;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.ShockImmune))
+            {
+                Weaknesses[(int)DamageType.Electrical] = 0f;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.PoisonImmune))
+            {
+                Weaknesses[(int)DamageType.Poison] = 0f;
+            }
+
+            if(WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Prismatic))
+            {
+                Weaknesses[(int)DamageType.Poison] = .5f;
+                Weaknesses[(int)DamageType.Fire] = .5f;
+                Weaknesses[(int)DamageType.Ice] = .5f;
+                Weaknesses[(int)DamageType.Electrical] = .5f;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Immortal))
+            {
+                Health *= 2;
+                CurrentHealth = Health;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Tough))
+            {
+                Weaknesses[(int)DamageType.Physical] = .5f;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Regenerating))
+            {
+                regenHealth = true;
+            }
+
+            if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Invisible))
+            {
+                Stealthed = true;
+            }
         }
     }
 
@@ -279,5 +373,25 @@ namespace GarrettTowerDefense
         Burning,
         Slowed,
         Stunned
+    }
+
+    public enum BossPhase
+    {
+        Walk = 0,
+        Summon
+    }
+
+    public enum CarnageModeBuff
+    {
+        Invisible,      //The spawned enemy will be invisible
+        FireImmune,     //The spawned enemy will be immune to fire damage
+        IceImmune,      //The spawned enemy will be immune to ice damage
+        ShockImmune,    //The spawned enemy will be immune to shock damage
+        PoisonImmune,   //The spawned enemy will be immune to poison damage
+        Prismatic,      //The spawned enemy will take half damage from all elemental damage
+        Regenerating,   //The spawned enemy will regenerate 3% of its maximum health per second.
+        Fast,           //The spawned enemy will move with +15 speed.
+        Tough,          //The spawned enemy will take half damage from physical attacks
+        Immortal        //The spawned enemy will have double health
     }
 }

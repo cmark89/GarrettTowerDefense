@@ -15,12 +15,19 @@ namespace GarrettTowerDefense
         public float NextSpawn { get; private set; }
         public int EnemiesLeft { get; private set; }
 
+        public static List<CarnageModeBuff> CarnageBuffs;
+
         public bool WavePaused = false;
+        public static bool carnageMode = false;
+
+        public static List<QueuedSpawn> QueuedSpawns { get; set; }
 
         Random rand;
 
         public WaveManager()
         {
+            QueuedSpawns = new List<QueuedSpawn>();
+            CarnageBuffs = new List<CarnageModeBuff>();
             rand = new Random();
 
             WaveNumber = 0;
@@ -47,6 +54,16 @@ namespace GarrettTowerDefense
                     NextSpawn = WaveTime + SpawnRate;
                     SpawnEnemy();
                 }
+            }
+
+            if (QueuedSpawns.Count > 0)
+            {
+                foreach (QueuedSpawn qs in QueuedSpawns)
+                {
+                    SpawnAt(qs.enemy, qs.spawnPoint);
+                }
+
+                QueuedSpawns.Clear();
             }
         }
 
@@ -172,6 +189,14 @@ namespace GarrettTowerDefense
             EnemiesLeft = 7 + WaveNumber * 2;
 
             NextSpawn = 0 + SpawnRate;
+
+            // If in carnage mode...
+            if (carnageMode)
+            {
+                //Set the number of buffs for this wave...
+                int numberOfBuffs = ((WaveNumber - 12) / 3) + 1;
+                GetNextCarnageBuffs(numberOfBuffs);
+            }
         }
 
         public void ReenableSpawn()
@@ -183,11 +208,66 @@ namespace GarrettTowerDefense
         }
 
         //Spawns a specific enemy at a point (used for bosses)
-        public void SpawnAt(Enemy e, Point spawnAt)
+        public static void SpawnAt(Enemy e, Point spawnAt)
         {
             Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
-
             e.Initialize(spawnVector);
+        }
+
+        // This class handles queued orders to spawn enemies so as not to disrupt the enumerations while waiting for the next cycle (used to allow boss spawning)
+        public class QueuedSpawn
+        {
+            public Enemy enemy;
+            public Point spawnPoint;
+
+            public QueuedSpawn(Enemy e, Point p)
+            {
+                enemy = e;
+                spawnPoint = p;
+            }
+        }
+
+        public static void BeginCarnageMode()
+        {
+            Console.WriteLine("------------------");
+            Console.WriteLine("CARNAGE MODE ACTIVATED");
+            Console.WriteLine("------------------");
+            carnageMode = true;
+            GetNextCarnageBuffs();
+        }
+
+        public static void GetNextCarnageBuffs(int targetBuffs = 1)
+        {
+            Random rand = new Random();
+            CarnageBuffs.Clear();
+
+            int newBuff = 0;
+            // For each buff to add...
+            while(CarnageBuffs.Count < targetBuffs)
+            {
+                // Roll a new buff to add to the wave
+                newBuff = rand.Next(0, Enum.GetValues(typeof(CarnageModeBuff)).Length);
+
+                // Check if the buff already exists...
+                if (CarnageBuffs.Contains((CarnageModeBuff)newBuff))
+                {
+                    continue;
+                }
+                else
+                {
+                    // Add the buff to the list of buffs for the wave
+                    CarnageBuffs.Add((CarnageModeBuff)newBuff);
+                }
+            }
+
+            Console.WriteLine("------------------");
+            Console.WriteLine("THIS WAVE'S CARNAGE:");
+            Console.WriteLine("------------------");
+            foreach (CarnageModeBuff cmb in CarnageBuffs)
+            {
+                Console.WriteLine(cmb.ToString());
+            }
+            Console.WriteLine("------------------");
         }
             
     }

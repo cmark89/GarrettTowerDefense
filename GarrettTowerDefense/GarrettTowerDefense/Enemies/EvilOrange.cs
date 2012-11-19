@@ -34,7 +34,7 @@ namespace GarrettTowerDefense
             if (carnageMode)
             {
                 Name = "Carnage Orange";
-                BaseHealth = 300;
+                BaseHealth = 200;
                 //Add keywords or something...
             }
 

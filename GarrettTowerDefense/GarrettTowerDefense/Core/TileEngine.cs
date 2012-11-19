@@ -30,6 +30,11 @@ namespace GarrettTowerDefense
         {
             return new Vector2(((int)(screenPoint.X / TileWidth)) * TileWidth, ((int)(screenPoint.Y / TileHeight)) * TileHeight);
         }
+
+        public static Vector2 MapPointToVector(Point point)
+        {
+            return new Vector2(point.X * TileWidth, point.Y * TileHeight);
+        }
     }
 
 
