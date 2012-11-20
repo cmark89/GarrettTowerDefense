@@ -37,7 +37,8 @@ namespace GarrettTowerDefense
                 Name = "Carnage Carrot";
                 
                 //Increased health
-                //BaseHealth = 400;
+                Health = 500;
+                CurrentHealth = Health;
             }
 
             //base.Initialize();

@@ -31,11 +31,13 @@ namespace GarrettTowerDefense
 
             CurrentState = MonsterState.Normal;
 
+            CarnageColor = new Color(.4f, .9f, .7f, 1f);
+
             if (carnageMode)
             {
                 Name = "Carnage Orange";
-                BaseHealth = 200;
-                //Add keywords or something...
+                Health = 600;
+                CurrentHealth = Health;
             }
 
             //base.Initialize();

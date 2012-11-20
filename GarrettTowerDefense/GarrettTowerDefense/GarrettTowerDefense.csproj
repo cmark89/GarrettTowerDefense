@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Animation.cs" />
     <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\BinaryMinHeap.cs" />
     <Compile Include="Core\Serializer.cs" />

@@ -30,11 +30,13 @@ namespace GarrettTowerDefense
             Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
 
             CurrentState = MonsterState.Normal;
+            CarnageColor = new Color(.8f, .3f, .7f, 1f);
 
             if (carnageMode)
             {
                 Name = "Carnage Lemon";
-                //BaseHealth = 300;
+                Health = 1000;
+                CurrentHealth = Health;
                 //Add keywords or something...
             }
 

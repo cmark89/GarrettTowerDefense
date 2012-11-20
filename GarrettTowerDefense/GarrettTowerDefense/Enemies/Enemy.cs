@@ -56,7 +56,7 @@ namespace GarrettTowerDefense
         private bool _canDestroyTowers = false;
 
         private bool regenHealth = false;
-        private float regenPercent = .04f;
+        private float regenPercent = .025f;
 
 
         public virtual void Initialize(Vector2 initialPosition)
@@ -263,7 +263,7 @@ namespace GarrettTowerDefense
 
         public void BeginFreeze(float slow, float duration)
         {
-            if (Weaknesses[(int)DamageType.Ice] == 0)
+            if (Weaknesses[(int)DamageType.Ice] <= .3f)
                 return;
 
             MovementSpeed = BaseMovementSpeed * slow;
@@ -273,7 +273,7 @@ namespace GarrettTowerDefense
 
         public void BeginBurn(float percent, float duration)
         {
-            if (Weaknesses[(int)DamageType.Fire] == 0)
+            if (Weaknesses[(int)DamageType.Fire] <= .3f)
                 return;
 
             float damage = (percent * Health) * Weaknesses[(int)DamageType.Fire];
@@ -285,7 +285,7 @@ namespace GarrettTowerDefense
 
         public void BeginPoison(float damage, float duration)
         {
-            if (Weaknesses[(int)DamageType.Poison] == 0)
+            if (Weaknesses[(int)DamageType.Poison] <= .3f)
                 return;
 
             poisonDPS = damage * Weaknesses[(int)DamageType.Poison];
@@ -297,9 +297,6 @@ namespace GarrettTowerDefense
         // Finds all the carnage mode buffs in the current wave and applies them to the monster
         public void ApplyCarnageBuffs()
         {
-            //To make this befitting carnage mode, give the enemy 350% health.
-            Health *= 3.5f;
-
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Fast))
             {
                 BaseMovementSpeed += 20;
@@ -308,22 +305,22 @@ namespace GarrettTowerDefense
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.FireImmune))
             {
-                Weaknesses[(int)DamageType.Fire] = 0f;
+                Weaknesses[(int)DamageType.Fire] = .25f;
             }
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.IceImmune))
             {
-                Weaknesses[(int)DamageType.Ice] = 0f;
+                Weaknesses[(int)DamageType.Ice] = .25f;
             }
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.ShockImmune))
             {
-                Weaknesses[(int)DamageType.Electrical] = 0f;
+                Weaknesses[(int)DamageType.Electrical] = .25f;
             }
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.PoisonImmune))
             {
-                Weaknesses[(int)DamageType.Poison] = 0f;
+                Weaknesses[(int)DamageType.Poison] = .25f;
             }
 
             if(WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Prismatic))
@@ -336,13 +333,13 @@ namespace GarrettTowerDefense
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Immortal))
             {
-                Health *= 2;
+                Health *= 1.5f;
                 CurrentHealth = Health;
             }
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Tough))
             {
-                Weaknesses[(int)DamageType.Physical] = .5f;
+                Weaknesses[(int)DamageType.Physical] = .3f;
             }
 
             if (WaveManager.CarnageBuffs.Contains(CarnageModeBuff.Regenerating))
@@ -378,7 +375,9 @@ namespace GarrettTowerDefense
     public enum BossPhase
     {
         Walk = 0,
-        Summon
+        Summon,
+        ShieldWalk,
+        AttackWalk
     }
 
     public enum CarnageModeBuff

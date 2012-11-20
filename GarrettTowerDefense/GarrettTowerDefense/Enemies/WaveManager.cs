@@ -191,11 +191,18 @@ namespace GarrettTowerDefense
             NextSpawn = 0 + SpawnRate;
 
             // If in carnage mode...
-            if (carnageMode)
+            if (carnageMode && WaveNumber < 24)
             {
                 //Set the number of buffs for this wave...
-                int numberOfBuffs = ((WaveNumber - 12) / 3) + 1;
+                int numberOfBuffs = ((WaveNumber - 12) / 4) + 1;
                 GetNextCarnageBuffs(numberOfBuffs);
+                EnemiesLeft = 10 + ((WaveNumber - 12) * 2);
+            }
+
+            if (WaveNumber == 24)
+            {
+                AudioManager.PlaySong(6);
+                AudioManager.SetVolume(.5f);
             }
         }
 

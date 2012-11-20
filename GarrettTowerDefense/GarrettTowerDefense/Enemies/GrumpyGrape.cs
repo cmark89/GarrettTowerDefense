@@ -35,10 +35,8 @@ namespace GarrettTowerDefense
             if (carnageMode)
             {
                 Name = "Carnage Grape";
-                //BaseHealth = 175;
-                //BaseMovementSpeed = 45;
-                //Damage = 5;
-                //Add keywords or something...
+                Health = 550;
+                CurrentHealth = Health;
             }
 
             //base.Initialize();
