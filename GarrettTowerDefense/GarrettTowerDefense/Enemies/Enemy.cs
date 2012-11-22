@@ -14,6 +14,11 @@ namespace GarrettTowerDefense
         public string Name { get; protected set; }
         //The position of the enemy in screen space.
         public Vector2 Position { get; protected set; }
+        public Vector2 CenterPosition
+        {
+            get { return new Vector2(Position.X + (TileEngine.TileWidth / 2), Position.Y + (TileEngine.TileHeight / 2)); }
+        }
+
         public Point MapPosition { get; protected set; }
         //The index of the enemy in the sprite sheet
         public int TextureID { get; protected set; }

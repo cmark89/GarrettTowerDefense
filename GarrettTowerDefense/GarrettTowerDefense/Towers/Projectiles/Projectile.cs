@@ -71,7 +71,8 @@ namespace GarrettTowerDefense
             if (isGlaive)
                 curRotation += rotationSpeed;
             else
-                curRotation = (float)Math.Atan2((double)((Position.Y + _offset) - (Target.Position.Y + _offset)), (double)((Position.X + _offset) - (Target.Position.X + _offset))) + 90f;
+                curRotation = Vector2Helper.FindAngle(Target.Position, Position) - (float)(Math.PI/2);
+
 
             //Handle the movement of the projectile
             float movementThisFrame = Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;

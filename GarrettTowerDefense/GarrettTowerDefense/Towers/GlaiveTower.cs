@@ -40,6 +40,16 @@ namespace GarrettTowerDefense
             base.LevelUp();
         }
 
+        public override void LevelDown()
+        {
+            Damage -= 4;
+            MaxBounces -= 1;
+            MaxGlaives -= 1;
+            MaxBounceRange -= 40;
+
+            base.LevelDown();
+        }
+
         public override void LaunchAttack(Enemy Target)
         {
             if(Projectiles.Count <= MaxGlaives)

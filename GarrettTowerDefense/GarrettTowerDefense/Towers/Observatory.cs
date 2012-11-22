@@ -31,5 +31,12 @@ namespace GarrettTowerDefense
             RevealRange += 50;
             base.LevelUp();
         }
+
+        public override void LevelDown()
+        {
+            RevealRange -= 50;
+
+            base.LevelDown();
+        }
     }
 }

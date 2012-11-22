@@ -43,6 +43,15 @@ namespace GarrettTowerDefense
             base.LevelUp();
         }
 
+        public override void LevelDown()
+        {
+            Damage -= 3;
+            AttackSpeed += .2f;
+            burnAoE -= 15;
+
+            base.LevelDown();
+        }
+
         public override void LaunchAttack(Enemy Target)
         {
             //Fire a projectile

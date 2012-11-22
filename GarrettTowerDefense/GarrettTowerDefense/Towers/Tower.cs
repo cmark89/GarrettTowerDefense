@@ -14,13 +14,18 @@ namespace GarrettTowerDefense
         public MapCell ParentCell;
         //The Tower's position in map coordinates, and stores the center of that tile as its Vector2 position.
         public Point MapPosition;
-        public Vector2 Position;    
+        public Vector2 Position;
+        public Vector2 CenterPosition
+        {
+            get { return new Vector2(Position.X + (TileEngine.TileWidth / 2), Position.Y + (TileEngine.TileHeight / 2)); }
+        }
+
         //The Tower's tile graphic index in the tileset
         public int TileIndex;
         
         public string Name { get; protected set; }
         protected int Health { get; set; }
-        protected int Level { get; set; }
+        public int Level { get; protected set; }
 
         protected DamageType DamageType {get; set;}
         protected int Damage { get; set; }
@@ -37,6 +42,10 @@ namespace GarrettTowerDefense
         public List<Projectile> DisabledProjectiles;
 
         public int[] UpgradeCost = new int[4];
+
+        protected bool stunned = false;
+        protected float unstunTime;
+        protected Animation stunAnimation;
 
 
         
@@ -75,6 +84,9 @@ namespace GarrettTowerDefense
 
         public virtual void Attack(GameTime gameTime)
         {
+            if (stunned)
+                return;
+
             //Attack a target
 
             //Target is out of range
@@ -167,6 +179,12 @@ namespace GarrettTowerDefense
             Level++;
         }
 
+        public virtual void LevelDown()
+        {
+            // Decrease level of tower.
+            Level--;
+        }
+
         public virtual void UpdateStats()
         {
             //Recalculate damage, attack speed and range based on the level / upgrades
@@ -207,6 +225,18 @@ namespace GarrettTowerDefense
         
         public virtual void Update(GameTime gameTime)
         {
+            if (stunned)
+            {
+                stunAnimation.Update(gameTime);
+                unstunTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (unstunTime <= 0)
+                {
+                    stunned = false;
+                    stunAnimation = null;
+                }
+            }
+
             //Only try to attack if the tower has a damage value of greater than 0
             if (Damage > 0 && gameTime.TotalGameTime.TotalSeconds >= NextAttackTime)
             {
@@ -238,6 +268,11 @@ namespace GarrettTowerDefense
 
                 if(Level > 1)
                     spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(MapPosition.X * TileEngine.TileWidth, MapPosition.Y * TileEngine.TileHeight, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(35 + Level), Color.White);
+
+                if (stunned)
+                {
+                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(MapPosition.X * TileEngine.TileWidth, MapPosition.Y * TileEngine.TileHeight, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(stunAnimation.CurrentFrameIndex), Color.White);
+                }
             }
 
             foreach (Projectile p in Projectiles)
@@ -252,6 +287,13 @@ namespace GarrettTowerDefense
         {
             DisabledProjectiles.Add(proj);
             proj.Destroy();
+        }
+
+        public void Stun(float duration)
+        {
+            stunned = true;
+            unstunTime = duration;
+            stunAnimation = new Animation(new int[] { 46, 47 }, 5);
         }
     }
 

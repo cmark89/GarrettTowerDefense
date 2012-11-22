@@ -84,8 +84,12 @@ namespace GarrettTowerDefense
                 switch (WaveNumber)
                 {
                     case (1):
-                        newEnemy = new CruelCarrot();
+                        WavePaused = true;
+                        EnemiesLeft = 0;
+                        newEnemy = new AlexanderHamilton();
                         break;
+                        //newEnemy = new CruelCarrot();
+                        //break;
                     case (2):
                         newEnemy = new GrumpyGrape();
                         break;

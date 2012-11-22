@@ -50,6 +50,15 @@ namespace GarrettTowerDefense
             base.LevelUp();
         }
 
+        public override void LevelDown()
+        {
+            Damage -= 2;
+            altDamage -= 1;
+            altAttackSpeed += 1;
+
+            base.LevelDown();
+        }
+
         public override void Update(GameTime gameTime)
         {
             //Only try to attack if the tower has a damage value of greater than 0

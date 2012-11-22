@@ -114,6 +114,7 @@
     <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\BinaryMinHeap.cs" />
     <Compile Include="Core\Serializer.cs" />
+    <Compile Include="Core\Utility.cs" />
     <Compile Include="Enemies\BadBanana.cs" />
     <Compile Include="Enemies\AngryApple.cs" />
     <Compile Include="Enemies\CarnivorousCorn.cs" />

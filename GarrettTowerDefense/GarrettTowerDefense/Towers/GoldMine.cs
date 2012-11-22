@@ -38,6 +38,14 @@ namespace GarrettTowerDefense
             base.LevelUp();
         }
 
+        public override void LevelDown()
+        {
+            GoldBonus -= 2;
+            GoldInterval += 1;
+
+            base.LevelDown();
+        }
+
 
         public override void Update(GameTime gameTime)
         {

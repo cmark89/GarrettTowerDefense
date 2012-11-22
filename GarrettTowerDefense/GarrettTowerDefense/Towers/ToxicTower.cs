@@ -38,6 +38,13 @@ namespace GarrettTowerDefense
             base.LevelUp();
         }
 
+        public override void LevelDown()
+        {
+            Damage -= 5;
+
+            base.LevelDown();
+        }
+
         public override void LaunchAttack(Enemy Target)
         {
             //Fire a projectile
