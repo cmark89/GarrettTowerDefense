@@ -58,7 +58,7 @@ namespace GarrettTowerDefense
         protected float poisonDPS = 0f;
         protected float poisonDuration = 0f;
 
-        private bool _canDestroyTowers = false;
+        protected bool _canDestroyTowers = false;
 
         private bool regenHealth = false;
         private float regenPercent = .025f;
@@ -254,7 +254,7 @@ namespace GarrettTowerDefense
         }
 
 
-        public void DamageEnemy(int damage, DamageType type)
+        public virtual void DamageEnemy(int damage, DamageType type)
         {
             if (!Alive)
                 return;

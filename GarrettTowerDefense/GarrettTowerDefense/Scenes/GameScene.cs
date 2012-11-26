@@ -58,7 +58,7 @@ namespace GarrettTowerDefense
 
             MaxHealth = 100;
             CurHealth = MaxHealth;
-            Gold = 200;
+            Gold = 400;
             
             CurrentMouseAction = MouseAction.None;
         }
@@ -133,6 +133,15 @@ namespace GarrettTowerDefense
             {
                 if(e.Alive)
                     e.Update(gameTime);
+            }
+
+            for (int i = 0; i < Towers.Count; i++)
+            {
+                if (Towers[i].Destroyed)
+                {
+                    Console.WriteLine("Remove " + Towers[i].Name + " from the global tower list.");
+                    Towers.RemoveAt(i);
+                }
             }
 
             for (int i = 0; i < Enemies.Count; i++)

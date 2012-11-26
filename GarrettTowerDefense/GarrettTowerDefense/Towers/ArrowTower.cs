@@ -18,6 +18,7 @@ namespace GarrettTowerDefense
             Level = 1;
 
             UpgradeCost = new int[]{40,60,100,160};
+            BuildCost = Cost;
 
             DamageType = DamageType.Physical;
             Damage = 8;
@@ -28,7 +29,7 @@ namespace GarrettTowerDefense
 
         public override void LevelUp()
         {
-            Damage += 2;
+            Damage += 3;
             AttackRange += 35;
 
             base.LevelUp();
@@ -36,7 +37,7 @@ namespace GarrettTowerDefense
 
         public override void LevelDown()
         {
-            Damage -= 2;
+            Damage -= 3;
             AttackRange -= 35;
 
             base.LevelDown();

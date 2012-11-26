@@ -27,6 +27,7 @@ namespace GarrettTowerDefense
             Level = 1;
 
             UpgradeCost = new int[] { 40, 70, 120, 170 };
+            BuildCost = Cost;
 
             DamageType = DamageType.Ice;
             Damage = 10;
@@ -86,6 +87,11 @@ namespace GarrettTowerDefense
                 {
                     Projectiles.Remove(p);
                 }
+            }
+
+            if (explodeAnimation != null)
+            {
+                explodeAnimation.Update(gameTime);
             }
         }
 

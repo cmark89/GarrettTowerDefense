@@ -33,7 +33,8 @@ namespace GarrettTowerDefense
         protected float AttackRange { get; set; }
         protected float ProjectileSpeed { get; set; }
 
-        protected bool Constructed { get; set; }
+        public bool Constructed { get; set; }
+        public bool Destroyed { get; set; }
 
         public Enemy Target { get; protected set; }
         public float NextAttackTime { get; private set; }
@@ -42,10 +43,13 @@ namespace GarrettTowerDefense
         public List<Projectile> DisabledProjectiles;
 
         public int[] UpgradeCost = new int[4];
+        public int BuildCost;
 
         protected bool stunned = false;
         protected float unstunTime;
         protected Animation stunAnimation;
+        protected Animation explodeAnimation;
+        protected float explodeTimeRemaining = 0f;
 
 
         
@@ -193,7 +197,6 @@ namespace GarrettTowerDefense
         //Destroy the tower, either on purpose or as the result of a game effect
         public virtual void Destroy()
         {
-            //KABLAMO!!!
 
             //Free the parent tile from the no building restriction if applicable.
             if(Name != "Gold Mine")
@@ -207,7 +210,7 @@ namespace GarrettTowerDefense
             Constructed = false;
             //Projectiles.Clear();
             //DisabledProjectiles.Clear();
-            GameScene.Towers.Remove(GameScene.Towers.Find(x => x == this));
+            Explode();
 
             GameScene.RecalculateEnemyPath();
         }
@@ -249,14 +252,17 @@ namespace GarrettTowerDefense
                     p.Update(gameTime);
             }
 
-            if (DisabledProjectiles.Count == 0)
-                return;
-            else
+            if (DisabledProjectiles.Count > 0)
             {
                 foreach (Projectile p in DisabledProjectiles)
                 {
                     Projectiles.Remove(p);
                 }
+            }
+
+            if (explodeAnimation != null)
+            {
+                explodeAnimation.Update(gameTime);
             }
         }
 
@@ -280,6 +286,11 @@ namespace GarrettTowerDefense
                 if (p.Enabled)
                     p.Draw(spriteBatch);
             }
+
+            if (explodeAnimation != null)
+            {
+                spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(MapPosition.X * TileEngine.TileWidth, MapPosition.Y * TileEngine.TileHeight, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(explodeAnimation.CurrentFrameIndex), Color.White);
+            }
         }
 
 
@@ -294,6 +305,43 @@ namespace GarrettTowerDefense
             stunned = true;
             unstunTime = duration;
             stunAnimation = new Animation(new int[] { 46, 47 }, 5);
+        }
+
+        public void Sell(float refundPercentage)
+        {
+            int upgradeTotal = 0;
+            if (Level > 1)
+            {
+                for (int i = 0; i < Level - 1; i++)
+                {
+                    upgradeTotal += UpgradeCost[i];
+                }
+            }
+
+            int totalCost = BuildCost + upgradeTotal;
+            GameScene.Gold += (int)(totalCost * refundPercentage);
+
+            Destroy();
+        }
+
+        // Creates the explosion animation and triggers the countdown to absolute destruction.
+        public void Explode()
+        {
+            explodeAnimation = new Animation(new int[] { 48, 49, 50, 51, 52, 53 }, 12, true);
+            explodeAnimation.AnimationFinish += new AnimationFinishEventHandler(FinishExploding);
+        }
+
+        // Finally, remove the tower from the list, ensuring it will be garbage collected.
+        public void FinishExploding()
+        {
+            Console.WriteLine("Explosion callback completed.");
+            explodeAnimation = null;
+            Destroyed = true;
+        }
+
+        public void RemoveTower()
+        {
+            GameScene.Towers.Remove(GameScene.Towers.Find(x => x == this));
         }
     }
 

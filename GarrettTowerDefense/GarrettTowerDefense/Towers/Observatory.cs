@@ -19,6 +19,7 @@ namespace GarrettTowerDefense
             Level = 1;
 
             UpgradeCost = new int[] { 30, 60, 90, 120 };
+            BuildCost = Cost;
 
             DamageType = DamageType.Physical;
             Damage = 0;

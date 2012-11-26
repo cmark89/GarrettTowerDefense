@@ -268,6 +268,7 @@ namespace GarrettTowerDefense
 
             Position = TileEngine.MapPointToVector(GameScene.CurrentMap.SpawnPoints[rand.Next(0, GameScene.CurrentMap.SpawnPoints.Count)]);
             GetPath(GameScene.CurrentMap.CastleTile);
+            MapPosition = TileEngine.ScreenSpaceToMapSpace(Position);
         }
     }
 }

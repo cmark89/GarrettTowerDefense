@@ -16,6 +16,9 @@ namespace GarrettTowerDefense
         public bool shieldActive = false;
         // This is the type of damage to ignore
         public DamageType shieldType;
+        public Color shieldColor;
+        public float nextShieldTime;
+        public float shieldChangeCooldown = 10f;
 
         public GameTime currentGameTime;
         public float healthPercentage;
@@ -42,6 +45,21 @@ namespace GarrettTowerDefense
         private float beamCooldown = 1.3f;
         private float nextBeamTime;
 
+        private bool stunned = false;
+        private float unstunTime;
+
+        private Animation destroyTowersAnimation;
+        private List<Tower> builtTowers;
+        private bool destroyingTowers = false;
+        private const float towerDestroyInterval = .25f;
+        private int destroyTowerDistance = 0;
+        private float nextTowerDestroyTime;
+        private float destructionWaveWidth;
+        private float destructionWaveHeight;
+        private Color destructionWaveColor;
+
+        private bool eventActive = false;
+
 
 
         public AlexanderHamilton()
@@ -49,7 +67,8 @@ namespace GarrettTowerDefense
             Name = "Alexander Hamilton";
             TextureID = 17;
 
-            BaseHealth = 30000;
+            BaseHealth = 200;
+            //BaseHealth = 20000;
             //Calculate true health based on the wave number
             Health = BaseHealth;
             CurrentHealth = Health;
@@ -59,7 +78,7 @@ namespace GarrettTowerDefense
             Damage = 100;
 
             currentPhase = 1;
-            bossPhase = BossPhase.AttackWalk;
+            bossPhase = BossPhase.Walk;
 
             BaseMovementSpeed = 25;
             MovementSpeed = BaseMovementSpeed;
@@ -74,7 +93,9 @@ namespace GarrettTowerDefense
 
             //TEST THIS SHIT!
             //In actuality, have this set the time to a couple seconds after spawning
-            nextOrbTime = 13f;
+            nextOrbTime = 4f;
+            //SET SHIELD ON
+            shieldActive = true;
 
             //base.Initialize();
         }
@@ -84,7 +105,22 @@ namespace GarrettTowerDefense
         {
             if (Alive)
             {
+                if (destroyTowersAnimation != null)
+                {
+                    // First, draw the explosion wave to make sure it happens below hamilton himself.  
+                    int startX = (int)(CenterPosition.X - (destructionWaveWidth / 2f));
+                    int startY = (int)(CenterPosition.Y - (destructionWaveHeight / 2f));
+
+
+                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle(startX, startY, (int)destructionWaveWidth, (int)destructionWaveHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(destroyTowersAnimation.CurrentFrameIndex), destructionWaveColor);
+                }
+                
+
                 Color drawColor = Color.White;
+
+                if (stunned)
+                    drawColor = new Color(.5f, .7f, .5f, .5f);
+
                 if (bossPhase == BossPhase.Summon)
                     drawColor = new Color(.5f, .5f, .5f, .5f);
 
@@ -102,6 +138,11 @@ namespace GarrettTowerDefense
                     // Draw the orb in a very standard manner
                     spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)orbPosition.X, (int)orbPosition.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(orbAnimation.CurrentFrameIndex), new Color(1f,1f,1f,.5f));
                 }
+
+                if (shieldActive)
+                {
+                    spriteBatch.Draw(GameScene.CurrentMap.Tileset.Texture, new Rectangle((int)Position.X, (int)Position.Y, TileEngine.TileWidth, TileEngine.TileHeight), GameScene.CurrentMap.Tileset.GetSourceRectangle(45), shieldColor);
+                }
             }
         }
 
@@ -110,7 +151,23 @@ namespace GarrettTowerDefense
             // Cache the game time
             currentGameTime = gameTime;
 
-            Console.WriteLine(CurrentHealth);
+            if (eventActive)
+            {
+                EventUpdate(gameTime);
+                return;
+            }
+
+            if (stunned)
+            {
+                if (currentGameTime.TotalGameTime.TotalSeconds >= unstunTime)
+                {
+                    stunned = false;
+
+                    Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
+                }
+            }
+
+            //Console.WriteLine(CurrentHealth);
 
             //Move the enemy and shit if not stunned
             if (CurrentState != MonsterState.Stunned)
@@ -193,6 +250,14 @@ namespace GarrettTowerDefense
                         break;
                 }
 
+                if (destroyingTowers)
+                {
+                    if (builtTowers.Count > 0)
+                    {
+                        UpdateTowerDestruction(gameTime);
+                    }                    
+                }
+
 
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
                 if (TileEngine.ScreenSpaceToMapSpace(Position) == GameScene.CurrentMap.CastleTile)
@@ -207,13 +272,96 @@ namespace GarrettTowerDefense
         // Checks the boss's health to see if it needs to enter the next phase
         public void CheckHealth()
         {
-            if (healthPercentage < .85f && currentPhase == 1)
+            if (healthPercentage < .8f && currentPhase == 1)
             {
+                Console.WriteLine("-------------");
+                Console.WriteLine("PHASE 2 BEGIN");
+                Console.WriteLine("-------------");
                 // Go to phase 2
-                //bossPhase = 
+                currentPhase = 2;
+
+                TeleportToSpawn();
+                GetPath(GameScene.CurrentMap.CastleTile);
+                shieldActive = true;
+                SetShieldImmunity();
+            }
+
+            if (healthPercentage < .6f && currentPhase == 2)
+            {
+                Console.WriteLine("-------------");
+                Console.WriteLine("PHASE 3 BEGIN");
+                Console.WriteLine("-------------");
+                // Go to phase 3
+                currentPhase = 3;
+
+                TeleportToSpawn();
+                GetPath(GameScene.CurrentMap.CastleTile);
+                shieldActive = false;
+
+                //GO TO MOVING SUMMON PHASE?
+            }
+
+            if (healthPercentage < .45f && currentPhase == 3)
+            {
+                Console.WriteLine("-------------");
+                Console.WriteLine("PHASE 4 BEGIN");
+                Console.WriteLine("-------------");
+                currentPhase = 4;
+
+                TeleportToSpawn();
+                GetPath(GameScene.CurrentMap.CastleTile);
+
+                bossPhase = BossPhase.AttackWalk;
+                nextOrbTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 4f;
+            }
+
+            if (healthPercentage < .2f && currentPhase == 4)
+            {
+                Console.WriteLine("-------------");
+                Console.WriteLine("PHASE 5 BEGIN");
+                Console.WriteLine("-------------");
+                currentPhase = 5;
+
+                // HERE HE DESTROYS EVERYTHING 
+                TeleportToSpawn();
+                GetPath(GameScene.CurrentMap.CastleTile);
+
+                bossPhase = BossPhase.Walk;
+                StartFinalPhase();
             }
         }
 
+        public override void UpdateMovement(GameTime gameTime)
+        {
+            if (Waypoints.Count == 0 || stunned)
+                return;
+
+            //Check if the distance to the next waypoint (Waypoints[0]) is less than or equal to the movement this frame; if so, set the 
+            //monster's position to that point, and then remove the first waypoint from the list and set the next.
+            float movementThisFrame = MovementSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (Vector2.Distance(Position, Waypoints[0]) <= movementThisFrame)
+            {
+                Position = Waypoints[0];
+                Waypoints.RemoveAt(0);
+            }
+            else
+            {
+                //Otherwise, move towards the waypoint
+                Vector2 newMovement = Waypoints[0] - Position;
+                newMovement.Normalize();
+
+                newMovement *= movementThisFrame;
+                Position += newMovement;
+            }
+
+            MapPosition = TileEngine.ScreenSpaceToMapSpace(Position);
+
+            if (_canDestroyTowers && GameScene.CurrentMap[MapPosition.Y, MapPosition.X].ContainsTower)
+            {
+                GameScene.Towers.Find(x => x.MapPosition == MapPosition).Destroy();
+            }
+        }
         #endregion
 
         public void UpdateAttack(GameTime gameTime)
@@ -223,6 +371,15 @@ namespace GarrettTowerDefense
             {
                 // Fire a beam
                 FireBeam();
+            }
+
+            if (shieldActive)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds > nextShieldTime)
+                {
+                    SetShieldImmunity();
+                    nextShieldTime = (float)gameTime.TotalGameTime.TotalSeconds + shieldChangeCooldown;
+                }
             }
 
 
@@ -269,10 +426,8 @@ namespace GarrettTowerDefense
                 }
             }
         }
-
-        // <summary>
-        // Launches a beam at a random tower.
-        // </summary>
+        
+        
         public void FireBeam()
         {
             List<Tower> validTargets = GameScene.Towers.FindAll(x => Vector2.Distance(Position, x.Position) <= beamRange);
@@ -285,6 +440,7 @@ namespace GarrettTowerDefense
             beamAnimation = new Animation(new int[] { 42, 43, 44 });
         }
 
+
         public void BeamHit(Tower target)
         {
             //KABLAMMO!
@@ -296,11 +452,16 @@ namespace GarrettTowerDefense
             }
         }
 
+
         public void FireOrb()
         {
             List<Tower> viableTargets = GameScene.Towers.FindAll(x => Vector2.Distance(x.Position, Position) <= orbRange);
             if (viableTargets.Count <= 0)
+            {
+
+                nextOrbTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 4f;
                 return;
+            }
             
             Random rand = new Random();
 
@@ -309,6 +470,7 @@ namespace GarrettTowerDefense
             orbPosition = Position;
             orbTarget = viableTargets[rand.Next(0, viableTargets.Count)];
         }
+
 
         public void OrbHit(Tower target)
         {
@@ -321,6 +483,158 @@ namespace GarrettTowerDefense
             }
 
             nextOrbTime = (float)currentGameTime.TotalGameTime.TotalSeconds + orbCooldown;
+        }
+
+
+        public void SetShieldImmunity()
+        {
+            if (!shieldActive)
+            {
+                shieldActive = true;
+            }
+
+            Random rand = new Random();
+            int immunity = rand.Next(0, Enum.GetValues(typeof(DamageType)).Length);
+            shieldType = (DamageType)immunity;
+            Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
+            Weaknesses[immunity] = 0f;
+
+            switch (shieldType) 
+            {
+                case (DamageType.Physical):
+                    shieldColor = new Color(.5f, .5f, .5f, .3f);
+                    break;
+                case (DamageType.Fire):
+                    shieldColor = new Color(.8f, 0f, 0f, .3f);
+                    break;
+                case (DamageType.Ice):
+                    shieldColor = new Color(0f, .65f, .65f, .3f);
+                    break;
+                case (DamageType.Electrical):
+                    shieldColor = new Color(0f, .3f, .65f, .3f);
+                    break;
+                case (DamageType.Poison):
+                    shieldColor = new Color(0f, .65f, .15f, .3f);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        public void TeleportToSpawn()
+        {
+            Random rand = new Random();
+
+            Position = TileEngine.MapPointToVector(GameScene.CurrentMap.SpawnPoints[rand.Next(0, GameScene.CurrentMap.SpawnPoints.Count)]);
+            GetPath(GameScene.CurrentMap.CastleTile);
+            MapPosition = TileEngine.ScreenSpaceToMapSpace(Position);
+        }
+
+
+        public void DestroyTowers(Tower[] towers)
+        {
+            foreach (Tower t in towers)
+            {
+                Console.WriteLine("Destroying a specific tower: " + t.Name);
+                t.Sell(1f);
+                builtTowers.Remove(t);
+            }
+        }
+
+        public void UpdateTowerDestruction(GameTime gameTime)
+        {
+            // Set the animation properties here.
+            destructionWaveWidth += ((TileEngine.TileWidth * 2) / towerDestroyInterval) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            destructionWaveHeight += ((TileEngine.TileHeight * 2) / towerDestroyInterval) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
+            // Change the color
+            destructionWaveColor = new Color(.5f, .5f, .5f, .2f);
+            
+
+            if (currentGameTime.TotalGameTime.TotalSeconds >= nextTowerDestroyTime)
+            {
+                Console.WriteLine("Towers remaining: " + builtTowers.Count); 
+                Console.WriteLine("Destroy all towers at " + destroyTowerDistance);
+                DestroyTowers(GetTowersAtDistance(destroyTowerDistance));
+                destroyTowerDistance++;
+
+                nextTowerDestroyTime = (float)currentGameTime.TotalGameTime.TotalSeconds + towerDestroyInterval;
+
+                if (builtTowers.Count == 0)
+                {
+                    destroyTowersAnimation = null;
+                    Console.WriteLine("Towers destroyed!");
+                    destroyingTowers = false;
+                    Weaknesses = new float[] { 0f, 0f, 0f, 0f, 0f };
+                }
+            }
+        }
+
+
+        public void StartFinalPhase()
+        {
+            AudioManager.PlaySong(3);
+            Console.WriteLine("Final phase begin!");
+            Weaknesses = new float[] { 0f, 0f, 0f, 0f, 0f };
+            isBurning = false;
+            isPoisoned = false;
+            isFrozen = false; 
+
+            beamAnimation = null;
+            orbAnimation = null;
+
+            // Here Hamilton will mock the player.
+
+            // He then destroys towers in a ring outward from wherever he respawns.
+
+            Console.WriteLine("Begin destroying all towers!");
+            builtTowers = new List<Tower>(GameScene.Towers);
+            destroyTowersAnimation = new Animation(new int[] { 45 }, 0);
+
+            destroyingTowers = true;
+            
+            stunned = true;
+            unstunTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 30f;
+        }
+        
+
+        public Tower[] GetTowersAtDistance(int range)
+        {
+            List<Tower> towersFound = new List<Tower>();
+
+            int xDist;
+            int yDist;
+            int totalDist;
+
+            foreach (Tower t in builtTowers)
+            {
+                if (!t.Constructed)
+                    continue;
+
+                xDist = Math.Abs(t.MapPosition.X - MapPosition.X);
+                yDist = Math.Abs(t.MapPosition.Y - MapPosition.Y);
+
+                totalDist = xDist + yDist;
+
+                Console.WriteLine("Tower is at " + totalDist);
+
+                //if (totalDist <= range || xDist)
+                if(xDist <= range && yDist <= range)
+                {
+                    towersFound.Add(t);
+                }
+            }
+
+            Console.WriteLine("Towers to destroy: " + towersFound.Count);
+            return towersFound.ToArray();
+        }
+
+
+        // This is where events such as text will be handled.  This is processed /instead/ of movement / attack updates, and also foregoes health checking.
+        public void EventUpdate(GameTime gameTime)
+        {
+
         }
     }
 }
