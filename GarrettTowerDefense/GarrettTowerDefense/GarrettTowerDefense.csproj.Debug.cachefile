@@ -18,6 +18,8 @@ Content\GUI\Healthbar.xnb
 Content\GUI\EnemyHealthbar.xnb
 Content\GUI\EditorGUI.xnb
 Content\Audio\Music\AbandonAllHQ.xnb
+Content\GUI\hamiltonMessage.xnb
+Content\Fonts\MessageFont.xnb
 Content\Audio\Music\Elegy.wma
 Content\Audio\Music\Bananalord.wma
 Content\Audio\Music\ProfaningTheRitual.wma

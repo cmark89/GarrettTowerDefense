@@ -23,6 +23,9 @@ namespace GarrettTowerDefense
 
         public static Scene currentScene;
 
+        // Good idea, or no?  Time will tell.
+        public static ContentManager StaticContent;
+
         public GarrettTowerDefense()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -70,6 +73,8 @@ namespace GarrettTowerDefense
         /// </summary>
         protected override void LoadContent()
         {
+            StaticContent = Content;
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);          
 

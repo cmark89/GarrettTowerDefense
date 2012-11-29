@@ -67,8 +67,8 @@ namespace GarrettTowerDefense
             Name = "Alexander Hamilton";
             TextureID = 17;
 
-            BaseHealth = 200;
-            //BaseHealth = 20000;
+            //BaseHealth = 200;
+            BaseHealth = 35000;
             //Calculate true health based on the wave number
             Health = BaseHealth;
             CurrentHealth = Health;
@@ -94,8 +94,8 @@ namespace GarrettTowerDefense
             //TEST THIS SHIT!
             //In actuality, have this set the time to a couple seconds after spawning
             nextOrbTime = 4f;
-            //SET SHIELD ON
-            shieldActive = true;
+
+            ShowMessage("Here I come, you faggot!");
 
             //base.Initialize();
         }
@@ -153,7 +153,6 @@ namespace GarrettTowerDefense
 
             if (eventActive)
             {
-                EventUpdate(gameTime);
                 return;
             }
 
@@ -241,6 +240,7 @@ namespace GarrettTowerDefense
                         break;
                     case BossPhase.ShieldWalk:
                         UpdateMovement(gameTime);
+                        UpdateAttack(gameTime);
                         break;
                     case BossPhase.AttackWalk:
                         UpdateAttack(gameTime);
@@ -284,6 +284,7 @@ namespace GarrettTowerDefense
                 GetPath(GameScene.CurrentMap.CastleTile);
                 shieldActive = true;
                 SetShieldImmunity();
+                ShowMessage("Hide behind your walls all you please.  We'll see what happens when your weapons are rendered useless!");
             }
 
             if (healthPercentage < .6f && currentPhase == 2)
@@ -297,11 +298,13 @@ namespace GarrettTowerDefense
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
                 shieldActive = false;
-
+                Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
+                
+                ShowMessage("Rise my legions!  Crush all that stands in your way!  Let none survive!!");
                 //GO TO MOVING SUMMON PHASE?
             }
 
-            if (healthPercentage < .45f && currentPhase == 3)
+            if (healthPercentage < .5f && currentPhase == 3)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 4 BEGIN");
@@ -313,21 +316,25 @@ namespace GarrettTowerDefense
 
                 bossPhase = BossPhase.AttackWalk;
                 nextOrbTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 4f;
+                ShowMessage("I shall raze your stronghold to the ground!  Behold the ruins of your ambition!");
             }
 
-            if (healthPercentage < .2f && currentPhase == 4)
+            if (healthPercentage < .3f && currentPhase == 4)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 5 BEGIN");
                 Console.WriteLine("-------------");
                 currentPhase = 5;
 
-                // HERE HE DESTROYS EVERYTHING 
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
 
                 bossPhase = BossPhase.Walk;
-                StartFinalPhase();
+
+                // Fade out the music, instead of just stopping it
+                AudioManager.StopMusic();
+
+                ShowFinalPhaseMessage1();
             }
         }
 
@@ -367,7 +374,7 @@ namespace GarrettTowerDefense
         public void UpdateAttack(GameTime gameTime)
         {
             // Here, update the various forms of attack Hamilton uses.  Shoot a beam at a random tower and BOOM it!
-            if (beamAnimation == null && nextBeamTime <= gameTime.TotalGameTime.TotalSeconds)
+            if (bossPhase == BossPhase.AttackWalk && beamAnimation == null && nextBeamTime <= gameTime.TotalGameTime.TotalSeconds)
             {
                 // Fire a beam
                 FireBeam();
@@ -383,7 +390,7 @@ namespace GarrettTowerDefense
             }
 
 
-            if (orbAnimation == null && nextOrbTime <= gameTime.TotalGameTime.TotalSeconds)
+            if (bossPhase == BossPhase.AttackWalk && orbAnimation == null && nextOrbTime <= gameTime.TotalGameTime.TotalSeconds)
             {
                 // Shoot an orb
                 FireOrb();
@@ -589,7 +596,7 @@ namespace GarrettTowerDefense
             // He then destroys towers in a ring outward from wherever he respawns.
 
             Console.WriteLine("Begin destroying all towers!");
-            builtTowers = new List<Tower>(GameScene.Towers);
+            builtTowers = new List<Tower>(GameScene.Towers.Where(x => x.Constructed));
             destroyTowersAnimation = new Animation(new int[] { 45 }, 0);
 
             destroyingTowers = true;
@@ -631,10 +638,155 @@ namespace GarrettTowerDefense
         }
 
 
-        // This is where events such as text will be handled.  This is processed /instead/ of movement / attack updates, and also foregoes health checking.
-        public void EventUpdate(GameTime gameTime)
+        public static void ShowMessage(string message)
         {
+            new MessageWindow("hamiltonMessage", text: message, isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                GameScene.Paused = true;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                GameScene.Paused = false;
+            };
 
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage1()
+        {
+            new MessageWindow("hamiltonMessage", "You are stronger than I gave you credit for...but you are a mote of dust before the cosmic powers I command.", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                GameScene.Paused = true;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage2();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage2()
+        {
+            new MessageWindow("hamiltonMessage", "Because you have fought so hard, I shall tell you a secret...", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage3();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage3()
+        {
+            new MessageWindow("hamiltonMessage", "I have been using a mere one percent of my nigh unlimited power!", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage4();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage4()
+        {
+            new MessageWindow("hamiltonMessage", "That's right, Garrett, hear the truth and despair!  You have only come so far because I have allowed you to do so.", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage5();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage5()
+        {
+            new MessageWindow("hamiltonMessage", "Only by clinging desperately to an illusion of hope could your defeat be absolute.  Only then could it be perfect.", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage6();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage6()
+        {
+            new MessageWindow("hamiltonMessage", "That is ABSOLUTE DESPAIR!", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage7();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage7()
+        {
+            new MessageWindow("hamiltonMessage", "Now, Garrett, open your eyes and drink in the full extent of your helplessness!  Know that I am Hamilton, the ruler of all the cosmos!", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage8();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage8()
+        {
+            new MessageWindow("hamiltonMessage", "Bask in the full extent of my power!  Bask in your undoing!  Bask in ABSOLUTE DESPAIR!!", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                ShowFinalPhaseMessage9();
+            };
+
+            GameScene.messageWindow.ShowWindow();
+        }
+
+        public void ShowFinalPhaseMessage9()
+        {
+            new MessageWindow("hamiltonMessage", "Behold...the end of everything!!!", isVisible: false);
+            GameScene.messageWindow.ShowMessageWindow += delegate
+            {
+                return;
+            };
+            GameScene.messageWindow.HideMessageWindow += delegate
+            {
+                StartFinalPhase();
+                GameScene.Paused = false;
+            };
+
+            GameScene.messageWindow.ShowWindow();
         }
     }
 }

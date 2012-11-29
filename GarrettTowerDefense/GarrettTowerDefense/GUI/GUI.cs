@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using GarrettTowerDefense;
 
 namespace GarrettTowerDefense
 {
@@ -69,50 +70,54 @@ namespace GarrettTowerDefense
             }
 
             //Check for GUI hovering
+            Rectangle tooltipRect = new Rectangle((int)tooltipText1Start.X, (int)tooltipText1Start.Y, 145, 182);
+
+            // Note: Refactor this to a BuildStrings() method called on construction, to prevent calling GetWrappedString every frame.
             if (Buttons[0].MouseOver())
             {
                 tooltipText0 = "Barricade";
-                tooltipText1 = "Barricades are simple constructions \nof metal and several less sturdy \nmaterials.  While they lack any true \noffensive capabilities, they are cheap \nand can be used to block enemy \npathing.";
+                tooltipText1 = normalFont.GetWrappedString("Barricades are simple constructions of metal and several less sturdy materials.  While they lack any true offensive capabilities, they are cheap and can be used to block enemy pathing.", tooltipRect);
+                            
             }
             else if (Buttons[1].MouseOver())
             {
                 tooltipText0 = "Arrow Tower";
-                tooltipText1 = "Arrow Towers are the workhorse of \nGarrett's fortifications.  While \nthey do not possess any special \neffects or attributes, their cheap \ncost is admired far and wide.";
+                tooltipText1 = normalFont.GetWrappedString("Arrow Towers are the workhorse of Garrett's fortifications.  While they do not possess any special effects or attributes, their cheap cost is admired far and wide.", tooltipRect);
             }
             else if (Buttons[2].MouseOver())
             {
                 tooltipText0 = "Toxic Tower";
-                tooltipText1 = "Toxic Towers are vile constructions \nborn of filth and disease.  Its attacks \ncause enemies to lose health \nover time.";
+                tooltipText1 = normalFont.GetWrappedString("Toxic Towers are vile constructions born of filth and disease.  Its attacks cause enemies to lose health over time.", tooltipRect);
             }
             else if (Buttons[3].MouseOver())
             {
                 tooltipText0 = "Flame Tower";
-                tooltipText1 = "The Flame Tower is a powerful \nfurnace built from the bones of \nGarrett's enemies.  While it attacks \nslowly, its attacks deal damage in an \narea and cause targets to burn for a \npercentage of their health over \ntime.";
+                tooltipText1 = normalFont.GetWrappedString("The Flame Tower is a powerful furnace built from the bones of Garrett's enemies.  While it attacks slowly, its attacks deal damage in an area and cause targets to burn for a percentage of their health over time.", tooltipRect);
             }
             else if (Buttons[4].MouseOver())
             {
                 tooltipText0 = "Tesla Tower";
-                tooltipText1 = "The Tesla Tower is Garrett's most \nmaddening invention.  The Tesla \nTower has a slow attack speed, but its \nattacks will hit all enemies within a \nlarge radius around it.";
+                tooltipText1 = normalFont.GetWrappedString("The Tesla Tower is Garrett's most maddening invention.  The Tesla Tower has a slow attack speed, but its attacks will hit all enemies within a large radius around it.", tooltipRect);
             }
             else if (Buttons[5].MouseOver())
             {
                 tooltipText0 = "Ice Tower";
-                tooltipText1 = "The Ice Towers are menacing obelisks \nmade of unbreakable ice crystals.  \nAny enemy unfortunate enough to \nbe hit by this tower will have its \nmovement speed slowed.";
+                tooltipText1 = normalFont.GetWrappedString("The Ice Towers are menacing obelisks made of unbreakable ice crystals.  Any enemy unfortunate enough to be hit by this tower will have its movement speed slowed.", tooltipRect);
             }
             else if (Buttons[6].MouseOver())
             {
                 tooltipText0 = "Glaive Tower";
-                tooltipText1 = "The Glaive Tower is a powerful and \ndeadly device that shoots spinning \nblades of carnage at its opponents.  \nThese blades will bounce to \nadditional targets, allowing it to cut \nthrough swarms of enemies.";
+                tooltipText1 = normalFont.GetWrappedString("The Glaive Tower is a powerful and deadly device that shoots spinning blades of carnage at its opponents.  These blades will bounce to additional targets, allowing it to cut through swarms of enemies.", tooltipRect);
             }
             else if (Buttons[7].MouseOver())
             {
                 tooltipText0 = "Observatory";
-                tooltipText1 = "The Observatory, normally a \nnon-violent retreat for intellectuals, \nhas been upgraded to reveal \nstealthed enemy units.";
+                tooltipText1 = normalFont.GetWrappedString("The Observatory, normally a non-violent retreat for intellectuals, has been upgraded to reveal stealthed enemy units.", tooltipRect);
             }
             else if (Buttons[8].MouseOver())
             {
                 tooltipText0 = "Gold Mine";
-                tooltipText1 = "Gold is the fuel of the engine of \ncommerce.  Constructs a Gold Mine \non top of a gold vein, providing \npassive income.";
+                tooltipText1 = normalFont.GetWrappedString("Gold is the fuel of the engine of commerce.  Constructs a Gold Mine on top of a gold vein, providing passive income.", tooltipRect);
             }
             else
             {
@@ -176,7 +181,7 @@ namespace GarrettTowerDefense
 
             if (tooltipText1 != null)
             {
-                spriteBatch.DrawString(normalFont, tooltipText1, tooltipText1Start, Color.LightYellow);
+                spriteBatch.DrawString(normalFont, tooltipText1, tooltipText1Start + new Vector2(6,0), Color.LightYellow);
             }
         }
     }

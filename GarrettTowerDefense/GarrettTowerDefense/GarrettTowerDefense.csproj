@@ -113,6 +113,7 @@
     <Compile Include="Core\Animation.cs" />
     <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\BinaryMinHeap.cs" />
+    <Compile Include="Core\MessageWindow.cs" />
     <Compile Include="Core\Serializer.cs" />
     <Compile Include="Core\Utility.cs" />
     <Compile Include="Enemies\BadBanana.cs" />

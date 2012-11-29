@@ -32,9 +32,14 @@ namespace GarrettTowerDefense
 
         public static GUI GUI { get; private set; }
 
+        public static MessageWindow messageWindow;
+
         //Used for storing the price of towers efficiently
         public static int LoadedPrice {get; set;}
         public static WaveManager waveManager { get; set; }
+
+        // Used for pausing the game.
+        public static bool Paused = false;
 
 
         //Stores player related variables
@@ -124,55 +129,54 @@ namespace GarrettTowerDefense
             #endregion
 
             //Update each tower in turn
-            foreach (Tower t in Towers)
+            if (!Paused)
             {
-                t.Update(gameTime);
-            }
-
-            foreach (Enemy e in Enemies)
-            {
-                if(e.Alive)
-                    e.Update(gameTime);
-            }
-
-            for (int i = 0; i < Towers.Count; i++)
-            {
-                if (Towers[i].Destroyed)
+                foreach (Tower t in Towers)
                 {
-                    Console.WriteLine("Remove " + Towers[i].Name + " from the global tower list.");
-                    Towers.RemoveAt(i);
-                }
-            }
-
-            for (int i = 0; i < Enemies.Count; i++)
-            {
-                if (!Enemies[i].Alive)
-                    Enemies.RemoveAt(i);
-            }
-
-            //Should add an upgrade button and make this require MouseAction.Updrade instead of MouseAction.None.  Otherwise it's dumb.
-            if (CurrentMouseAction == MouseAction.None && MouseHandler.MouseOverMap() && MouseHandler.RightClick())
-            {
-                Vector2 mousepos = new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y);
-                Point clickedtile = TileEngine.ScreenSpaceToMapSpace(mousepos);
-                Console.WriteLine("Right clicked on " + clickedtile);
-
-                Tower t = GameScene.Towers.Find(x => x.MapPosition == clickedtile);
-                if (t != null)
-                {
-                    t.Upgrade();
+                    t.Update(gameTime);
                 }
 
+                foreach (Enemy e in Enemies)
+                {
+                    if (e.Alive)
+                        e.Update(gameTime);
+                }
 
-                
+                for (int i = 0; i < Towers.Count; i++)
+                {
+                    if (Towers[i].Destroyed)
+                    {
+                        Console.WriteLine("Remove " + Towers[i].Name + " from the global tower list.");
+                        Towers.RemoveAt(i);
+                    }
+                }
+
+                for (int i = 0; i < Enemies.Count; i++)
+                {
+                    if (!Enemies[i].Alive)
+                        Enemies.RemoveAt(i);
+                }
+                //Should add an upgrade button and make this require MouseAction.Updrade instead of MouseAction.None.  Otherwise it's dumb.
+                if (CurrentMouseAction == MouseAction.None && MouseHandler.MouseOverMap() && MouseHandler.RightClick())
+                {
+                    Vector2 mousepos = new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y);
+                    Point clickedtile = TileEngine.ScreenSpaceToMapSpace(mousepos);
+                    Console.WriteLine("Right clicked on " + clickedtile);
+
+                    Tower t = GameScene.Towers.Find(x => x.MapPosition == clickedtile);
+                    if (t != null)
+                    {
+                        t.Upgrade();
+                    }
+                }
+
+                //Update the wave manager.
+                waveManager.Update(gameTime);
             }
-
-
-
-            //Update the wave manager.
-            waveManager.Update(gameTime);
-
             
+
+            if (messageWindow != null)
+                messageWindow.Update(gameTime);            
         }
 
 
@@ -267,6 +271,11 @@ namespace GarrettTowerDefense
                 }
                 
                 spriteBatch.Draw(EnemyHealthbar, new Rectangle((int)e.Position.X, (int)e.Position.Y, width, 3), color);
+            }
+
+            if (messageWindow != null)
+            {
+                messageWindow.Draw(spriteBatch);
             }
 
             GUI.Draw(spriteBatch);

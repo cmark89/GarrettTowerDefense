@@ -84,12 +84,12 @@ namespace GarrettTowerDefense
                 switch (WaveNumber)
                 {
                     case (1):
-                        WavePaused = true;
-                        EnemiesLeft = 0;
-                        newEnemy = new AlexanderHamilton();
-                        break;
-                        //newEnemy = new CruelCarrot();
+                        //WavePaused = true;
+                        //EnemiesLeft = 0;
+                        //newEnemy = new AlexanderHamilton();
                         //break;
+                        newEnemy = new CruelCarrot();
+                        break;
                     case (2):
                         newEnemy = new GrumpyGrape();
                         break;
@@ -205,6 +205,7 @@ namespace GarrettTowerDefense
 
             if (WaveNumber == 24)
             {
+                AlexanderHamilton.ShowMessage("Worthless underlings.  It seems I will have to dispose of you myself!");
                 AudioManager.PlaySong(6);
                 AudioManager.SetVolume(.5f);
             }
