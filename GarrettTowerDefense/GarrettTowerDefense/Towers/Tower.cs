@@ -49,10 +49,7 @@ namespace GarrettTowerDefense
         protected float unstunTime;
         protected Animation stunAnimation;
         protected Animation explodeAnimation;
-        protected float explodeTimeRemaining = 0f;
-
-
-        
+        protected float explodeTimeRemaining = 0f;        
 
         public Tower()
         {
@@ -73,6 +70,8 @@ namespace GarrettTowerDefense
                 ParentCell.IsWalkable = false;
                 ParentCell.IsBuildable = false;
                 ParentCell.ContainsTower = true;
+
+                GameScene.Gold -= BuildCost;
 
                 GameScene.CurrentMap.SetMovementCost(MapPosition, Pathfinding.Pathfinder.TOWER_COST);
 

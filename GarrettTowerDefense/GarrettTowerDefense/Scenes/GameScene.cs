@@ -33,6 +33,7 @@ namespace GarrettTowerDefense
         public static GUI GUI { get; private set; }
 
         public static MessageWindow messageWindow;
+        public static Tooltip tooltip;
 
         //Used for storing the price of towers efficiently
         public static int LoadedPrice {get; set;}
@@ -46,6 +47,8 @@ namespace GarrettTowerDefense
         public static int MaxHealth;
         public static int CurHealth;
         public static int Gold;
+
+        public static bool showGrid = false;
 
 
         public GameScene()
@@ -172,6 +175,9 @@ namespace GarrettTowerDefense
 
                 //Update the wave manager.
                 waveManager.Update(gameTime);
+
+                if (tooltip != null)
+                    tooltip.Update(gameTime);
             }
             
 
@@ -189,6 +195,14 @@ namespace GarrettTowerDefense
                 CurrentMap.Draw(spriteBatch);
 
             //pathfinder.Draw(spriteBatch);
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
+            {
+                showGrid = true;
+            }
+            else
+            {
+                showGrid = false;
+            }
 
             //Draw something cool at the cursor if relevant
             if (CurrentMouseAction != MouseAction.None && MouseHandler.MouseOverMap())
@@ -279,6 +293,10 @@ namespace GarrettTowerDefense
             }
 
             GUI.Draw(spriteBatch);
+            if (tooltip != null)
+            {
+                tooltip.Draw(spriteBatch);
+            }
         }
 
 
@@ -307,39 +325,30 @@ namespace GarrettTowerDefense
                     {
                         case MouseAction.BuildBarricade:
                             new Barricade().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildArrowTower:
                             new ArrowTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildToxicTower:
                             new ToxicTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildFlameTower:
                             new FlameTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildTeslaTower:
                             new TeslaTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildIceTower:
                             new IceTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildGlaiveTower:
                             new GlaiveTower().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildObservatory:
                             new Observatory().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         case MouseAction.BuildGoldMine:
                             new GoldMine().Build(curMouseTile);
-                            if (Gold >= LoadedPrice) { Gold -= LoadedPrice; }
                             break;
                         default:
                             break;

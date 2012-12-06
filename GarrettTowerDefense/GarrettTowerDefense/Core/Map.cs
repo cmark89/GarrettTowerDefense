@@ -201,6 +201,9 @@ namespace GarrettTowerDefense
                     {
                         spriteBatch.Draw(Tileset.Texture, destinationRect, Tileset.GetSourceRectangle(mapCells[y,x].tiles[i].TileID), Color.White);
                     }
+
+                    if (GameScene.showGrid)
+                        spriteBatch.Draw(Tileset.Texture, destinationRect, Tileset.GetSourceRectangle(54), Color.White);
                 }
             }
         }
