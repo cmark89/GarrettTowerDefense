@@ -145,6 +145,7 @@
     <Compile Include="Scenes\MapEditorScene.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Core\TileEngine.cs" />
+    <Compile Include="Scenes\TitleScene.cs" />
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\Barricade.cs" />
     <Compile Include="Towers\Observatory.cs" />

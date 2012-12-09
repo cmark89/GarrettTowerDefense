@@ -28,6 +28,12 @@ namespace GarrettTowerDefense
             ProjectileSpeed = 350;
         }
 
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \n\nNext Upgrade: \n+2 Damage \n-.25 Attack Speed\n+25 Range\n\nUpgrade Cost: {5}",
+                Level, Name, Damage, AttackSpeed, AttackRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+        }
+
         public override void LevelUp()
         {
             Damage += 2;
@@ -48,6 +54,8 @@ namespace GarrettTowerDefense
 
         public override void LaunchAttack(Enemy Target)
         {
+            AudioManager.PlaySoundEffect(8);
+
             //Fire a projectile at each enemy in range.
             foreach (Enemy e in GameScene.Enemies)
             {

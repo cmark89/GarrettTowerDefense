@@ -35,8 +35,8 @@ namespace GarrettTowerDefense
             if (carnageMode)
             {
                 Name = "Carnage Potato";
-                BaseHealth = 750;
-                CurrentHealth = BaseHealth;
+                Health = 750;
+                CurrentHealth = Health;
             }
 
             //base.Initialize();

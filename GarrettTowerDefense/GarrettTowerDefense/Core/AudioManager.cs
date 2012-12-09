@@ -33,6 +33,22 @@ namespace GarrettTowerDefense
 
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Laugh"));
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/LikeThat"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/ArrowTower_Attack"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/FireTower_Attack"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/GlaiveTower_Attack"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/GlaiveTower_Bounce"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/GoldMine_Income"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/IceTower_Attack"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/TeslaTower_Attack"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Tower_Build"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Tower_Explode"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Tower_Upgrade"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/ToxicTower_Attack"));
+
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Boss_Beam"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Boss_ShieldChange"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Boss_StunOrb"));
+            AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Tower_Stunned"));
         }
 
 
@@ -93,9 +109,9 @@ namespace GarrettTowerDefense
         }
 
 
-        public static void PlaySoundEffect(int index)
+        public static void PlaySoundEffect(int index, float volume = .48f)
         {
-            SoundEffects[index].Play();
+            SoundEffects[index].Play(volume, 0f, 0f);
         }
 
 

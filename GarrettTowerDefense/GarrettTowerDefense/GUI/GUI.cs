@@ -51,7 +51,7 @@ namespace GarrettTowerDefense
         {
             int x = GarrettTowerDefense.viewport.Width - GUITexture.Width;
 
-            tooltipText1Start = new Vector2(x + 5, 325);
+            tooltipText1Start = new Vector2(x + 5, 300);
 
             GUIArea = new Rectangle(x, 0, GUITexture.Width, GUITexture.Height);
             Buttons.Add(new GUIButton(new Rectangle(GUIArea.X + 23, GUIArea.Y + 104, 47, 47), 16));
@@ -179,9 +179,9 @@ namespace GarrettTowerDefense
                 b.Draw(spriteBatch);
             }
 
-            if (tooltipText1 != null)
+            if (GameScene.selectedTower != null)
             {
-                spriteBatch.DrawString(normalFont, tooltipText1, tooltipText1Start + new Vector2(6,0), Color.LightYellow);
+                spriteBatch.DrawString(normalFont, GameScene.selectedTower.tooltipText, tooltipText1Start + new Vector2(6,0), Color.White);
             }
         }
     }

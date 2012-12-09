@@ -37,7 +37,7 @@ namespace GarrettTowerDefense
         public bool Destroyed { get; set; }
 
         public Enemy Target { get; protected set; }
-        public float NextAttackTime { get; private set; }
+        public float NextAttackTime { get; protected set; }
 
         public List<Projectile> Projectiles;
         public List<Projectile> DisabledProjectiles;
@@ -49,17 +49,26 @@ namespace GarrettTowerDefense
         protected float unstunTime;
         protected Animation stunAnimation;
         protected Animation explodeAnimation;
-        protected float explodeTimeRemaining = 0f;        
+        protected float explodeTimeRemaining = 0f;
+
+        // Stores the text displayed in the tooltip.
+        public string tooltipText;
+
+        protected int attackSoundEffect;
 
         public Tower()
         {
             //Empty constructor
         }
 
+        public virtual void UpdateTooltipText()
+        {
+        }
+
         //Build the tower on the selected tile
         public virtual void Build(Point point)
         {
-            if (GameScene.CurrentMap.TileIsBuildable(point) && GameScene.Gold >= GameScene.LoadedPrice)
+            if ((GameScene.CurrentMap.TileIsBuildable(point)  && GameScene.Gold >= GameScene.LoadedPrice))
             {
                 //Play sound effect.
                 //Create the tower on the given tile
@@ -72,6 +81,7 @@ namespace GarrettTowerDefense
                 ParentCell.ContainsTower = true;
 
                 GameScene.Gold -= BuildCost;
+                AudioManager.PlaySoundEffect(9);
 
                 GameScene.CurrentMap.SetMovementCost(MapPosition, Pathfinding.Pathfinder.TOWER_COST);
 
@@ -172,6 +182,7 @@ namespace GarrettTowerDefense
                 Console.WriteLine("Upgrade " + Name + "!");
                 GameScene.Gold -= UpgradeCost[Level - 1];
                 LevelUp();
+                AudioManager.PlaySoundEffect(11);
                 //Play level up sound effect here.  Maybe a sparkly.
             }
         }
@@ -180,6 +191,7 @@ namespace GarrettTowerDefense
         {
             //Increase the level of the tower
             Level++;
+            UpdateTooltipText();
         }
 
         public virtual void LevelDown()
@@ -204,14 +216,16 @@ namespace GarrettTowerDefense
             ParentCell.IsBuildable = true;
             ParentCell.ContainsTower = false;
 
-            GameScene.CurrentMap.SetMovementCost(MapPosition, 1f);
+            if (Name != "Gold Mine")
+                GameScene.CurrentMap.SetMovementCost(MapPosition, 1f);
 
             Constructed = false;
             //Projectiles.Clear();
             //DisabledProjectiles.Clear();
             Explode();
 
-            GameScene.RecalculateEnemyPath();
+            if(Name != "Gold Mine")
+                GameScene.RecalculateEnemyPath();
         }
 
         public virtual void Initialize()
@@ -221,8 +235,10 @@ namespace GarrettTowerDefense
             DisabledProjectiles = new List<Projectile>();
             Constructed = true;
             NextAttackTime = 0;
+            UpdateTooltipText();
 
             GameScene.RecalculateEnemyPath();
+            
         }
         
         public virtual void Update(GameTime gameTime)
@@ -328,6 +344,7 @@ namespace GarrettTowerDefense
         {
             explodeAnimation = new Animation(new int[] { 48, 49, 50, 51, 52, 53 }, 12, true);
             explodeAnimation.AnimationFinish += new AnimationFinishEventHandler(FinishExploding);
+            AudioManager.PlaySoundEffect(10);
         }
 
         // Finally, remove the tower from the list, ensuring it will be garbage collected.

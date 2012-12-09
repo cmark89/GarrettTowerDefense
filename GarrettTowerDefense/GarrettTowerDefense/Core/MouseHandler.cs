@@ -12,6 +12,22 @@ namespace GarrettTowerDefense
         public static MouseState PreviousMouseState;
         public static MouseState CurrentMouseState;
 
+        public static int MapY
+        {
+            get
+            {
+                return TileEngine.ScreenSpaceToMapSpace(new Vector2(CurrentMouseState.X, CurrentMouseState.Y)).Y;
+            }
+        }
+
+        public static int MapX
+        {
+            get
+            {
+                return TileEngine.ScreenSpaceToMapSpace(new Vector2(CurrentMouseState.X, CurrentMouseState.Y)).X;
+            }
+        }
+
         public static void Update(GameTime gameTime)
         {
             PreviousMouseState = CurrentMouseState;

@@ -54,7 +54,7 @@ namespace GarrettTowerDefense
         protected float burnDPS = 0f;
         protected float burnDuration = 0f;
 
-        protected bool isPoisoned = false;
+        public bool isPoisoned = false;
         protected float poisonDPS = 0f;
         protected float poisonDuration = 0f;
 
@@ -276,7 +276,7 @@ namespace GarrettTowerDefense
             freezeDuration = duration;
         }
 
-        public void BeginBurn(float percent, float duration)
+        public virtual void BeginBurn(float percent, float duration)
         {
             if (Weaknesses[(int)DamageType.Fire] <= .3f)
                 return;

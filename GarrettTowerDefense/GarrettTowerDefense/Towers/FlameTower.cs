@@ -31,8 +31,14 @@ namespace GarrettTowerDefense
             AttackRange = 200;
             ProjectileSpeed = 180;
 
-            burnDuration = 5f;
-            burnPercent = .1f;
+            burnDuration = 8f;
+            burnPercent = .07f;
+        }
+
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \nBurn Damage: {5}% \n\nNext Upgrade: \n+3 Damage \n+.2 Attack Speed \n+15 AoE\n\nUpgrade Cost: {6}",
+                Level, Name, Damage, AttackSpeed, AttackRange, burnPercent*100, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
         }
 
         public override void LevelUp()
@@ -55,6 +61,7 @@ namespace GarrettTowerDefense
 
         public override void LaunchAttack(Enemy Target)
         {
+            AudioManager.PlaySoundEffect(3);
             //Fire a projectile
             Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 32));
         }

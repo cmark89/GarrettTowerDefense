@@ -31,6 +31,12 @@ namespace GarrettTowerDefense
             ProjectileSpeed = 240;
         }
 
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \nBounces: {5}\nBounce Range: {6}\n\nNext Upgrade: \n+4 Damage \n+1 Bounce\n+40 Bounce Range\n\nUpgrade Cost: {7}",
+                Level, Name, Damage, AttackSpeed, AttackRange, MaxBounces, MaxBounceRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+        }
+
         public override void LevelUp()
         {
             Damage += 4;
@@ -55,6 +61,7 @@ namespace GarrettTowerDefense
         {
             if(Projectiles.Count <= MaxGlaives)
             {
+                AudioManager.PlaySoundEffect(4);
                 //Fire a projectile
                 Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 35));
             }
@@ -69,6 +76,7 @@ namespace GarrettTowerDefense
                 target.DamageEnemy(Damage, DamageType);
                 proj.Bounces++;
                 proj.HitEnemies.Add(target);
+                AudioManager.PlaySoundEffect(5);
 
                 
                 if (proj.Bounces > MaxBounces)
@@ -102,10 +110,6 @@ namespace GarrettTowerDefense
                     //Since it's possible for the previous loop to not change the target, dispose of it if the target is the same as before.
                     if(proj.HitEnemies.Contains(proj.Target))
                         DisposeOfProjectile(proj);
-
-
-                    
-
                 }
             }
 

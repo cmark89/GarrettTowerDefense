@@ -50,6 +50,8 @@ namespace GarrettTowerDefense
 
         public static bool showGrid = false;
 
+        public static Tower selectedTower = null;
+
 
         public GameScene()
         {
@@ -83,6 +85,15 @@ namespace GarrettTowerDefense
             #region GUI and Input
             //Check for mouse input and handle it accordingly
             HandleMouseInput(gameTime);
+
+            if (MouseHandler.MouseOverMap() && CurrentMap[MouseHandler.MapY, MouseHandler.MapX].ContainsTower)
+            {
+                selectedTower = Towers.Find(x => x.MapPosition.X == MouseHandler.MapX && x.MapPosition.Y == MouseHandler.MapY);
+            }
+            else if(selectedTower != null)
+            {
+                selectedTower = null;
+            }
 
             GUI.Update(gameTime);
 
@@ -357,13 +368,13 @@ namespace GarrettTowerDefense
                     
 
                     //Handle clicking on the map
-                    AudioManager.PlaySoundEffect(1);
+                    //AudioManager.PlaySoundEffect(1);
                 }
                 //The mouse is too far to the right to be over the map
                 else
                 {
                     //Handle clicking over the interface.
-                    AudioManager.PlaySoundEffect(0);
+                    //AudioManager.PlaySoundEffect(0);
                 }
             }
             if (MouseHandler.RightClick())

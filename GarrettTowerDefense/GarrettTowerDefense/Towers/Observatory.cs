@@ -27,6 +27,12 @@ namespace GarrettTowerDefense
             AttackRange = 700;
         }
 
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\n\nRange: {2} \n\nNext Upgrade: \n+50 Range\n\nUpgrade Cost: {3}",
+                Level, Name, RevealRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+        }
+
         public override void LevelUp()
         {
             RevealRange += 50;

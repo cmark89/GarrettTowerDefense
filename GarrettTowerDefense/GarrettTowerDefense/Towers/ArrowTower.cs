@@ -27,12 +27,19 @@ namespace GarrettTowerDefense
             ProjectileSpeed = 250;
         }
 
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \n\nNext Upgrade: \n+3 Damage \n+35 Range\n\nUpgrade Cost: {5}",
+                Level, Name, Damage, AttackSpeed, AttackRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+        }
+
         public override void LevelUp()
         {
             Damage += 3;
             AttackRange += 35;
 
             base.LevelUp();
+            UpdateTooltipText();
         }
 
         public override void LevelDown()
@@ -46,6 +53,7 @@ namespace GarrettTowerDefense
         public override void LaunchAttack(Enemy Target)
         {
             //Fire a projectile
+            AudioManager.PlaySoundEffect(2);
             Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 30));
         }
 

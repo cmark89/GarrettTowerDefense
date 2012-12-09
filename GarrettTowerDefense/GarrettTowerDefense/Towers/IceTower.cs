@@ -42,6 +42,21 @@ namespace GarrettTowerDefense
             altDamage = 0;
         }
 
+        public override void UpdateTooltipText()
+        {
+            if(Level == 1)
+            {
+                tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \n\nNext Upgrade: \n+2 Damage \nGrants Sub-Attack\n\nUpgrade Cost: {5}",
+                    Level, Name, Damage, AttackSpeed, AttackRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+            }
+            else
+            {
+                   tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4}\nSub-Attack Speed: {5} \n\nNext Upgrade: \n+2 Damage \nSub-Attack Speed - 1\n\nUpgrade Cost: {6}",
+                    Level, Name, Damage, AttackSpeed, AttackRange, altAttackSpeed, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+            }
+            
+        }
+
         public override void LevelUp()
         {
             Damage += 2;
@@ -62,6 +77,18 @@ namespace GarrettTowerDefense
 
         public override void Update(GameTime gameTime)
         {
+            if (stunned)
+            {
+                stunAnimation.Update(gameTime);
+                unstunTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (unstunTime <= 0)
+                {
+                    stunned = false;
+                    stunAnimation = null;
+                }
+            }
+
             //Only try to attack if the tower has a damage value of greater than 0
             if (Damage > 0 && gameTime.TotalGameTime.TotalSeconds >= NextAttackTime)
             {
@@ -108,12 +135,14 @@ namespace GarrettTowerDefense
 
         public override void LaunchAttack(Enemy Target)
         {
+            AudioManager.PlaySoundEffect(7);
             //Fire a projectile
             Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 34));
         }
 
         public void LaunchSecondaryAttack(Enemy Target)
         {
+            AudioManager.PlaySoundEffect(7);
             //Fire a new projectile
             Projectiles.Add(new Projectile(this, Target, ProjectileSpeed, 36, "Icicle"));
         }

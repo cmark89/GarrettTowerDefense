@@ -35,14 +35,14 @@ namespace GarrettTowerDefense
         private float beamRange = 140;
 
         private float stunDuration = 9f;
-        private float orbCooldown = 14f;
+        private float orbCooldown = 11f;
         private Tower orbTarget;
         private float orbRange = 350f;
         private Vector2 orbPosition;
         private float nextOrbTime;
         private float orbSpeed = 130f;
 
-        private float beamCooldown = 1.3f;
+        private float beamCooldown = 1.2f;
         private float nextBeamTime;
 
         private bool stunned = false;
@@ -283,6 +283,12 @@ namespace GarrettTowerDefense
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
                 shieldActive = true;
+                bossPhase = BossPhase.ShieldWalk;
+
+                isFrozen = false;
+                isBurning = false;
+                isPoisoned = false;
+
                 SetShieldImmunity();
                 ShowMessage("Hide behind your walls all you please.  We'll see what happens when your weapons are rendered useless!");
             }
@@ -299,6 +305,10 @@ namespace GarrettTowerDefense
                 GetPath(GameScene.CurrentMap.CastleTile);
                 shieldActive = false;
                 Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
+
+                isFrozen = false;
+                isBurning = false;
+                isPoisoned = false;
                 
                 ShowMessage("Rise my legions!  Crush all that stands in your way!  Let none survive!!");
                 //GO TO MOVING SUMMON PHASE?
@@ -310,6 +320,10 @@ namespace GarrettTowerDefense
                 Console.WriteLine("PHASE 4 BEGIN");
                 Console.WriteLine("-------------");
                 currentPhase = 4;
+
+                isFrozen = false;
+                isBurning = false;
+                isPoisoned = false;
 
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
@@ -328,6 +342,10 @@ namespace GarrettTowerDefense
 
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
+
+                isFrozen = false;
+                isBurning = false;
+                isPoisoned = false;
 
                 bossPhase = BossPhase.Walk;
 
@@ -437,6 +455,7 @@ namespace GarrettTowerDefense
         
         public void FireBeam()
         {
+            AudioManager.PlaySoundEffect(13, .7f);
             List<Tower> validTargets = GameScene.Towers.FindAll(x => Vector2.Distance(Position, x.Position) <= beamRange);
             if (validTargets.Count <= 0)
                 return;
@@ -462,6 +481,7 @@ namespace GarrettTowerDefense
 
         public void FireOrb()
         {
+            AudioManager.PlaySoundEffect(15, .7f);
             List<Tower> viableTargets = GameScene.Towers.FindAll(x => Vector2.Distance(x.Position, Position) <= orbRange);
             if (viableTargets.Count <= 0)
             {
@@ -481,6 +501,8 @@ namespace GarrettTowerDefense
 
         public void OrbHit(Tower target)
         {
+            AudioManager.PlaySoundEffect(16, .7f);
+
             orbAnimation = null;
 
             List<Tower> affectedTowers = GameScene.Towers.FindAll(x => x.Name == target.Name);
@@ -495,6 +517,8 @@ namespace GarrettTowerDefense
 
         public void SetShieldImmunity()
         {
+            AudioManager.PlaySoundEffect(14, .7f);
+
             if (!shieldActive)
             {
                 shieldActive = true;
@@ -787,6 +811,21 @@ namespace GarrettTowerDefense
             };
 
             GameScene.messageWindow.ShowWindow();
+        }
+
+        public override void BeginBurn(float percent, float duration)
+        {
+            if (percent > .005f)
+                percent = .005f;
+
+            if (Weaknesses[(int)DamageType.Fire] <= .3f)
+                return;
+
+            float damage = (percent * Health) * Weaknesses[(int)DamageType.Fire];
+            Console.WriteLine(Name + " will burn for " + damage + " damage (" + damage / duration + " damage per second) over " + duration + " seconds.");
+            isBurning = true;
+            burnDPS = (Health * percent) / duration;
+            burnDuration = duration;
         }
     }
 }

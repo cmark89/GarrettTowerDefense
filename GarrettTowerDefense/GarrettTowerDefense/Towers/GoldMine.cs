@@ -31,6 +31,12 @@ namespace GarrettTowerDefense
             AttackRange = 0;
         }
 
+        public override void UpdateTooltipText()
+        {
+            tooltipText = String.Format("Level {0} {1} \n\nGold Income: {2}\nIncome Interval: {3} seconds \n\nNext Upgrade: \n+2 Gold Income\n-1 Income Interval\n\nUpgrade Cost: {4}",
+                Level, Name, GoldBonus, GoldInterval, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
+        }
+
         public override void LevelUp()
         {
             GoldBonus += 2;
@@ -59,6 +65,7 @@ namespace GarrettTowerDefense
 
         public void ProduceGold()
         {
+            AudioManager.PlaySoundEffect(6);
             GameScene.Gold += GoldBonus;
         }
 
@@ -71,7 +78,13 @@ namespace GarrettTowerDefense
                 //Create the tower on the given tile
                 MapPosition = point;
                 Position = new Vector2(point.X * TileEngine.TileWidth, point.Y * TileEngine.TileHeight);
-                GameScene.CurrentMap.SetTileGoldability(point, false);
+                ParentCell = GameScene.CurrentMap[point.Y, point.X];
+
+                ParentCell.IsWalkable = false;
+                ParentCell.IsBuildable = false;
+                ParentCell.ContainsTower = true;
+
+                GameScene.Gold -= BuildCost;
 
                 Initialize();
             }
