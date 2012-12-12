@@ -37,7 +37,7 @@ namespace GarrettTowerDefense
         public bool Destroyed { get; set; }
 
         public Enemy Target { get; protected set; }
-        public float NextAttackTime { get; protected set; }
+        public float AttackCharge { get; protected set; }
 
         public List<Projectile> Projectiles;
         public List<Projectile> DisabledProjectiles;
@@ -118,13 +118,13 @@ namespace GarrettTowerDefense
             if (Target != null && Target.Alive)
             {
                 //Attack the target normally
-                AttackCharge = (float)gameTime.TotalGameTime.TotalSeconds + AttackSpeed;
+                AttackCharge = 0;
                 LaunchAttack(Target);
             }
             else
             {
                 //There is no target in range.  Set the next attack time up by .4f seconds or so to prevent hard computing
-                NextAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + .4f;
+                AttackCharge -= .4f;
                 return;
             }
         }
@@ -234,7 +234,7 @@ namespace GarrettTowerDefense
             Projectiles = new List<Projectile>();
             DisabledProjectiles = new List<Projectile>();
             Constructed = true;
-            NextAttackTime = 0;
+            AttackCharge = AttackSpeed;
             UpdateTooltipText();
 
             GameScene.RecalculateEnemyPath();
@@ -255,8 +255,10 @@ namespace GarrettTowerDefense
                 }
             }
 
+            AttackCharge += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             //Only try to attack if the tower has a damage value of greater than 0
-            if (Damage > 0 && gameTime.TotalGameTime.TotalSeconds >= NextAttackTime)
+            if (Damage > 0 && AttackCharge >= AttackSpeed)
             {
                 Attack(gameTime);
             }

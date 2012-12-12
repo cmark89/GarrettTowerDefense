@@ -66,13 +66,13 @@ namespace GarrettTowerDefense
             if (Target != null && Target.Alive)
             {
                 //Attack the target normally
-                NextAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + AttackSpeed;
+                AttackCharge = 0f;
                 LaunchAttack(Target);
             }
             else
             {
                 //There is no target in range.  Set the next attack time up by .4f seconds or so to prevent hard computing
-                NextAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + .4f;
+                AttackCharge -= .4f;
                 return;
             }
         }

@@ -13,7 +13,7 @@ namespace GarrettTowerDefense
         private float slowAmount;
         private float freezeDuration;
 
-        private float nextAltAttackTime;
+        private float altAttackCharge;
         private float altAttackSpeed;
 
         public int altDamage;
@@ -89,13 +89,16 @@ namespace GarrettTowerDefense
                 }
             }
 
+            AttackCharge += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            altAttackCharge += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             //Only try to attack if the tower has a damage value of greater than 0
-            if (Damage > 0 && gameTime.TotalGameTime.TotalSeconds >= NextAttackTime)
+            if (Damage > 0 && AttackCharge >= AttackSpeed)
             {
                 Attack(gameTime);
             }
 
-            if (Level > 1 && gameTime.TotalGameTime.TotalSeconds >= nextAltAttackTime)
+            if (Level > 1 && altAttackCharge >= altAttackSpeed)
             {
                 AltAttack(gameTime);
             }
@@ -125,7 +128,7 @@ namespace GarrettTowerDefense
 
         public void AltAttack(GameTime gameTime)
         {
-            nextAltAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + altAttackSpeed;
+            altAttackCharge = 0f;
 
             List<Enemy> altAttackTargets = GameScene.Enemies.FindAll(x => Target != x && x.Alive && x.Visible && Vector2.Distance(x.Position, Position) <= AttackRange);
             if(altAttackTargets.Count > 0)
