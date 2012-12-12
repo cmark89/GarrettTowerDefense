@@ -70,7 +70,7 @@ namespace GarrettTowerDefense
 
             if (isGlaive)
                 curRotation += rotationSpeed;
-            else
+            else if(Name == "Icicle")
                 curRotation = Vector2Helper.FindAngle(Target.Position, Position) - (float)(Math.PI/2);
 
 

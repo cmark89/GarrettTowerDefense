@@ -30,6 +30,8 @@ namespace GarrettTowerDefense
             AddSong(Content.Load<Song>("Audio/Music/Esoterica"));
             AddSong(Content.Load<Song>("Audio/Music/ProfaningTheRitual"));
             AddSong(Content.Load<Song>("Audio/Music/AbandonAllHQ"));
+            AddSong(Content.Load<Song>("Audio/Music/GarrettOverture"));
+            AddSong(Content.Load<Song>("Audio/Music/AnimatedLong"));
 
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Laugh"));
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/LikeThat"));
@@ -89,13 +91,12 @@ namespace GarrettTowerDefense
             }
         }
 
-        public static void PlaySong(int index)
+        public static void PlaySong(int index, bool repeat = true)
         {
             try
             {
-                MediaPlayer.IsRepeating = true;
+                MediaPlayer.IsRepeating = repeat;
                 MediaPlayer.Play(MusicTracks[index]);
-                
             }
             catch
             {
@@ -109,7 +110,7 @@ namespace GarrettTowerDefense
         }
 
 
-        public static void PlaySoundEffect(int index, float volume = .48f)
+        public static void PlaySoundEffect(int index, float volume = .3f)
         {
             SoundEffects[index].Play(volume, 0f, 0f);
         }
@@ -118,6 +119,16 @@ namespace GarrettTowerDefense
         public static void StopMusic()
         {
             MediaPlayer.Stop();
+        }
+
+        public static void PauseSong()
+        {
+            MediaPlayer.Pause();
+        }
+
+        public static void ResumeSong()
+        {
+            MediaPlayer.Resume();
         }
     }
 }

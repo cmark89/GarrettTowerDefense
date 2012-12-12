@@ -59,6 +59,10 @@ namespace GarrettTowerDefense
 
         public void Update(GameTime gameTime)
         {
+            if (GarrettTowerDefense.loadingScene)
+                return;
+
+
             if (MouseHandler.MouseInRect(Rect))
             {
                 if (MouseHandler.CurrentMouseState.LeftButton == ButtonState.Pressed)
@@ -74,6 +78,12 @@ namespace GarrettTowerDefense
             {
                 State = GUIButtonState.Up;
             }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (GarrettTowerDefense.loadingScene)
+                return;
 
             switch (State)
             {
@@ -87,10 +97,8 @@ namespace GarrettTowerDefense
                     currentImage = GUIButton.DownTexture;
                     break;
             }
-        }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
+
             spriteBatch.Draw(currentImage, Rect, Color.White);
             if (displayString == null)
                 spriteBatch.Draw(Scene.CurrentMap.Tileset.Texture, new Rectangle(Rect.X + 7, Rect.Y + 7, TileEngine.TileWidth, TileEngine.TileHeight), Scene.CurrentMap.Tileset.GetSourceRectangle(buttonImage), Color.White);

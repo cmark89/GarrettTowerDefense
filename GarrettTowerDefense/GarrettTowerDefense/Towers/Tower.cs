@@ -118,7 +118,7 @@ namespace GarrettTowerDefense
             if (Target != null && Target.Alive)
             {
                 //Attack the target normally
-                NextAttackTime = (float)gameTime.TotalGameTime.TotalSeconds + AttackSpeed;
+                AttackCharge = (float)gameTime.TotalGameTime.TotalSeconds + AttackSpeed;
                 LaunchAttack(Target);
             }
             else

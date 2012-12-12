@@ -26,7 +26,7 @@ namespace GarrettTowerDefense
             bossPhase = BossPhase.Walk;
 
             //BaseHealth = 100;
-            BaseHealth = 2000;
+            BaseHealth = 3000;
             
             //Calculate true health based on the wave number
             Health = BaseHealth;

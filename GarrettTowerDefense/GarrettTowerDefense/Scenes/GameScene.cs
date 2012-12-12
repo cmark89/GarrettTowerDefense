@@ -41,6 +41,7 @@ namespace GarrettTowerDefense
 
         // Used for pausing the game.
         public static bool Paused = false;
+        public static bool PlayerPaused = false;
 
 
         //Stores player related variables
@@ -71,19 +72,36 @@ namespace GarrettTowerDefense
             Gold = 400;
             
             CurrentMouseAction = MouseAction.None;
+
+            GUI = new GUI(GarrettTowerDefense.StaticContent);
         }
 
         public override void LoadContent(ContentManager Content)
         {
             GUI = new GUI(Content);
+            
             EnemyHealthbar = Content.Load<Texture2D>("GUI/EnemyHealthbar");
         }
 
         
         public override void Update(GameTime gameTime)
         {
+            if (GarrettTowerDefense.loadingScene)
+                return;
+
             #region GUI and Input
-            //Check for mouse input and handle it accordingly
+            // Check if the game has to pause
+            if(KeyboardHandler.KeyPress(Keys.Space))
+            {
+                PlayerPaused = !PlayerPaused;
+
+                if (PlayerPaused)
+                    AudioManager.PauseSong();
+                else
+                    AudioManager.ResumeSong();
+            }
+
+            // Check for mouse input and handle it accordingly
             HandleMouseInput(gameTime);
 
             if (MouseHandler.MouseOverMap() && CurrentMap[MouseHandler.MapY, MouseHandler.MapX].ContainsTower)
@@ -98,52 +116,55 @@ namespace GarrettTowerDefense
             GUI.Update(gameTime);
 
             //Check for GUI input
-            switch (GUI.currentInput)
+            if (!PlayerPaused)
             {
-                case GUIInput.BuildBarricade:
-                    CurrentMouseAction = MouseAction.BuildBarricade;
-                    LoadedPrice = Barricade.Cost;
-                    break;
-                case GUIInput.BuildArrowTower:
-                    CurrentMouseAction = MouseAction.BuildArrowTower;
-                    LoadedPrice = ArrowTower.Cost;
-                    break;
-                case GUIInput.BuildToxicTower:
-                    CurrentMouseAction = MouseAction.BuildToxicTower;
-                    LoadedPrice = ToxicTower.Cost;
-                    break;
-                case GUIInput.BuildFlameTower:
-                    CurrentMouseAction = MouseAction.BuildFlameTower;
-                    LoadedPrice = FlameTower.Cost;
-                    break;
-                case GUIInput.BuildTeslaTower:
-                    CurrentMouseAction = MouseAction.BuildTeslaTower;
-                    LoadedPrice = TeslaTower.Cost;
-                    break;
-                case GUIInput.BuildIceTower:
-                    CurrentMouseAction = MouseAction.BuildIceTower;
-                    LoadedPrice = IceTower.Cost;
-                    break;
-                case GUIInput.BuildGlaiveTower:
-                    CurrentMouseAction = MouseAction.BuildGlaiveTower;
-                    LoadedPrice = GlaiveTower.Cost;
-                    break;
-                case GUIInput.BuildObservatory:
-                    CurrentMouseAction = MouseAction.BuildObservatory;
-                    LoadedPrice = Observatory.Cost;
-                    break;
-                case GUIInput.BuildGoldMine:
-                    CurrentMouseAction = MouseAction.BuildGoldMine;
-                    LoadedPrice = GoldMine.Cost;
-                    break;
-                default:
-                    break;
+                switch (GUI.currentInput)
+                {
+                    case GUIInput.BuildBarricade:
+                        CurrentMouseAction = MouseAction.BuildBarricade;
+                        LoadedPrice = Barricade.Cost;
+                        break;
+                    case GUIInput.BuildArrowTower:
+                        CurrentMouseAction = MouseAction.BuildArrowTower;
+                        LoadedPrice = ArrowTower.Cost;
+                        break;
+                    case GUIInput.BuildToxicTower:
+                        CurrentMouseAction = MouseAction.BuildToxicTower;
+                        LoadedPrice = ToxicTower.Cost;
+                        break;
+                    case GUIInput.BuildFlameTower:
+                        CurrentMouseAction = MouseAction.BuildFlameTower;
+                        LoadedPrice = FlameTower.Cost;
+                        break;
+                    case GUIInput.BuildTeslaTower:
+                        CurrentMouseAction = MouseAction.BuildTeslaTower;
+                        LoadedPrice = TeslaTower.Cost;
+                        break;
+                    case GUIInput.BuildIceTower:
+                        CurrentMouseAction = MouseAction.BuildIceTower;
+                        LoadedPrice = IceTower.Cost;
+                        break;
+                    case GUIInput.BuildGlaiveTower:
+                        CurrentMouseAction = MouseAction.BuildGlaiveTower;
+                        LoadedPrice = GlaiveTower.Cost;
+                        break;
+                    case GUIInput.BuildObservatory:
+                        CurrentMouseAction = MouseAction.BuildObservatory;
+                        LoadedPrice = Observatory.Cost;
+                        break;
+                    case GUIInput.BuildGoldMine:
+                        CurrentMouseAction = MouseAction.BuildGoldMine;
+                        LoadedPrice = GoldMine.Cost;
+                        break;
+                    default:
+                        break;
+                }
             }
             
             #endregion
 
             //Update each tower in turn
-            if (!Paused)
+            if (!Paused && !PlayerPaused)
             {
                 foreach (Tower t in Towers)
                 {
@@ -199,7 +220,8 @@ namespace GarrettTowerDefense
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //If a tower is currently selected, draw that tower at the cursor position in a faded opacity.
+            if (GarrettTowerDefense.loadingScene)
+                return;
             
             //Draw the map
             if (CurrentMap != null)
@@ -313,7 +335,9 @@ namespace GarrettTowerDefense
 
         public static void SetMap(Map map)
         {
+            map.LoadFromSerialized();
             CurrentMap = map;
+            CurrentMap.Initialize();
             pathfinder = new Pathfinder(map);
         }
 
@@ -364,11 +388,6 @@ namespace GarrettTowerDefense
                         default:
                             break;
                     }
-
-                    
-
-                    //Handle clicking on the map
-                    //AudioManager.PlaySoundEffect(1);
                 }
                 //The mouse is too far to the right to be over the map
                 else
@@ -403,6 +422,18 @@ namespace GarrettTowerDefense
         {
             Console.WriteLine("Gain " + gold + " gold!  Now have " + (Gold + gold));
             Gold += gold;
+        }
+
+        public static void DamageCastle(int damage)
+        {
+            Console.WriteLine("Enemy hit the castle!");
+            AudioManager.PlaySoundEffect(10);
+            CurHealth -= damage;
+
+            if (CurHealth <= 0)
+            {
+                GarrettTowerDefense.ChangeScene(new GameOverScene());
+            }
         }
     }
 

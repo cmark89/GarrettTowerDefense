@@ -22,13 +22,18 @@ namespace GarrettTowerDefense
         public static Viewport viewport;
 
         public static Scene currentScene;
+        public static GraphicsDeviceManager StaticGraphics;
 
         // Good idea, or no?  Time will tell.
         public static ContentManager StaticContent;
 
+        public static bool loadingScene = false;
+
         public GarrettTowerDefense()
         {
             graphics = new GraphicsDeviceManager(this);
+            this.Window.Title = "Garrett Tower Defense";
+            StaticGraphics = graphics;
             Content.RootDirectory = "Content";
         }
 
@@ -53,10 +58,14 @@ namespace GarrettTowerDefense
             //Let the audio manager load all relevant assets itself
             AudioManager.LoadContent(Content);
 
-            currentScene = new GameScene();
-            GameScene.SetMap((Map)Serializer.Deserialize("map.gtd"));
-            Scene.CurrentMap.LoadFromSerialized();
-            Scene.CurrentMap.Initialize();
+
+            currentScene = new OpeningMovieScene();
+            currentScene.LoadContent(Content);
+
+            //currentScene = new GameScene();
+            //GameScene.SetMap((Map)Serializer.Deserialize("map.gtd"));
+            //Scene.CurrentMap.LoadFromSerialized();
+            //Scene.CurrentMap.Initialize();
 
             //currentScene = new MapEditorScene();
 
@@ -105,6 +114,7 @@ namespace GarrettTowerDefense
                 this.Exit();
 
             MouseHandler.Update(gameTime);
+            KeyboardHandler.Update(gameTime);
 
             currentScene.Update(gameTime);
 
@@ -119,13 +129,24 @@ namespace GarrettTowerDefense
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
             currentScene.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public static void ChangeScene(Scene newScene)
+        {
+            loadingScene = true;
+
+            newScene.LoadContent(StaticContent);
+            newScene.Initialize();
+            currentScene = newScene;
+
+            loadingScene = false;
         }
     }
 }

@@ -159,11 +159,10 @@ namespace GarrettTowerDefense
                 UpdateMovement(gameTime);
                 
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
-                if (TileEngine.ScreenSpaceToMapSpace(Position) == GameScene.CurrentMap.CastleTile)
+                if (CenterPosition == TileEngine.MapPointToVector(GameScene.CurrentMap.CastleTile) + new Vector2(TileEngine.TileWidth/2, TileEngine.TileHeight/2))
                 {
-                    Console.WriteLine("Enemy hit the castle!");
                     Alive = false;
-                    GameScene.CurHealth -= Damage;
+                    GameScene.DamageCastle(Damage);
                 }
             }
         }

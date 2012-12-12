@@ -29,6 +29,8 @@ namespace GarrettTowerDefense
 
         public GUI(ContentManager Content)
         {
+            GUIButton.LoadContent(Content);
+
             GUITexture = Content.Load<Texture2D>("GUI/MainGUI");
             HealthbarTexture = Content.Load<Texture2D>("GUI/Healthbar");
             normalFont = Content.Load<SpriteFont>("Fonts/NormalFont");
@@ -40,7 +42,6 @@ namespace GarrettTowerDefense
             Tooltip.bodyFont = normalFont;
             Tooltip.goldFont = goldFont;
 
-            GUIButton.LoadContent(Content);
             Buttons = new List<GUIButton>();
             currentInput = GUIInput.None;
 
@@ -70,6 +71,9 @@ namespace GarrettTowerDefense
 
         public void Update(GameTime gameTime)
         {
+            if (GarrettTowerDefense.loadingScene)
+                return;
+
             foreach (GUIButton b in Buttons)
             {
                 b.Update(gameTime);
@@ -94,22 +98,22 @@ namespace GarrettTowerDefense
             }
             else if (Buttons[3].MouseOver())
             {
-                new Tooltip(new string[] { "Flame Tower", "The Flame Tower is a powerful furnace built from the bones of Garrett's enemies.  While it attacks slowly, its attacks deal damage in an area and cause targets to burn for a percentage of their health over time.", FlameTower.Cost.ToString() });
+                new Tooltip(new string[] { "Flame Tower", "Flame Towers are vile furnaces built from the bones of Garrett's enemies.  Causes targets to burn for a percentage of their health over time.", FlameTower.Cost.ToString() });
             }
             else if (Buttons[4].MouseOver())
             {
-                new Tooltip(new string[] { "Tesla Tower", "The Tesla Tower is Garrett's most maddening invention.  The Tesla Tower has a slow attack speed, but its attacks will hit all enemies within a large radius around it.", TeslaTower.Cost.ToString() });
+                new Tooltip(new string[] { "Tesla Tower", "The Tesla Tower is Garrett's most maddening invention.  Hits all enemies within a large radius around it.", TeslaTower.Cost.ToString() });
             }
             else if (Buttons[5].MouseOver())
             {
                 if (GameScene.tooltip == null)
                 {
-                    new Tooltip(new string[] { "Ice Tower", "The Ice Towers are menacing obelisks made of unbreakable ice crystals.  Any enemy unfortunate enough to be hit by this tower will have its movement speed slowed.", IceTower.Cost.ToString() });
+                    new Tooltip(new string[] { "Ice Tower", "The Ice Towers are menacing obelisks made of unbreakable ice crystals.  Damages and slows movement.", IceTower.Cost.ToString() });
                 }
             }
             else if (Buttons[6].MouseOver())
             {
-                new Tooltip(new string[] { "Glaive Tower", "The Glaive Tower is a powerful and deadly device that shoots spinning blades of carnage at its opponents.  These blades will bounce to additional targets, allowing it to cut through swarms of enemies.", GlaiveTower.Cost.ToString() });
+                new Tooltip(new string[] { "Glaive Tower", "The Glaive Tower is a powerful device that shoots spinning blades of carnage at its opponents.  These blades bounce to hit multiple targets.", GlaiveTower.Cost.ToString() });
             }
             else if (Buttons[7].MouseOver())
             {
@@ -170,6 +174,9 @@ namespace GarrettTowerDefense
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (GarrettTowerDefense.loadingScene)
+                return;
+
             spriteBatch.Draw(GUITexture, GUIArea, Color.White);
             spriteBatch.Draw(HealthbarTexture, new Rectangle(GUIArea.X + 7, GUIArea.Y+7, (int)(HealthbarTexture.Width * ((float)GameScene.CurHealth/(float)GameScene.MaxHealth)),24), Color.White);
             

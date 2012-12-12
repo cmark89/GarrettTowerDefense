@@ -20,24 +20,4 @@ namespace GarrettTowerDefense
 
         public abstract void Draw(SpriteBatch spriteBatch);
     }
-
-
-    public class TitleScene : Scene
-    {
-        public override void LoadContent(ContentManager Content)
-        {
-        }
-
-        public override void Initialize()
-        {
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-        }
-    }
 }

@@ -5,7 +5,7 @@
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GarrettTowerDefense</RootNamespace>
     <AssemblyName>GarrettTowerDefense</AssemblyName>
@@ -16,8 +16,9 @@
     <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>bd0ed26b-17a6-4db4-be74-df67b07aee3d</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <ApplicationIcon>bn.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,7 +31,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -113,6 +113,7 @@
     <Compile Include="Core\Animation.cs" />
     <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\BinaryMinHeap.cs" />
+    <Compile Include="Core\KeyboardHandler.cs" />
     <Compile Include="Core\MessageWindow.cs" />
     <Compile Include="Core\Serializer.cs" />
     <Compile Include="Core\Tooltip.cs" />
@@ -142,9 +143,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="GarrettTowerDefense.cs" />
     <Compile Include="Core\Scene.cs" />
+    <Compile Include="Scenes\VictoryScene.cs" />
+    <Compile Include="Scenes\GameOverScene.cs" />
     <Compile Include="Scenes\MapEditorScene.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Core\TileEngine.cs" />
+    <Compile Include="Scenes\OpeningMovieScene.cs" />
     <Compile Include="Scenes\TitleScene.cs" />
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\Barricade.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="Towers\Tower.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bn.ico" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

@@ -93,7 +93,7 @@ namespace GarrettTowerDefense
 
             //TEST THIS SHIT!
             //In actuality, have this set the time to a couple seconds after spawning
-            nextOrbTime = 4f;
+            nextOrbTime = 2f;
 
             ShowMessage("Here I come, you faggot!");
 
@@ -272,7 +272,7 @@ namespace GarrettTowerDefense
         // Checks the boss's health to see if it needs to enter the next phase
         public void CheckHealth()
         {
-            if (healthPercentage < .8f && currentPhase == 1)
+            if (healthPercentage < .75f && currentPhase == 1)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 2 BEGIN");
@@ -293,33 +293,14 @@ namespace GarrettTowerDefense
                 ShowMessage("Hide behind your walls all you please.  We'll see what happens when your weapons are rendered useless!");
             }
 
-            if (healthPercentage < .6f && currentPhase == 2)
+            if (healthPercentage < .5f && currentPhase == 2)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 3 BEGIN");
                 Console.WriteLine("-------------");
-                // Go to phase 3
                 currentPhase = 3;
 
-                TeleportToSpawn();
-                GetPath(GameScene.CurrentMap.CastleTile);
                 shieldActive = false;
-                Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
-
-                isFrozen = false;
-                isBurning = false;
-                isPoisoned = false;
-                
-                ShowMessage("Rise my legions!  Crush all that stands in your way!  Let none survive!!");
-                //GO TO MOVING SUMMON PHASE?
-            }
-
-            if (healthPercentage < .5f && currentPhase == 3)
-            {
-                Console.WriteLine("-------------");
-                Console.WriteLine("PHASE 4 BEGIN");
-                Console.WriteLine("-------------");
-                currentPhase = 4;
 
                 isFrozen = false;
                 isBurning = false;
@@ -333,12 +314,12 @@ namespace GarrettTowerDefense
                 ShowMessage("I shall raze your stronghold to the ground!  Behold the ruins of your ambition!");
             }
 
-            if (healthPercentage < .3f && currentPhase == 4)
+            if (healthPercentage < .3f && currentPhase == 3)
             {
                 Console.WriteLine("-------------");
-                Console.WriteLine("PHASE 5 BEGIN");
+                Console.WriteLine("PHASE 4 BEGIN");
                 Console.WriteLine("-------------");
-                currentPhase = 5;
+                currentPhase = 4;
 
                 TeleportToSpawn();
                 GetPath(GameScene.CurrentMap.CastleTile);
@@ -355,6 +336,16 @@ namespace GarrettTowerDefense
                 ShowFinalPhaseMessage1();
             }
         }
+
+
+        public override void CheckForDeath()
+        {
+            if (CurrentHealth <= 1)
+            {
+                GarrettTowerDefense.ChangeScene(new VictoryScene());
+            }
+        }
+
 
         public override void UpdateMovement(GameTime gameTime)
         {

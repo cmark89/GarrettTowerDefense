@@ -239,6 +239,8 @@ namespace GarrettTowerDefense
             {
                 Console.WriteLine(String.Format("Spawn point at: {0}, {1}", p.X, p.Y));
             }
+
+            AudioManager.PlaySong(Music);
         }
 
 
