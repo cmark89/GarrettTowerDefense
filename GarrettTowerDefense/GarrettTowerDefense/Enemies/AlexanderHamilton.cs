@@ -95,7 +95,7 @@ namespace GarrettTowerDefense
             //In actuality, have this set the time to a couple seconds after spawning
             nextOrbTime = 2f;
 
-            ShowMessage("Here I come, you faggot!");
+            ShowMessage("Here I come, Garrett!");
 
             //base.Initialize();
         }
@@ -260,11 +260,11 @@ namespace GarrettTowerDefense
 
 
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
-                if (TileEngine.ScreenSpaceToMapSpace(Position) == GameScene.CurrentMap.CastleTile)
+                if (CenterPosition == TileEngine.MapPointToVector(GameScene.CurrentMap.CastleTile) + new Vector2(TileEngine.TileWidth / 2, TileEngine.TileHeight / 2))
                 {
                     Console.WriteLine("Enemy hit the castle!");
                     Alive = false;
-                    GameScene.CurHealth -= Damage;
+                    GameScene.DamageCastle(1000);
                 }
             }
         }
@@ -327,6 +327,8 @@ namespace GarrettTowerDefense
                 isFrozen = false;
                 isBurning = false;
                 isPoisoned = false;
+
+                Visible = true;
 
                 bossPhase = BossPhase.Walk;
 
@@ -446,7 +448,7 @@ namespace GarrettTowerDefense
         
         public void FireBeam()
         {
-            AudioManager.PlaySoundEffect(13, .7f);
+            AudioManager.PlaySoundEffect(13, .5f);
             List<Tower> validTargets = GameScene.Towers.FindAll(x => Vector2.Distance(Position, x.Position) <= beamRange);
             if (validTargets.Count <= 0)
                 return;
@@ -472,7 +474,7 @@ namespace GarrettTowerDefense
 
         public void FireOrb()
         {
-            AudioManager.PlaySoundEffect(15, .7f);
+            AudioManager.PlaySoundEffect(15, .5f);
             List<Tower> viableTargets = GameScene.Towers.FindAll(x => Vector2.Distance(x.Position, Position) <= orbRange);
             if (viableTargets.Count <= 0)
             {
@@ -492,7 +494,7 @@ namespace GarrettTowerDefense
 
         public void OrbHit(Tower target)
         {
-            AudioManager.PlaySoundEffect(16, .7f);
+            AudioManager.PlaySoundEffect(16, .5f);
 
             orbAnimation = null;
 
@@ -508,7 +510,7 @@ namespace GarrettTowerDefense
 
         public void SetShieldImmunity()
         {
-            AudioManager.PlaySoundEffect(14, .7f);
+            AudioManager.PlaySoundEffect(14, .5f);
 
             if (!shieldActive)
             {
@@ -618,6 +620,8 @@ namespace GarrettTowerDefense
             
             stunned = true;
             unstunTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 30f;
+            GameScene.GUI.countdownActive = true;
+            GameScene.GUI.countdownTime = 30f;
         }
         
 

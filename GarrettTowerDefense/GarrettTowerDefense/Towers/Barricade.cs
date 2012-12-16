@@ -7,7 +7,7 @@ namespace GarrettTowerDefense
 {
     public class Barricade : Tower
     {
-        public static int Cost = 25;
+        public static int Cost = 15;
 
         //Constructor for arrow towers
         public Barricade()

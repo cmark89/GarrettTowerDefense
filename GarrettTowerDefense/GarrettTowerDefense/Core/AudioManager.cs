@@ -32,6 +32,7 @@ namespace GarrettTowerDefense
             AddSong(Content.Load<Song>("Audio/Music/AbandonAllHQ"));
             AddSong(Content.Load<Song>("Audio/Music/GarrettOverture"));
             AddSong(Content.Load<Song>("Audio/Music/AnimatedLong"));
+            AddSong(Content.Load<Song>("Audio/Music/NothingShortOfAlexanderHamilton"));
 
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Laugh"));
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/LikeThat"));
@@ -110,7 +111,7 @@ namespace GarrettTowerDefense
         }
 
 
-        public static void PlaySoundEffect(int index, float volume = .3f)
+        public static void PlaySoundEffect(int index, float volume = .2f)
         {
             SoundEffects[index].Play(volume, 0f, 0f);
         }

@@ -182,7 +182,6 @@ namespace GarrettTowerDefense
                 Console.WriteLine("Upgrade " + Name + "!");
                 GameScene.Gold -= UpgradeCost[Level - 1];
                 LevelUp();
-                AudioManager.PlaySoundEffect(11);
                 //Play level up sound effect here.  Maybe a sparkly.
             }
         }
@@ -191,6 +190,7 @@ namespace GarrettTowerDefense
         {
             //Increase the level of the tower
             Level++;
+            AudioManager.PlaySoundEffect(11);
             UpdateTooltipText();
         }
 
@@ -234,11 +234,10 @@ namespace GarrettTowerDefense
             Projectiles = new List<Projectile>();
             DisabledProjectiles = new List<Projectile>();
             Constructed = true;
-            AttackCharge = AttackSpeed;
+            AttackCharge = 0;
             UpdateTooltipText();
 
             GameScene.RecalculateEnemyPath();
-            
         }
         
         public virtual void Update(GameTime gameTime)

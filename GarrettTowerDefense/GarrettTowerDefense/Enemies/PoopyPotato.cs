@@ -18,8 +18,7 @@ namespace GarrettTowerDefense
             Health = BaseHealth * (1 + (.35f * GameScene.waveManager.WaveNumber));
             CurrentHealth = Health;
 
-            Bounty = 11;
-            Bounty = (int)Bounty * (1 + (int)(GameScene.waveManager.WaveNumber / 10));
+            Bounty = (GameScene.waveManager.WaveNumber) + 4;
 
             Damage = 4;
 

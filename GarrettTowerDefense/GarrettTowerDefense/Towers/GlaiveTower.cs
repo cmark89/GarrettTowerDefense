@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     public class GlaiveTower : Tower
     {
-        public static int Cost = 90;
+        public static int Cost = 75;
         public int MaxBounces = 4;
         public int MaxBounceRange = 125;
         public int MaxGlaives = 2;
@@ -25,8 +25,8 @@ namespace GarrettTowerDefense
             BuildCost = Cost;
 
             DamageType = DamageType.Physical;
-            Damage = 10;
-            AttackSpeed = 1.8f;
+            Damage = 15;
+            AttackSpeed = 1.7f;
             AttackRange = 300;
             ProjectileSpeed = 240;
         }
@@ -73,7 +73,7 @@ namespace GarrettTowerDefense
             if (target != null)
             {
                 int finalDamage = Damage - (2 * proj.Bounces);
-                target.DamageEnemy(Damage, DamageType);
+                target.DamageEnemy(finalDamage, DamageType);
                 proj.Bounces++;
                 proj.HitEnemies.Add(target);
                 AudioManager.PlaySoundEffect(5);

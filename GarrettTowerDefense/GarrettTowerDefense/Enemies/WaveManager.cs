@@ -15,6 +15,9 @@ namespace GarrettTowerDefense
         public float NextSpawn { get; private set; }
         public int EnemiesLeft { get; private set; }
 
+        public string WaveText { get; private set; }
+        public bool WaveTextShown { get; private set; }
+
         public static List<CarnageModeBuff> CarnageBuffs;
 
         public bool WavePaused = false;
@@ -35,6 +38,10 @@ namespace GarrettTowerDefense
             WaveTime = 0f;
             SpawnRate = 1f;
             NextSpawn = 0;
+
+            carnageMode = false;
+            QueuedSpawns = new List<QueuedSpawn>();
+            CarnageBuffs = new List<CarnageModeBuff>();
         }
 
         public void Update(GameTime gameTime)
@@ -53,6 +60,12 @@ namespace GarrettTowerDefense
 
                     NextSpawn = WaveTime + SpawnRate;
                     SpawnEnemy();
+                }
+
+                if (WaveTextShown)
+                {
+                    if (WaveTime - SpawnRate < 0)
+                        WaveText = "Next Wave: " + String.Format("{0:0.0}", Math.Abs(WaveTime - SpawnRate));
                 }
             }
 
@@ -180,6 +193,8 @@ namespace GarrettTowerDefense
                 Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
 
                 newEnemy.Initialize(spawnVector);
+
+                WaveText = "Current Wave:\n " + newEnemy.Name;
             }
         }
 
@@ -194,6 +209,9 @@ namespace GarrettTowerDefense
 
             NextSpawn = 0 + SpawnRate;
 
+            WaveText = "Next Wave: ";
+            WaveTextShown = true;
+
             // If in carnage mode...
             if (carnageMode && WaveNumber < 24)
             {
@@ -206,8 +224,7 @@ namespace GarrettTowerDefense
             if (WaveNumber == 24)
             {
                 AlexanderHamilton.ShowMessage("Worthless underlings.  It seems I will have to dispose of you myself!");
-                AudioManager.PlaySong(6);
-                AudioManager.SetVolume(.5f);
+                AudioManager.PlaySong(9);
             }
         }
 

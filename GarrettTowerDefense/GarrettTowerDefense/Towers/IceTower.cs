@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     public class IceTower : Tower
     {
-        public static int Cost = 70;
+        public static int Cost = 60;
 
         private float slowAmount;
         private float freezeDuration;

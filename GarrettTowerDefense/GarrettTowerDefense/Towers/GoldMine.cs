@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     public class GoldMine : Tower
     {
-        public static int Cost = 75;
+        public static int Cost = 50;
 
         public double LastGoldTime;
         public float GoldInterval = 10f;
@@ -22,7 +22,7 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
-            UpgradeCost = new int[] { 100, 150, 200, 250 };
+            UpgradeCost = new int[] { 50, 100, 150, 200 };
             BuildCost = Cost;
 
             DamageType = DamageType.Physical;

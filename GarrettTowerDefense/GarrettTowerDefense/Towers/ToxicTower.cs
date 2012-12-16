@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     public class ToxicTower : Tower
     {
-        public static int Cost = 60;
+        public static int Cost = 45;
 
         private float poisonDuration;
 
@@ -26,7 +26,7 @@ namespace GarrettTowerDefense
             DamageType = DamageType.Poison;
             Damage = 5;
             AttackSpeed = 1.4f;
-            AttackRange = 270;
+            AttackRange = 210;
             ProjectileSpeed = 170;
 
             poisonDuration = 10f;

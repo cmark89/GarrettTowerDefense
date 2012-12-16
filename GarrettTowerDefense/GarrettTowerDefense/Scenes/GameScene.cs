@@ -69,7 +69,7 @@ namespace GarrettTowerDefense
 
             MaxHealth = 100;
             CurHealth = MaxHealth;
-            Gold = 400;
+            Gold = 150;
             
             CurrentMouseAction = MouseAction.None;
 
@@ -96,9 +96,14 @@ namespace GarrettTowerDefense
                 PlayerPaused = !PlayerPaused;
 
                 if (PlayerPaused)
-                    AudioManager.PauseSong();
+                {
+                    //AudioManager.PauseSong();
+                    AudioManager.SetVolume(.25f);
+                }
                 else
-                    AudioManager.ResumeSong();
+                {
+                    AudioManager.SetVolume(1f);
+                }
             }
 
             // Check for mouse input and handle it accordingly
@@ -207,10 +212,10 @@ namespace GarrettTowerDefense
 
                 //Update the wave manager.
                 waveManager.Update(gameTime);
-
-                if (tooltip != null)
-                    tooltip.Update(gameTime);
             }
+
+            if (tooltip != null)
+                tooltip.Update(gameTime);
             
 
             if (messageWindow != null)

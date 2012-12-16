@@ -7,7 +7,7 @@ namespace GarrettTowerDefense
 {
     public class FlameTower : Tower
     {
-        public static int Cost = 70;
+        public static int Cost = 55;
 
         public float burnPercent;
         public float burnDuration;
@@ -32,12 +32,12 @@ namespace GarrettTowerDefense
             ProjectileSpeed = 180;
 
             burnDuration = 8f;
-            burnPercent = .07f;
+            burnPercent = .06f;
         }
 
         public override void UpdateTooltipText()
         {
-            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \nBurn Damage: {5}% \n\nNext Upgrade: \n+3 Damage \n+.2 Attack Speed \n+15 AoE\n\nUpgrade Cost: {6}",
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \nBurn Damage: {5}% \n\nNext Upgrade: \n+3 Damage \n+.2 Attack Speed \n+1% Burn Damage\n\nUpgrade Cost: {6}",
                 Level, Name, Damage, AttackSpeed, AttackRange, burnPercent*100, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
         }
 
@@ -45,7 +45,7 @@ namespace GarrettTowerDefense
         {
             Damage += 3;
             AttackSpeed -= .2f;
-            burnAoE += 15;
+            burnPercent += .01f;
 
             base.LevelUp();
         }
@@ -54,7 +54,7 @@ namespace GarrettTowerDefense
         {
             Damage -= 3;
             AttackSpeed += .2f;
-            burnAoE -= 15;
+            burnPercent -= .01f;
 
             base.LevelDown();
         }

@@ -19,10 +19,14 @@ namespace GarrettTowerDefense
 
         public SpriteFont normalFont { get; private set; }
         public SpriteFont goldFont { get; private set; }
+        public SpriteFont countdownFont { get; private set; }
 
         public Vector2 tooltipText1Start { get; private set; }
         public string tooltipText0 { get; private set; }
         public string tooltipText1 { get; private set; }
+
+        public bool countdownActive = false;
+        public float countdownTime = 0f;
         
 
         private static Rectangle GUIArea;
@@ -35,6 +39,7 @@ namespace GarrettTowerDefense
             HealthbarTexture = Content.Load<Texture2D>("GUI/Healthbar");
             normalFont = Content.Load<SpriteFont>("Fonts/NormalFont");
             goldFont = Content.Load<SpriteFont>("Fonts/GoldFont");
+            countdownFont = Content.Load<SpriteFont>("Fonts/CountdownFont");
 
             TooltipTexture = Content.Load<Texture2D>("GUI/Tooltip");
             // Load tooltip fonts...
@@ -77,6 +82,11 @@ namespace GarrettTowerDefense
             foreach (GUIButton b in Buttons)
             {
                 b.Update(gameTime);
+            }
+
+            if (countdownActive)
+            {
+                countdownTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             //Check for GUI hovering
@@ -181,6 +191,18 @@ namespace GarrettTowerDefense
             spriteBatch.Draw(HealthbarTexture, new Rectangle(GUIArea.X + 7, GUIArea.Y+7, (int)(HealthbarTexture.Width * ((float)GameScene.CurHealth/(float)GameScene.MaxHealth)),24), Color.White);
             
             spriteBatch.DrawString(goldFont, GameScene.Gold.ToString(), new Vector2(GUIArea.X + 75, 37), Color.Orange);
+
+
+            if (countdownActive)
+            {
+                spriteBatch.DrawString(countdownFont, String.Format("{0:0.0}", countdownTime), new Vector2(GUIArea.X + ((GUIArea.Width / 2) - (countdownFont.MeasureString(String.Format("{0:0.0}", countdownTime)).X / 2)), 70), Color.White);
+            }
+            else if (GameScene.waveManager != null && GameScene.waveManager.WaveTextShown)
+            {
+                spriteBatch.DrawString(countdownFont, GameScene.waveManager.WaveText, new Vector2(GUIArea.X + ((GUIArea.Width / 2) - (countdownFont.MeasureString(GameScene.waveManager.WaveText).X / 2)), 70), Color.White);
+            }
+
+
             foreach (GUIButton b in Buttons)
             {
                 b.Draw(spriteBatch);

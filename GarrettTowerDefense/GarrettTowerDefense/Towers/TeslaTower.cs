@@ -8,7 +8,7 @@ namespace GarrettTowerDefense
 {
     public class TeslaTower : Tower
     {
-        public static int Cost = 75;
+        public static int Cost = 90;
 
         //Constructor for arrow towers
         public TeslaTower()
@@ -22,7 +22,7 @@ namespace GarrettTowerDefense
             BuildCost = Cost;
 
             DamageType = DamageType.Electrical;
-            Damage = 12;
+            Damage = 15;
             AttackSpeed = 3f;
             AttackRange = 225;
             ProjectileSpeed = 350;
@@ -36,7 +36,7 @@ namespace GarrettTowerDefense
 
         public override void LevelUp()
         {
-            Damage += 2;
+            Damage += 4;
             AttackSpeed -= .25f;
             AttackRange += 25;
 
@@ -45,7 +45,7 @@ namespace GarrettTowerDefense
 
         public override void LevelDown()
         {
-            Damage -= 2;
+            Damage -= 4;
             AttackSpeed += .25f;
             AttackRange -= 25;
 

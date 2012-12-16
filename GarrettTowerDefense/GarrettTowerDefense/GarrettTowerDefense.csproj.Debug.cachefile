@@ -43,6 +43,10 @@ Content\GameOver.xnb
 Content\Victory.xnb
 Content\Audio\Music\AnimatedLong.xnb
 Content\Intro.xnb
+Content\Audio\Music\NothingShortOfAlexanderHamilton.xnb
+Content\GUI\Controls.xnb
+Content\Fonts\MainMenuFont.xnb
+Content\Fonts\CountdownFont.xnb
 Content\Audio\Music\Elegy.wma
 Content\Audio\Music\Bananalord.wma
 Content\Audio\Music\ProfaningTheRitual.wma
@@ -54,3 +58,4 @@ Content\Audio\Music\AbandonAllHQ.wma
 Content\Audio\Music\GarrettOverture.wma
 Content\Audio\Music\AnimatedLong.wma
 Content\Intro.wmv
+Content\Audio\Music\NothingShortOfAlexanderHamilton.wma

@@ -7,8 +7,8 @@ namespace GarrettTowerDefense
 {
     public class Observatory : Tower
     {
-        public static int Cost = 50;
-        public static float RevealRange = 100;
+        public static int Cost = 45;
+        public static float RevealRange = 150;
 
         //Constructor for arrow towers
         public Observatory()

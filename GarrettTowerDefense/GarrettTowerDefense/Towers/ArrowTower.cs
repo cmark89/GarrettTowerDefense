@@ -7,7 +7,7 @@ namespace GarrettTowerDefense
 {
     public class ArrowTower : Tower
     {
-        public static int Cost = 40;
+        public static int Cost = 30;
 
         //Constructor for arrow towers
         public ArrowTower()
@@ -17,7 +17,7 @@ namespace GarrettTowerDefense
             Health = 100;
             Level = 1;
 
-            UpgradeCost = new int[]{40,60,100,160};
+            UpgradeCost = new int[]{25,50,100,150};
             BuildCost = Cost;
 
             DamageType = DamageType.Physical;
@@ -29,7 +29,7 @@ namespace GarrettTowerDefense
 
         public override void UpdateTooltipText()
         {
-            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \n\nNext Upgrade: \n+3 Damage \n+35 Range\n\nUpgrade Cost: {5}",
+            tooltipText = String.Format("Level {0} {1} \n\nDamage: {2} \nAttack Speed: {3} \nRange: {4} \n\nNext Upgrade: \n+3 Damage \n+35 Range\n -.1 Attack Speed\n\nUpgrade Cost: {5}",
                 Level, Name, Damage, AttackSpeed, AttackRange, Level < 5 ? UpgradeCost[Level - 1].ToString() : " - ");
         }
 
@@ -37,6 +37,7 @@ namespace GarrettTowerDefense
         {
             Damage += 3;
             AttackRange += 35;
+            AttackSpeed -= .1f;
 
             base.LevelUp();
             UpdateTooltipText();
@@ -46,6 +47,7 @@ namespace GarrettTowerDefense
         {
             Damage -= 3;
             AttackRange -= 35;
+            AttackSpeed += .1f;
 
             base.LevelDown();
         }
