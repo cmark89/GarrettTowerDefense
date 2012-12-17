@@ -37,7 +37,7 @@ namespace GarrettTowerDefense
 
         public override void Initialize()
         {
-            AudioManager.PlaySong(7);
+            AudioManager.PlaySong(0);
         }
 
         public override void LoadContent(ContentManager Content)

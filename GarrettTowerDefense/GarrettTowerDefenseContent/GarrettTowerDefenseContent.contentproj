@@ -42,47 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Music\Elegy.WAV">
-      <Name>Elegy</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-    <Compile Include="Audio\Music\Bananalord.WAV">
-      <Name>Bananalord</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-    <Compile Include="Audio\Music\ProfaningTheRitual.WAV">
-      <Name>ProfaningTheRitual</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-    <Compile Include="Audio\Music\Esoterica.WAV">
-      <Name>Esoterica</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-    <Compile Include="Audio\Music\AbandonAll.WAV">
-      <Name>AbandonAll</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Music\TheButcher.WAV">
-      <Name>TheButcher</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Music\AfflictionForever.WAV">
-      <Name>AfflictionForever</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Audio\SoundEffects\Laugh.wav">
       <Name>Laugh</Name>
       <Importer>WavImporter</Importer>
@@ -146,13 +105,6 @@
       <Name>EditorGUI</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Music\AbandonAllHQ.mp3">
-      <Name>AbandonAllHQ</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -271,13 +223,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Music\GarrettOverture.WAV">
-      <Name>GarrettOverture</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="GameOver.jpg">
       <Name>GameOver</Name>
       <Importer>TextureImporter</Importer>
@@ -297,24 +242,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Music\AnimatedLong.wav">
-      <Name>AnimatedLong</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Intro.wmv">
       <Name>Intro</Name>
       <Importer>WmvImporter</Importer>
       <Processor>VideoProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Music\NothingShortOfAlexanderHamilton.WAV">
-      <Name>NothingShortOfAlexanderHamilton</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +276,43 @@
       <Name>CountdownFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio\Music\AfflictionForever.mp3">
+      <Name>AfflictionForever</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\AnimatedLong.mp3">
+      <Name>AnimatedLong</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\Bananalord.mp3">
+      <Name>Bananalord</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\Esoterica.mp3">
+      <Name>Esoterica</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\GarrettOverture.mp3">
+      <Name>GarrettOverture</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\NothingShortOfAlexanderHamilton.mp3">
+      <Name>NothingShortOfAlexanderHamilton</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Audio\Music\ProfaningTheRitual.mp3">
+      <Name>ProfaningTheRitual</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

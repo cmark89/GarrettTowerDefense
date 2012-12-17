@@ -598,7 +598,7 @@ namespace GarrettTowerDefense
 
         public void StartFinalPhase()
         {
-            AudioManager.PlaySong(3);
+            AudioManager.PlaySong(5);
             Console.WriteLine("Final phase begin!");
             Weaknesses = new float[] { 0f, 0f, 0f, 0f, 0f };
             isBurning = false;

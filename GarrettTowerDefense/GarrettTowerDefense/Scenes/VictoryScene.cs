@@ -38,7 +38,7 @@ namespace GarrettTowerDefense
             if (elapsedTime >= quoteDelay && !playingMusic)
             {
                 playingMusic = true;
-                AudioManager.PlaySong(8);
+                AudioManager.PlaySong(6);
             }
 
 

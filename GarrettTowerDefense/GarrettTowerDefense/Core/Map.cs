@@ -65,104 +65,11 @@ namespace GarrettTowerDefense
         }
 
 
-        public void InitializeTestMap()
-        {
-            MapWidth = 19;
-            MapHeight = 15;
-            Tileset = TileEngine.Tilesets[0];
-            SpawnPoints = new List<Point>();
-            Random random = new Random();
-            Music = 3;
-
-            //Create a map using the first 3 tiles randomly
-            mapCells = new MapCell[MapHeight, MapWidth];
-            for (int y = 0; y < MapHeight; y++)
-            {
-                for (int x = 0; x < MapWidth; x++)
-                {
-                    mapCells[y, x] = new MapCell(random.Next(0,3));
-                }
-            }
-
-            //Now, loop back over the map.  If the tile is grass, there's a 1 in 3 chance a tree will be placed on top.
-            //If the tile is dirt, there's a 1 in 5 chance a gold mine will be placed on top.
-            for (int y = 0; y < MapHeight; y++)
-            {
-                for (int x = 0; x < MapWidth; x++)
-                {
-                    if (mapCells[y, x].tiles[0].TileID == 0 && random.NextDouble() < .33f)
-                    {
-                        mapCells[y, x].AddTile(3);
-                    }
-                }
-
-                for (int x = 0; x < MapWidth; x++)
-                {
-                    if (mapCells[y, x].tiles[0].TileID == 1 && random.NextDouble() < .1f)
-                    {
-                        mapCells[y, x].AddTile(14);
-                    }
-                }
-
-                Random rand = new Random();
-                Point randomPoint = new Point(rand.Next(0, MapWidth), rand.Next(0, MapHeight));
-                MapCell randCell = mapCells[randomPoint.Y, randomPoint.X] = new MapCell(0);
-                randCell.AddTile(4);
-                CastleTile = randomPoint;
-            }
-
-            Initialize();
-        }
-
-
-        public void InitializeTestMap2()
-        {
-            Console.WriteLine("INITIALIZE TEST MAP.");
-            MapWidth = 19;
-            MapHeight = 15;
-            Tileset = TileEngine.Tilesets[0];
-            SpawnPoints = new List<Point>();
-            Random random = new Random();
-            Music = 2;
-
-
-            mapCells = new MapCell[MapHeight, MapWidth];
-            for(int y = 0; y < MapHeight; y++)
-            {
-                for(int x = 0; x < MapWidth; x++)
-                {
-                    mapCells[y,x] = new MapCell(0);
-                }
-            }
-
-            mapCells[0, 13] = new MapCell(2);
-            mapCells[1, 13] = new MapCell(2);
-            mapCells[2, 13] = new MapCell(2);
-            mapCells[3, 13] = new MapCell(2);
-            mapCells[4, 13] = new MapCell(2);
-
-            mapCells[4, 0] = new MapCell(2);
-            mapCells[4, 1] = new MapCell(2);
-            mapCells[4, 2] = new MapCell(2);
-            mapCells[4, 3] = new MapCell(2);
-            mapCells[4, 4] = new MapCell(2);
-            mapCells[4, 5] = new MapCell(2);
-            mapCells[4, 6] = new MapCell(2);
-
-            mapCells[0, 0].AddTile(5);
-            mapCells[14, 2].AddTile(4);
-
-            CastleTile = new Point(2, 14);
-            SpawnPoints.Add(new Point(0, 0));
-
-            Initialize();
-        }
-
-
         public void Initialize()
         {
             Console.WriteLine("Map initialized.");
-            Music = 1;
+            // Select a random song to play for the game.
+            Music = new Random().Next(1, 4);
             AudioManager.PlaySong(Music);
 
             PopulateSpawnPoints();
@@ -220,6 +127,7 @@ namespace GarrettTowerDefense
                     if (mapCells[y, x].tiles.Count > 1 && mapCells[y, x].tiles[1].TileID == 4)
                     {
                         CastleTile = new Point(x, y);
+                        mapCells[y, x].IsBuildable = false;
                     }
 
                     if (mapCells[y, x].tiles.Count > 1 && mapCells[y, x].tiles[1].TileID == 5)

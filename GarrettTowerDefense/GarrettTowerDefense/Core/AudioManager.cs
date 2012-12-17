@@ -23,16 +23,13 @@ namespace GarrettTowerDefense
 
         public static void LoadContent(ContentManager Content)
         {
-            AddSong(Content.Load<Song>("Audio/Music/AbandonAll"));
-            AddSong(Content.Load<Song>("Audio/Music/AfflictionForever"));
+            AddSong(Content.Load<Song>("Audio/Music/GarrettOverture"));     
             AddSong(Content.Load<Song>("Audio/Music/Bananalord"));
-            AddSong(Content.Load<Song>("Audio/Music/Elegy"));
             AddSong(Content.Load<Song>("Audio/Music/Esoterica"));
             AddSong(Content.Load<Song>("Audio/Music/ProfaningTheRitual"));
-            AddSong(Content.Load<Song>("Audio/Music/AbandonAllHQ"));
-            AddSong(Content.Load<Song>("Audio/Music/GarrettOverture"));
-            AddSong(Content.Load<Song>("Audio/Music/AnimatedLong"));
+            AddSong(Content.Load<Song>("Audio/Music/AfflictionForever"));
             AddSong(Content.Load<Song>("Audio/Music/NothingShortOfAlexanderHamilton"));
+            AddSong(Content.Load<Song>("Audio/Music/AnimatedLong"));
 
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/Laugh"));
             AddSoundEffect(Content.Load<SoundEffect>("Audio/SoundEffects/LikeThat"));
