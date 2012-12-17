@@ -22,7 +22,7 @@ namespace GarrettTowerDefense
 
             DamageType = DamageType.Physical;
             Damage = 8;
-            AttackSpeed = 1.5f;
+            AttackSpeed = 1.3f;
             AttackRange = 150;
             ProjectileSpeed = 250;
         }

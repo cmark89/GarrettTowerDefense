@@ -31,7 +31,7 @@
     <MapFileExtensions>false</MapFileExtensions>
     <ProductName>Garrett Tower Defense</ProductName>
     <PublisherName>Objectively Radical Games</PublisherName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bn.ico" />
+    <None Include="ChangeLog.txt" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

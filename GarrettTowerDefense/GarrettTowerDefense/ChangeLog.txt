@@ -1,0 +1,6 @@
+﻿v1.0.0.1
+----
+-Alexander Hamilton's health has been increased to 45,000 (from 35,000).  Phase change percentages have been slightly modified.
+-Alexander Hamilton will now stun himself for 15 seconds during the final phase (down from 30)
+-Alexander Hamilton will now only refund 50% of the cost of a tower when destroying it during the final phase (down from 30)
+-Arrow Tower base attack speed increased to 1.3 (up from 1.5)

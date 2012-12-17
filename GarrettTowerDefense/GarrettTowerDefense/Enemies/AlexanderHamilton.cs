@@ -68,7 +68,7 @@ namespace GarrettTowerDefense
             TextureID = 17;
 
             //BaseHealth = 200;
-            BaseHealth = 35000;
+            BaseHealth = 45000;
             //Calculate true health based on the wave number
             Health = BaseHealth;
             CurrentHealth = Health;
@@ -161,7 +161,7 @@ namespace GarrettTowerDefense
                 if (currentGameTime.TotalGameTime.TotalSeconds >= unstunTime)
                 {
                     stunned = false;
-
+                    GameScene.GUI.countdownActive = false;
                     Weaknesses = new float[] { 1f, 1f, 1f, 1f, 1f };
                 }
             }
@@ -272,7 +272,7 @@ namespace GarrettTowerDefense
         // Checks the boss's health to see if it needs to enter the next phase
         public void CheckHealth()
         {
-            if (healthPercentage < .75f && currentPhase == 1)
+            if (healthPercentage < .78f && currentPhase == 1)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 2 BEGIN");
@@ -293,7 +293,7 @@ namespace GarrettTowerDefense
                 ShowMessage("Hide behind your walls all you please.  We'll see what happens when your weapons are rendered useless!");
             }
 
-            if (healthPercentage < .5f && currentPhase == 2)
+            if (healthPercentage < .55f && currentPhase == 2)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 3 BEGIN");
@@ -314,7 +314,7 @@ namespace GarrettTowerDefense
                 ShowMessage("I shall raze your stronghold to the ground!  Behold the ruins of your ambition!");
             }
 
-            if (healthPercentage < .3f && currentPhase == 3)
+            if (healthPercentage < .28f && currentPhase == 3)
             {
                 Console.WriteLine("-------------");
                 Console.WriteLine("PHASE 4 BEGIN");
@@ -561,7 +561,7 @@ namespace GarrettTowerDefense
             foreach (Tower t in towers)
             {
                 Console.WriteLine("Destroying a specific tower: " + t.Name);
-                t.Sell(1f);
+                t.Sell(.5f);
                 builtTowers.Remove(t);
             }
         }
@@ -619,9 +619,9 @@ namespace GarrettTowerDefense
             destroyingTowers = true;
             
             stunned = true;
-            unstunTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 30f;
+            unstunTime = (float)currentGameTime.TotalGameTime.TotalSeconds + 15f;
             GameScene.GUI.countdownActive = true;
-            GameScene.GUI.countdownTime = 30f;
+            GameScene.GUI.countdownTime = 15f;
         }
         
 
