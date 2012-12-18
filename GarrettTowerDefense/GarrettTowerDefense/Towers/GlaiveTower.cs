@@ -69,7 +69,6 @@ namespace GarrettTowerDefense
 
         public override void OnProjectileHit(Projectile proj, Enemy target)
         {
-            Console.WriteLine("The projecile hits!");
             if (target != null)
             {
                 int finalDamage = Damage - (2 * proj.Bounces);

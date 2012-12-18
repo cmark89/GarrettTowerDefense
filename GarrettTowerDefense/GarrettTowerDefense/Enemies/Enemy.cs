@@ -70,7 +70,7 @@ namespace GarrettTowerDefense
             Alive = true;
             DrawColor = Color.White;
             GameScene.Enemies.Add(this);
-            Console.WriteLine("\nFind path to castle (located at " + GameScene.CurrentMap.CastleTile.X + ", " + GameScene.CurrentMap.CastleTile.Y + ")");
+            
             GetPath(GameScene.CurrentMap.CastleTile);
 
             if (Stealthed)
@@ -194,8 +194,6 @@ namespace GarrettTowerDefense
         {
             int pathCost = 0;
             Waypoints = GameScene.pathfinder.FindPath(TileEngine.ScreenSpaceToMapSpace(Position), target, ref  pathCost);
-            Console.WriteLine("Position:" + Position);
-            Console.WriteLine("Map Position: " + TileEngine.ScreenSpaceToMapSpace(Position));
 
             if (pathCost < Pathfinder.TOWER_COST)
             {
@@ -249,7 +247,6 @@ namespace GarrettTowerDefense
         public void SetPosition(Vector2 v2)
         {
             Position = v2;
-            Console.WriteLine("Enemy spawn! " + Position);
         }
 
 
@@ -281,7 +278,6 @@ namespace GarrettTowerDefense
                 return;
 
             float damage = (percent * Health) * Weaknesses[(int)DamageType.Fire];
-            Console.WriteLine(Name + " will burn for " + damage + " damage (" + damage/duration + " damage per second) over " + duration + " seconds.");
             isBurning = true;
             burnDPS = (Health * percent) / duration;
             burnDuration = duration;
@@ -293,7 +289,6 @@ namespace GarrettTowerDefense
                 return;
 
             poisonDPS = damage * Weaknesses[(int)DamageType.Poison];
-            Console.WriteLine(Name + " will be poisoned for " + damage + " damage per second for " + duration + " seconds.");
             isPoisoned = true;
             poisonDuration = duration;
         }

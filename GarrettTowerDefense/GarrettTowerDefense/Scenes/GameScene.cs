@@ -14,7 +14,6 @@ namespace GarrettTowerDefense
     public class GameScene : Scene
     {
         //Stores the current map
-        //public static Map CurrentMap { get; private set; }
         public static Pathfinder pathfinder;
 
         //Stores a list of all towers currently in the game
@@ -97,7 +96,6 @@ namespace GarrettTowerDefense
 
                 if (PlayerPaused)
                 {
-                    //AudioManager.PauseSong();
                     AudioManager.SetVolume(.25f);
                 }
                 else
@@ -186,7 +184,6 @@ namespace GarrettTowerDefense
                 {
                     if (Towers[i].Destroyed)
                     {
-                        Console.WriteLine("Remove " + Towers[i].Name + " from the global tower list.");
                         Towers.RemoveAt(i);
                     }
                 }
@@ -201,7 +198,6 @@ namespace GarrettTowerDefense
                 {
                     Vector2 mousepos = new Vector2(MouseHandler.CurrentMouseState.X, MouseHandler.CurrentMouseState.Y);
                     Point clickedtile = TileEngine.ScreenSpaceToMapSpace(mousepos);
-                    Console.WriteLine("Right clicked on " + clickedtile);
 
                     Tower t = GameScene.Towers.Find(x => x.MapPosition == clickedtile);
                     if (t != null)
@@ -303,8 +299,6 @@ namespace GarrettTowerDefense
             }
             
             //Draw projectiles
-
-
             foreach (Enemy e in Enemies)
             {
                 if (e.Stealthed && !e.Visible)
@@ -394,13 +388,8 @@ namespace GarrettTowerDefense
                             break;
                     }
                 }
-                //The mouse is too far to the right to be over the map
-                else
-                {
-                    //Handle clicking over the interface.
-                    //AudioManager.PlaySoundEffect(0);
-                }
             }
+
             if (MouseHandler.RightClick())
             {
                 //If right clicking, break the current operation.
@@ -425,13 +414,11 @@ namespace GarrettTowerDefense
 
         public static void GainGold(int gold)
         {
-            Console.WriteLine("Gain " + gold + " gold!  Now have " + (Gold + gold));
             Gold += gold;
         }
 
         public static void DamageCastle(int damage)
         {
-            Console.WriteLine("Enemy hit the castle!");
             AudioManager.PlaySoundEffect(10);
             CurHealth -= damage;
 

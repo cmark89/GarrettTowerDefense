@@ -43,7 +43,7 @@ namespace GarrettTowerDefense
 
 
             // Check for input here to go back to menu
-            if (playingMusic && KeyboardHandler.KeyPress(Keys.Space))
+            if (playingMusic && (KeyboardHandler.KeyPress(Keys.Space) || KeyboardHandler.KeyPress(Keys.Escape) || KeyboardHandler.KeyPress(Keys.Enter) || MouseHandler.Click()))
             {
                 GarrettTowerDefense.ChangeScene(new TitleScene());
             }

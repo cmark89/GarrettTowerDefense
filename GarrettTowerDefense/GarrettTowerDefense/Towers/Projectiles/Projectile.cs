@@ -54,12 +54,6 @@ namespace GarrettTowerDefense
                 isGlaive = true;
             }
 
-            
-
-
-            //WORK ON THIS
-            //curRotation = (float)Math.Atan2((double)(Target.Position.Y - Position.Y), (double)(Target.Position.X - Position.X));
-            //curRotation *= (180f / (float)Math.PI);
             curRotation += 90;
         }
 

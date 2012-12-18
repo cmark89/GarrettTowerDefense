@@ -70,7 +70,6 @@ namespace Pathfinding
         //Construct new pathfinding information using the given map
         public Pathfinder(Map map)
         {
-            Console.WriteLine("Pathfinder activated.");
             levelWidth = map.MapWidth;
             levelHeight = map.MapHeight;
 
@@ -80,7 +79,6 @@ namespace Pathfinding
 
         public void InitializeSearchNodes(Map map)
         {
-            Console.WriteLine("Initializing search nodes.");
             searchNodes = new SearchNode[map.MapHeight, map.MapWidth];
 
             //For each tile in our map, create a SearchNode for it
@@ -220,14 +218,10 @@ namespace Pathfinding
         //The meat of the system:
         public List<Vector2> FindPath(Point startPoint, Point endPoint, ref int pathCost)
         {
-            Console.WriteLine("\nInitiate FindPath");
-            Console.WriteLine("\nStart Point: " + startPoint.X + ", " + startPoint.Y);
-            Console.WriteLine("\nEnd Point: " + endPoint.X + ", " + endPoint.Y);
 
             //Only attempt to use the pathfinding system if the start point and the end point are different
             if (startPoint == endPoint)
             {
-                Console.WriteLine("\nStart and end point are identical.  Terminating.");
                 return new List<Vector2>();
             }
 
@@ -275,7 +269,6 @@ namespace Pathfinding
                 //====================
                 if (currentNode == null)
                 {
-                    Console.WriteLine("\nNull node found.");
                     break;
                 }
 
@@ -284,10 +277,9 @@ namespace Pathfinding
                 //====================
                 if (currentNode == endNode)
                 {
-                    Console.WriteLine("\nGoal found.  Returning final path.");
                     //Trace our final path back to the start
                     pathCost = (int)currentNode.DistanceTraveled;
-                    Console.WriteLine("Path cost: " + pathCost);
+
                     return FindFinalPath(startNode, endNode);
                 }
 
@@ -351,7 +343,6 @@ namespace Pathfinding
                 currentNode.InClosedList = true;
             }
 
-            Console.WriteLine("\nNo path found.");
             //No path could be found.
             return new List<Vector2>();
         }

@@ -166,8 +166,6 @@ namespace GarrettTowerDefense
                 }
             }
 
-            //Console.WriteLine(CurrentHealth);
-
             //Move the enemy and shit if not stunned
             if (CurrentState != MonsterState.Stunned)
             {
@@ -262,7 +260,6 @@ namespace GarrettTowerDefense
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
                 if (CenterPosition == TileEngine.MapPointToVector(GameScene.CurrentMap.CastleTile) + new Vector2(TileEngine.TileWidth / 2, TileEngine.TileHeight / 2))
                 {
-                    Console.WriteLine("Enemy hit the castle!");
                     Alive = false;
                     GameScene.DamageCastle(1000);
                 }
@@ -274,9 +271,6 @@ namespace GarrettTowerDefense
         {
             if (healthPercentage < .78f && currentPhase == 1)
             {
-                Console.WriteLine("-------------");
-                Console.WriteLine("PHASE 2 BEGIN");
-                Console.WriteLine("-------------");
                 // Go to phase 2
                 currentPhase = 2;
 
@@ -295,9 +289,6 @@ namespace GarrettTowerDefense
 
             if (healthPercentage < .55f && currentPhase == 2)
             {
-                Console.WriteLine("-------------");
-                Console.WriteLine("PHASE 3 BEGIN");
-                Console.WriteLine("-------------");
                 currentPhase = 3;
 
                 shieldActive = false;
@@ -316,9 +307,6 @@ namespace GarrettTowerDefense
 
             if (healthPercentage < .28f && currentPhase == 3)
             {
-                Console.WriteLine("-------------");
-                Console.WriteLine("PHASE 4 BEGIN");
-                Console.WriteLine("-------------");
                 currentPhase = 4;
 
                 TeleportToSpawn();
@@ -560,7 +548,6 @@ namespace GarrettTowerDefense
         {
             foreach (Tower t in towers)
             {
-                Console.WriteLine("Destroying a specific tower: " + t.Name);
                 t.Sell(.5f);
                 builtTowers.Remove(t);
             }
@@ -578,8 +565,6 @@ namespace GarrettTowerDefense
 
             if (currentGameTime.TotalGameTime.TotalSeconds >= nextTowerDestroyTime)
             {
-                Console.WriteLine("Towers remaining: " + builtTowers.Count); 
-                Console.WriteLine("Destroy all towers at " + destroyTowerDistance);
                 DestroyTowers(GetTowersAtDistance(destroyTowerDistance));
                 destroyTowerDistance++;
 
@@ -588,7 +573,6 @@ namespace GarrettTowerDefense
                 if (builtTowers.Count == 0)
                 {
                     destroyTowersAnimation = null;
-                    Console.WriteLine("Towers destroyed!");
                     destroyingTowers = false;
                     Weaknesses = new float[] { 0f, 0f, 0f, 0f, 0f };
                 }
@@ -599,7 +583,6 @@ namespace GarrettTowerDefense
         public void StartFinalPhase()
         {
             AudioManager.PlaySong(5);
-            Console.WriteLine("Final phase begin!");
             Weaknesses = new float[] { 0f, 0f, 0f, 0f, 0f };
             isBurning = false;
             isPoisoned = false;
@@ -612,7 +595,6 @@ namespace GarrettTowerDefense
 
             // He then destroys towers in a ring outward from wherever he respawns.
 
-            Console.WriteLine("Begin destroying all towers!");
             builtTowers = new List<Tower>(GameScene.Towers.Where(x => x.Constructed));
             destroyTowersAnimation = new Animation(new int[] { 45 }, 0);
 
@@ -643,8 +625,6 @@ namespace GarrettTowerDefense
 
                 totalDist = xDist + yDist;
 
-                Console.WriteLine("Tower is at " + totalDist);
-
                 //if (totalDist <= range || xDist)
                 if(xDist <= range && yDist <= range)
                 {
@@ -652,7 +632,6 @@ namespace GarrettTowerDefense
                 }
             }
 
-            Console.WriteLine("Towers to destroy: " + towersFound.Count);
             return towersFound.ToArray();
         }
 
@@ -817,7 +796,6 @@ namespace GarrettTowerDefense
                 return;
 
             float damage = (percent * Health) * Weaknesses[(int)DamageType.Fire];
-            Console.WriteLine(Name + " will burn for " + damage + " damage (" + damage / duration + " damage per second) over " + duration + " seconds.");
             isBurning = true;
             burnDPS = (Health * percent) / duration;
             burnDuration = duration;

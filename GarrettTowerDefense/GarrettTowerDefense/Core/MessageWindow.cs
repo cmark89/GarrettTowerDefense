@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace GarrettTowerDefense
 {
@@ -14,17 +15,10 @@ namespace GarrettTowerDefense
     public class MessageWindow
     {
         private Texture2D windowTexture;
-        private int textStartX;
-        private int textStartY;
 
         private string messageText;
         private Rectangle windowRect;
         private Rectangle messageRectangle;
-
-        // This is the delay between individual characters appearing.
-
-        // This is the message as currently shown (revealed char by char)
-        private string shownString;
 
         public event ShowMessageWindowEventHandler ShowMessageWindow;
         public event HideMessageWindowEventHandler HideMessageWindow;
@@ -33,6 +27,8 @@ namespace GarrettTowerDefense
 
         private bool useSlowReveal = true;
         private int charsRevealed = 0;
+
+        // This is the delay between individual characters appearing.
         private const float textRevealTime = .06f;
         private float nextCharRevealTime;
 
@@ -97,7 +93,7 @@ namespace GarrettTowerDefense
 
             // This is for really fast testing...
             // Change this to actually detect meaningful input.
-            if (MouseHandler.Click() && Visible)
+            if ((MouseHandler.Click() || KeyboardHandler.KeyPress(Keys.Space) || KeyboardHandler.KeyPress(Keys.Escape) || KeyboardHandler.KeyPress(Keys.Enter)) && Visible)
             {
                 if (useSlowReveal && charsRevealed < messageText.Length)
                 {

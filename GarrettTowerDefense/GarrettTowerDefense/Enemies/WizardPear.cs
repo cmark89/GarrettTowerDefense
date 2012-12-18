@@ -140,7 +140,6 @@ namespace GarrettTowerDefense
                 //If the enemy is in  the castle tile, destroy it and damage the castle.
                 if (TileEngine.ScreenSpaceToMapSpace(Position) == GameScene.CurrentMap.CastleTile)
                 {
-                    Console.WriteLine("Enemy hit the castle!");
                     Alive = false;
                     GameScene.CurHealth -= Damage;
                 }
@@ -154,7 +153,6 @@ namespace GarrettTowerDefense
                 if (lives == 1)
                 {
                     GameScene.GainGold(Bounty);
-                    Console.WriteLine("Wizard Pear dies!");
                     GameScene.waveManager.WavePaused = false;
                     GameScene.waveManager.ReenableSpawn();
                     WaveManager.BeginCarnageMode();
@@ -164,7 +162,6 @@ namespace GarrettTowerDefense
                 else
                 {
                     CurrentHealth = Health;
-                    Console.WriteLine("Wizard Pear is acting strangely!");
                     lives--;
                     NextPhase(currentGameTime);
                 }

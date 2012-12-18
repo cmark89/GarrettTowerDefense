@@ -18,7 +18,6 @@ namespace GarrettTowerDefense
         {
             MusicTracks = new List<Song>();
             SoundEffects = new List<SoundEffect>();
-            //Load audio settings from file
         }
 
         public static void LoadContent(ContentManager Content)

@@ -56,10 +56,13 @@ namespace GarrettTowerDefense
 
         public override void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalSeconds - LastGoldTime >= GoldInterval)
+            if (Constructed)
             {
-                LastGoldTime = gameTime.TotalGameTime.TotalSeconds;
-                ProduceGold();
+                if (gameTime.TotalGameTime.TotalSeconds - LastGoldTime >= GoldInterval)
+                {
+                    LastGoldTime = gameTime.TotalGameTime.TotalSeconds;
+                    ProduceGold();
+                }
             }
         }
 

@@ -68,7 +68,6 @@ namespace GarrettTowerDefense
 
         public override void OnProjectileHit(Projectile proj, Enemy target)
         {
-            Console.WriteLine("The burning projecile hits!");
             if (Target != null)
             {
                 Target.DamageEnemy(Damage, DamageType);

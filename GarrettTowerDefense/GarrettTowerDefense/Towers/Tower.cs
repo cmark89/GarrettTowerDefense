@@ -92,15 +92,12 @@ namespace GarrettTowerDefense
                 //Give error sound
                 GameScene.ClearMouseAction();
             }
-            
         }
 
         public virtual void Attack(GameTime gameTime)
         {
             if (stunned)
                 return;
-
-            //Attack a target
 
             //Target is out of range
             if (Target != null && Target.Alive && Vector2.Distance(Position, Target.Position) > AttackRange)
@@ -132,13 +129,6 @@ namespace GarrettTowerDefense
         public virtual void LaunchAttack(Enemy Target)
         {
             //Actually launch an attack here
-
-            //Fire a projectile
-
-            //For testing purposes, just deal damage to the target here
-
-            Console.WriteLine("The tower strikes!");
-            Target.DamageEnemy(Damage, DamageType);
         }
 
         public virtual Enemy AcquireNewTarget(Vector2 point, float range)
@@ -172,14 +162,12 @@ namespace GarrettTowerDefense
         public virtual void OnProjectileHit(Projectile proj, Enemy target)
         {
             //Put stuff in here that will obliterate the projectile and thus the enemy.
-
         }
 
         public virtual void Upgrade()
         {
             if (Level < 5 && GameScene.Gold >= UpgradeCost[Level - 1])
             {
-                Console.WriteLine("Upgrade " + Name + "!");
                 GameScene.Gold -= UpgradeCost[Level - 1];
                 LevelUp();
                 //Play level up sound effect here.  Maybe a sparkly.
@@ -220,8 +208,7 @@ namespace GarrettTowerDefense
                 GameScene.CurrentMap.SetMovementCost(MapPosition, 1f);
 
             Constructed = false;
-            //Projectiles.Clear();
-            //DisabledProjectiles.Clear();
+
             Explode();
 
             if(Name != "Gold Mine")

@@ -12,11 +12,11 @@ using Pathfinding;
 
 namespace GarrettTowerDefense
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+    
     public class GarrettTowerDefense : Microsoft.Xna.Framework.Game
     {
+        //my code dont steal
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public static Viewport viewport;
@@ -24,7 +24,6 @@ namespace GarrettTowerDefense
         public static Scene currentScene;
         public static GraphicsDeviceManager StaticGraphics;
 
-        // Good idea, or no?  Time will tell.
         public static ContentManager StaticContent;
 
         public static bool loadingScene = false;
@@ -37,12 +36,7 @@ namespace GarrettTowerDefense
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+
         protected override void Initialize()
         {
             viewport = GraphicsDevice.Viewport;
@@ -59,15 +53,16 @@ namespace GarrettTowerDefense
             AudioManager.LoadContent(Content);
 
 
+            // If you want to make changes to the game map, uncomment the following line and then comment out the 
+            // two lines that follow it.  Make any changes you like to the map, and then click the save button to
+            // automatically write to map.gtd.  Afterwards, swap the commented lines once more.
+
+            //currentScene = new MapEditorScene();
+
             currentScene = new OpeningMovieScene();
             currentScene.LoadContent(Content);
 
-            //currentScene = new GameScene();
-            //GameScene.SetMap((Map)Serializer.Deserialize("map.gtd"));
-            //Scene.CurrentMap.LoadFromSerialized();
-            //Scene.CurrentMap.Initialize();
-
-            //currentScene = new MapEditorScene();
+            
 
             
 
@@ -76,57 +71,35 @@ namespace GarrettTowerDefense
             
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
             StaticContent = Content;
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);          
-
-            //Set the test map.
             
             //GameScene.CurrentMap.InitializeTestMap2();
             currentScene.LoadContent(Content);
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
+
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
         
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
             MouseHandler.Update(gameTime);
             KeyboardHandler.Update(gameTime);
 
             currentScene.Update(gameTime);
 
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);

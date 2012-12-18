@@ -53,7 +53,6 @@ namespace GarrettTowerDefense
                 {
                     if (WaveNumber == 0)
                     {
-                        Console.WriteLine("Begin the game at wave 1!");
                         NextWave();
                         return;
                     }
@@ -92,7 +91,6 @@ namespace GarrettTowerDefense
                 //Minus one enemy left.
                 EnemiesLeft--;
 
-                Console.WriteLine("Spawn an enemy!");
                 Enemy newEnemy;
                 switch (WaveNumber)
                 {
@@ -187,9 +185,6 @@ namespace GarrettTowerDefense
                 int spawnPointIndex = rand.Next(0, GameScene.CurrentMap.SpawnPoints.Count);
                 Point spawnAt = (GameScene.CurrentMap.SpawnPoints[spawnPointIndex]);
 
-                Console.WriteLine(GameScene.CurrentMap.SpawnPoints.Count + " spawn points found.  Spawn at index " + spawnPointIndex);
-                Console.WriteLine("Spawn at point: " + spawnAt);
-
                 Vector2 spawnVector = new Vector2(spawnAt.X * TileEngine.TileWidth, spawnAt.Y * TileEngine.TileHeight);
 
                 newEnemy.Initialize(spawnVector);
@@ -200,9 +195,9 @@ namespace GarrettTowerDefense
 
         public void NextWave()
         {
-            Console.WriteLine("Advance to next wave!");
             if (WavePaused)
                 WavePaused = false;
+
             WaveNumber++;
             WaveTime = -10f;
             EnemiesLeft = 7 + WaveNumber * 2;
@@ -230,9 +225,7 @@ namespace GarrettTowerDefense
 
         public void ReenableSpawn()
         {
-            Console.WriteLine("Reenable spawning");
             WavePaused = false;
-            Console.WriteLine("WavePaused : " + WavePaused.ToString());
             SpawnEnemy();
         }
 
@@ -258,9 +251,6 @@ namespace GarrettTowerDefense
 
         public static void BeginCarnageMode()
         {
-            Console.WriteLine("------------------");
-            Console.WriteLine("CARNAGE MODE ACTIVATED");
-            Console.WriteLine("------------------");
             carnageMode = true;
             GetNextCarnageBuffs();
         }
@@ -288,15 +278,6 @@ namespace GarrettTowerDefense
                     CarnageBuffs.Add((CarnageModeBuff)newBuff);
                 }
             }
-
-            Console.WriteLine("------------------");
-            Console.WriteLine("THIS WAVE'S CARNAGE:");
-            Console.WriteLine("------------------");
-            foreach (CarnageModeBuff cmb in CarnageBuffs)
-            {
-                Console.WriteLine(cmb.ToString());
-            }
-            Console.WriteLine("------------------");
         }
             
     }

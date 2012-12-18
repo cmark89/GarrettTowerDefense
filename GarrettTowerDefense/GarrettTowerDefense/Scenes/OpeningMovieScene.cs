@@ -50,7 +50,7 @@ namespace GarrettTowerDefense
             drawRect = new Rectangle(0, 0, GarrettTowerDefense.StaticGraphics.GraphicsDevice.Viewport.Width, GarrettTowerDefense.StaticGraphics.GraphicsDevice.Viewport.Height);
            
             // Check for input here to skip and go straight to the title screen
-            if ((started && player.State == MediaState.Stopped) || KeyboardHandler.KeyPress(Keys.Space) || KeyboardHandler.KeyPress(Keys.Enter) || KeyboardHandler.KeyPress(Keys.Escape))
+            if ((started && player.State == MediaState.Stopped) || KeyboardHandler.KeyPress(Keys.Space) || KeyboardHandler.KeyPress(Keys.Enter) || KeyboardHandler.KeyPress(Keys.Escape) || MouseHandler.Click())
             {
                 GarrettTowerDefense.ChangeScene(new TitleScene());
                 player.Stop();

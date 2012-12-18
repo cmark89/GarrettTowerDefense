@@ -67,7 +67,6 @@ namespace GarrettTowerDefense
 
         public void Initialize()
         {
-            Console.WriteLine("Map initialized.");
             // Select a random song to play for the game.
             Music = new Random().Next(1, 4);
             AudioManager.PlaySong(Music);
@@ -137,15 +136,9 @@ namespace GarrettTowerDefense
                 }
             }
 
-            Console.WriteLine(String.Format("Castle is at {0}, {1}.", CastleTile.X, CastleTile.Y));
             foreach (Tile t in mapCells[CastleTile.Y, CastleTile.X].tiles)
             {
                 Console.Write(t.TileID);
-            }
-
-            foreach (Point p in SpawnPoints)
-            {
-                Console.WriteLine(String.Format("Spawn point at: {0}, {1}", p.X, p.Y));
             }
 
             AudioManager.PlaySong(Music);

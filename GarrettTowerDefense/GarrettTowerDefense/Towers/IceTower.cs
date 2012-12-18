@@ -152,7 +152,6 @@ namespace GarrettTowerDefense
 
         public override void OnProjectileHit(Projectile proj, Enemy target)
         {
-            Console.WriteLine("The projecile hits!");
             if (target != null)
             {
                 target.BeginFreeze(slowAmount, freezeDuration);

@@ -17,7 +17,8 @@
     <XnaCrossPlatformGroupID>bd0ed26b-17a6-4db4-be74-df67b07aee3d</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>bn.ico</ApplicationIcon>
-    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <Thumbnail>
+    </Thumbnail>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Users\Corey\Desktop\GarrettTowerDefense\</PublishUrl>
     <Install>true</Install>
@@ -31,7 +32,7 @@
     <MapFileExtensions>false</MapFileExtensions>
     <ProductName>Garrett Tower Defense</ProductName>
     <PublisherName>Objectively Radical Games</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -127,7 +128,6 @@
   <ItemGroup>
     <Compile Include="Core\Animation.cs" />
     <Compile Include="Core\AudioManager.cs" />
-    <Compile Include="Core\BinaryMinHeap.cs" />
     <Compile Include="Core\KeyboardHandler.cs" />
     <Compile Include="Core\MessageWindow.cs" />
     <Compile Include="Core\Serializer.cs" />
@@ -178,10 +178,8 @@
     <Compile Include="Towers\Tower.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bn.ico" />
+    <None Include="bn.ico" />
     <None Include="ChangeLog.txt" />
-    <Content Include="Game.ico" />
-    <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GarrettTowerDefenseContent\GarrettTowerDefenseContent.contentproj">
@@ -221,51 +219,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="bn.ico">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="Game.ico">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="GameThumbnail.png">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-    <PublishFile Include="map.gtd">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GarrettTowerDefense_TemporaryKey.pfx" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
