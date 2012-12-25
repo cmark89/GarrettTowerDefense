@@ -96,6 +96,7 @@ namespace GarrettTowerDefense
 
                 if (PlayerPaused)
                 {
+                    ClearMouseAction();
                     AudioManager.SetVolume(.25f);
                 }
                 else

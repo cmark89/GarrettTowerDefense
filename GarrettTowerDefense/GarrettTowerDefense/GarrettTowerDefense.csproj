@@ -32,8 +32,8 @@
     <MapFileExtensions>false</MapFileExtensions>
     <ProductName>Garrett Tower Defense</ProductName>
     <PublisherName>Objectively Radical Games</PublisherName>
-    <ApplicationRevision>7</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.01.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>

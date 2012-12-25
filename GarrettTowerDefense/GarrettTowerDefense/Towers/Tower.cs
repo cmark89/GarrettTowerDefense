@@ -198,21 +198,22 @@ namespace GarrettTowerDefense
         {
 
             //Free the parent tile from the no building restriction if applicable.
-            if(Name != "Gold Mine")
-                ParentCell.IsWalkable = true;
-
-            ParentCell.IsBuildable = true;
-            ParentCell.ContainsTower = false;
-
             if (Name != "Gold Mine")
+            {
+                ParentCell.IsWalkable = true;
+                ParentCell.IsBuildable = true;
                 GameScene.CurrentMap.SetMovementCost(MapPosition, 1f);
+            }
 
+            ParentCell.ContainsTower = false;
             Constructed = false;
 
             Explode();
 
-            if(Name != "Gold Mine")
+            if (Name != "Gold Mine")
+            {
                 GameScene.RecalculateEnemyPath();
+            }
         }
 
         public virtual void Initialize()

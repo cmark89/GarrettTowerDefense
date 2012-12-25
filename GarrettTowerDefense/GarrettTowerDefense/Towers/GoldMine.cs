@@ -10,7 +10,7 @@ namespace GarrettTowerDefense
     {
         public static int Cost = 50;
 
-        public double LastGoldTime;
+        public double GoldChargeTime;
         public float GoldInterval = 10f;
         public int GoldBonus = 6;
 
@@ -56,11 +56,12 @@ namespace GarrettTowerDefense
 
         public override void Update(GameTime gameTime)
         {
-            if (Constructed)
+            if (Constructed && !GameScene.Paused && !GameScene.PlayerPaused)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - LastGoldTime >= GoldInterval)
+                GoldChargeTime += gameTime.ElapsedGameTime.TotalSeconds;
+                if (GoldChargeTime >= GoldInterval)
                 {
-                    LastGoldTime = gameTime.TotalGameTime.TotalSeconds;
+                    GoldChargeTime = 0;
                     ProduceGold();
                 }
             }
